@@ -1,0 +1,50 @@
+﻿@model Booking.Models.Room
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Room</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MinTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxPeople)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxPeople)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RoomId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
