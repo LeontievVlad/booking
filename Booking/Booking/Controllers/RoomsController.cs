@@ -1,18 +1,33 @@
-﻿using System;
+﻿using Booking.Models;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using Booking.Models;
 
 namespace Booking.Controllers
 {
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class RoomsController : Controller
     {
         private BookingContext db = new BookingContext();
+        private ApplicationDbContext _context = new ApplicationDbContext();
+        // SuperAdmin Management
+
+        [Authorize(Roles = "SuperAdmin")]
+        public ActionResult SuperAdmin()
+        {
+                var allUsers = _context.Users.ToList();
+                ViewBag.allRoles = _context.Roles;
+            foreach(var item in _context.Roles)
+            {
+                ViewBag.asdf += item;
+            }    
+
+
+                return View(allUsers);
+            
+        }
 
         // GET: Rooms
         public ActionResult Index()

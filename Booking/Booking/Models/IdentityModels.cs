@@ -29,5 +29,7 @@ namespace Booking.Models
         {
             return new ApplicationDbContext();
         }
+
+        //public System.Data.Entity.DbSet<Booking.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }
