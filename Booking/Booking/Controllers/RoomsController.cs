@@ -60,7 +60,14 @@ namespace Booking.Controllers
         }
 
         // GET: Rooms
+
         public ActionResult Index()
+        {
+            return View(db.Rooms.ToList());
+        }
+
+        [AllowAnonymous]
+        public ActionResult Booking()
         {
             return View(db.Rooms.ToList());
         }
