@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Booking.ViewModels.RolesViewModel>
+@{
+    ViewBag.Title = "GetRoles";
+}
+
+<h2>GetRoles</h2>
+
+@foreach (var user in Model.ToList())
+{
+    <hr />
+    <p>
+        @user.UserName |
+        @foreach (var role in user.RoleNames)
+        {
+            @role
+
+        }
+
+
+
+    </p>
+}
+
