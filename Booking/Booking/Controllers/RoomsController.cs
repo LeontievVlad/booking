@@ -1,9 +1,13 @@
 ﻿using Booking.Models;
+using Booking.ViewModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Booking.Controllers
 {
@@ -11,22 +15,48 @@ namespace Booking.Controllers
     public class RoomsController : Controller
     {
         private BookingContext db = new BookingContext();
-        private ApplicationDbContext _context = new ApplicationDbContext();
+        private ApplicationDbContext context = new ApplicationDbContext();
         // SuperAdmin Management
 
         [Authorize(Roles = "SuperAdmin")]
-        public ActionResult SuperAdmin()
+        public ActionResult GetRoles()
         {
-                var allUsers = _context.Users.ToList();
-                ViewBag.allRoles = _context.Roles;
-            foreach(var item in _context.Roles)
+            var userRoles = new List<RolesViewModel>();
+            //var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
+            //Get all the usernames
+            foreach (var user in userStore.Users)
             {
-                ViewBag.asdf += item;
-            }    
+                var r = new RolesViewModel
+                {
+                    UserName = user.UserName
+                };
+                userRoles.Add(r);
+            }
+            //Get all the Roles for our users
+            foreach (var user in userRoles)
+            {
 
+                user.RoleNames = userManager.GetRoles(userStore.Users.First(s => s.UserName == user.UserName).Id);
+                //user.RoleNames = userManager.IsInRole(userStore.Users., "user");
+            }
 
-                return View(allUsers);
-            
+            return View(userRoles);
+
+        }
+
+        [HttpGet]
+        public ActionResult ChangeRole(string UserName, string RoleNames)
+        {
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = userStore.Users;
+            userManager.RemoveFromRole(userStore.Users.First(s => s.UserName == UserName).Id, RoleNames);
+            userManager.AddToRole(userStore.Users.First(s => s.UserName == UserName).Id,
+                RoleNames == "User" ? "Admin" : "User");
+            return RedirectToAction("GetRoles");
         }
 
         // GET: Rooms
