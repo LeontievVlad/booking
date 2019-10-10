@@ -31,23 +31,23 @@
                 {
 
 
-                    <td>
-                        @role
-                        @Html.TextBox("RoleNames", role, new { hidden = "hidden" })
-                        @if (role == "Admin")
-                        {
-                            <input type="submit" value="Down" onclick="this.form.submit();" />
-                        }
-                        else if (role == "User")
-                        {
-                            <input type="submit" value="Up" onclick="this.form.submit();" />
-                        }
+        <td>
+            @role
+            @Html.TextBox("RoleNames", role, new { hidden = "hidden" })
+            @if (role == "Admin")
+            {
+                <input type="submit" value="Down" onclick="this.form.submit();" />
+            }
+            else if (role == "User")
+            {
+                <input type="submit" value="Up" onclick="this.form.submit();" />
+            }
 
 
 
 
 
-                    </td>
+        </td>
 
                 }
 

@@ -1,0 +1,25 @@
+﻿@model Booking.Models.Room
+@{
+    ViewBag.Title = "GetRoom";
+}
+
+<h2>GetRoom</h2>
+
+<p>
+    @ViewBag.data
+</p>
+
+
+@using (Html.BeginForm("GetRoom", "Rooms", FormMethod.Post))
+{
+    <input name="roomId" value="@Model.RoomId" hidden/>
+    <p>
+        Time:
+        <input type="date" min="@Model.MinTime" max="@Model.MaxTime" />
+    </p>
+    <p>
+        People:
+        <input type="number" min="0" max="@Model.MaxPeople" />
+    </p>
+    <input type="submit" onclick="this.form.submit();" />
+}

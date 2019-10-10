@@ -46,6 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -168,6 +169,8 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminRoomsController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -182,6 +185,10 @@
     <Compile Include="Migrations\201910080855350_TimeSpan.cs" />
     <Compile Include="Migrations\201910080855350_TimeSpan.Designer.cs">
       <DependentUpon>201910080855350_TimeSpan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910100813096_UpdateRoom.cs" />
+    <Compile Include="Migrations\201910100813096_UpdateRoom.Designer.cs">
+      <DependentUpon>201910100813096_UpdateRoom.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -204,6 +211,15 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\AdminRooms\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\AdminRooms\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\AdminRooms\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\AdminRooms\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\AdminRooms\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\AdminRooms\Booking.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -256,9 +272,11 @@
     <Content Include="Views\Rooms\Index.cshtml" />
     <Content Include="Views\Rooms\GetRoles.cshtml" />
     <Content Include="Views\Rooms\Booking.cshtml" />
+    <Content Include="Views\Rooms\GetRoom.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -279,6 +297,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910080855350_TimeSpan.resx">
       <DependentUpon>201910080855350_TimeSpan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910100813096_UpdateRoom.resx">
+      <DependentUpon>201910100813096_UpdateRoom.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
