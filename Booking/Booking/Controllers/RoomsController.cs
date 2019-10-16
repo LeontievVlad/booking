@@ -13,7 +13,7 @@ namespace Booking.Controllers
 {
     public class RoomsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Rooms
         public ActionResult Index()
@@ -21,99 +21,27 @@ namespace Booking.Controllers
             return View(db.Rooms.ToList());
         }
 
-        // GET: Rooms/Details/5
-        public ActionResult Details(int? id)
+        [HttpGet]
+        public ActionResult Reserve(int? RoomId)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Room room = db.Rooms.Find(id);
-            if (room == null)
-            {
-                return HttpNotFound();
-            }
-            return View(room);
-        }
-
-        // GET: Rooms/Create
-        public ActionResult Create()
-        {
+            ViewBag.work = RoomId;
+            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
+            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName");
             return View();
         }
 
-        // POST: Rooms/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RoomId,NameRoom,Date,MinTime,BusyTime,MaxTime,MaxPeople")] Room room)
+        public ActionResult Reserve(Reserved reserved)
         {
             if (ModelState.IsValid)
             {
-                db.Rooms.Add(room);
+                db.Reserveds.Add(reserved);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            return View(room);
-        }
-
-        // GET: Rooms/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Room room = db.Rooms.Find(id);
-            if (room == null)
-            {
-                return HttpNotFound();
-            }
-            return View(room);
-        }
-
-        // POST: Rooms/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RoomId,NameRoom,Date,MinTime,BusyTime,MaxTime,MaxPeople")] Room room)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(room).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(room);
-        }
-
-        // GET: Rooms/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Room room = db.Rooms.Find(id);
-            if (room == null)
-            {
-                return HttpNotFound();
-            }
-            return View(room);
-        }
-
-        // POST: Rooms/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Room room = db.Rooms.Find(id);
-            db.Rooms.Remove(room);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
+            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName");
+            return View();
         }
 
         protected override void Dispose(bool disposing)

@@ -8,21 +8,22 @@ using System.Web;
 using System.Web.Mvc;
 using Booking.Entity_Models;
 using Booking.Models;
+using Booking.Models.RoomViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Booking.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "SuperAdmin,Admin")]
     public class AdminController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
 
         [Authorize(Roles = "SuperAdmin")]
         public ActionResult GetRoles()
         {
             var userRoles = new List<RolesViewModel>();
-            //var context = new ApplicationDbContext();
             var userStore = new UserStore<ApplicationUser>(db);
             var userManager = new UserManager<ApplicationUser>(userStore);
 
@@ -38,9 +39,7 @@ namespace Booking.Areas.Admin.Controllers
             //Get all the Roles for our users
             foreach (var user in userRoles)
             {
-
                 user.RoleNames = userManager.GetRoles(userStore.Users.First(s => s.UserName == user.UserName).Id);
-                //user.RoleNames = userManager.IsInRole(userStore.Users., "user");
             }
 
             return View(userRoles);
@@ -60,9 +59,6 @@ namespace Booking.Areas.Admin.Controllers
             return RedirectToAction("GetRoles");
         }
 
-
-
-
         [Authorize]
         [HttpGet]
         public ActionResult GetRoom(int? id)
@@ -81,13 +77,13 @@ namespace Booking.Areas.Admin.Controllers
         public ActionResult GetRoom(Reserved reserved)
         {
 
-            //if (ModelState.IsValid)
-            //{
-            //    //reserved.UserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            //    db.Reserveds.Add(reserved);
-            //    db.SaveChanges();
-            //    return RedirectToAction("Index");
-            //}
+            if (ModelState.IsValid)
+            {
+                //reserved.UserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                db.Reserveds.Add(reserved);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
 
             return RedirectToAction("Index");
@@ -98,6 +94,7 @@ namespace Booking.Areas.Admin.Controllers
         // GET: Admin/Admin
         public ActionResult Index()
         {
+
             return View(db.Rooms.ToList());
         }
 
@@ -119,7 +116,8 @@ namespace Booking.Areas.Admin.Controllers
         // GET: Admin/Admin/Create
         public ActionResult Create()
         {
-            return View();
+            CreateRoomViewModel createRoomViewModel = new CreateRoomViewModel();
+            return View(createRoomViewModel);
         }
 
         // POST: Admin/Admin/Create
@@ -127,16 +125,27 @@ namespace Booking.Areas.Admin.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RoomId,NameRoom,Date,MinTime,BusyTime,MaxTime,MaxPeople")] Room room)
+        public ActionResult Create(CreateRoomViewModel createRoomViewModel)
         {
             if (ModelState.IsValid)
             {
+                Room room = new Room
+                {
+                    RoomId = createRoomViewModel.RoomId,
+                    NameRoom = createRoomViewModel.NameRoom,
+                    Date = createRoomViewModel.Date,
+                    MinTime = createRoomViewModel.MinTime,
+                    MaxTime = createRoomViewModel.MaxTime,
+                    //BusyTime = Convert.ToDateTime(createRoomViewModel.MaxTime - createRoomViewModel.MinTime),
+                    MaxPeople = createRoomViewModel.MaxPeople
+                };
                 db.Rooms.Add(room);
+                //db.Rooms.Add(createRoomViewModel);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(room);
+            return View(createRoomViewModel);
         }
 
         // GET: Admin/Admin/Edit/5

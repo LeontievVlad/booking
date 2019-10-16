@@ -60,9 +60,9 @@ namespace Booking.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName", reserved.User.Id);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName", reserved.UsersId);
             return View(reserved);
         }
 

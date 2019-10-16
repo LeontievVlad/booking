@@ -23,7 +23,14 @@
                     <li>@Html.ActionLink("Домашняя страница", "Index", "Admin")</li>
                     <li>@Html.ActionLink("GetRoles", "GetRoles", "Admin")</li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+                
+                
+                    
+                <span class="navbar-right navbar-text">
+                    @using Microsoft.AspNet.Identity
+                    @Html.ActionLink(User.Identity.GetUserName(), "Index", "../Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                </span>
+
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

@@ -1,10 +1,10 @@
 ﻿@model Booking.Entity_Models.Reserved
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = ViewBag.work;/* "Reserve";*/
 }
 
-<h2>Create</h2>
+<h2>Reserve</h2>
 
 @using (Html.BeginForm()) 
 {
@@ -57,8 +57,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.UsersId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @*@Html.EditorFor(model => model.User.Id, new { htmlAttributes = new { @class = "form-control" } })*@
-                @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.EditorFor(model => model.UsersId, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.UsersId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -74,4 +73,3 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-<script src="~/Scripts/ReservedDate.js"></script>

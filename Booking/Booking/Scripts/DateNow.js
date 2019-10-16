@@ -1,0 +1,1 @@
+﻿document.getElementById("Date").value = new Date().toJSON().slice(0, 10);

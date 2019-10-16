@@ -4,60 +4,55 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<style>
+    #container {
+        float: left;
+        width: 100%;
+        text-align: center;
+    }
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.NameRoom)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MinTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BusyTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MaxTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MaxPeople)
-        </th>
-        <th></th>
-    </tr>
+    span, #Room {
+        float: left;
+        padding: 5px;
+        min-width: 140px;
+    }
+</style>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.NameRoom)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MinTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BusyTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MaxTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MaxPeople)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.RoomId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.RoomId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.RoomId })
-        </td>
-    </tr>
-}
+<div id="container">
+    <div id="head">
+        <span>@Html.DisplayNameFor(model => model.NameRoom) </span>
+        <span>@Html.DisplayNameFor(model => model.Date)     </span>
+        <span>@Html.DisplayNameFor(model => model.MinTime)  </span>
+        <span>@Html.DisplayNameFor(model => model.MaxTime)  </span>
+        <span>@Html.DisplayNameFor(model => model.MaxPeople)</span>
+        <span>Reserve</span>
+    </div>
 
-</table>
+
+
+    @foreach (var item in Model)
+    {
+        <div id="Room">
+
+
+            @using (Html.BeginForm("Reserve", "Rooms", FormMethod.Get))
+            {
+
+
+                <input name="RoomId" value="@item.RoomId" hidden />
+                <span id="NameRoom" name="NameRoom">@item.NameRoom</span>
+                <span id="Date" name="Date">@item.Date</span>
+                <span id="MinTime" name="MinTime">@item.MinTime</span>
+                <span id="MaxTime" name="MaxTime">@item.MaxTime</span>
+                <span id="MaxPeole" name="MaxPeole">@item.MaxPeople</span>
+
+                <input type="submit" value="Reserve" onclick="this.form.submit();" />
+            }
+        </div>
+    }
+
+
+
+
+</div>
+<br />
