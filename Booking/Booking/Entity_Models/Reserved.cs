@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Booking.Models;
+using Microsoft.AspNet.Identity;
 using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,13 @@ namespace Booking.Entity_Models
         [DataType(DataType.Time)]
         public DateTime ReservedTimeTo { get; set; }
 
+        
         public int? RoomId { get; set; }
         public Room Room { get; set; }
 
         public string UsersId { get; set; }
-        
+        public ApplicationUser User { get; set; }
+
 
         //public string UserId = HttpContext.Current.User.Identity.GetUserId();
         //public List<string> UsersEmails{ get; set; }

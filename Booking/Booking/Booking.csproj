@@ -170,7 +170,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminRoomsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ReservedsController.cs" />
@@ -180,77 +180,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910080848199_First.cs" />
-    <Compile Include="Migrations\201910080848199_First.Designer.cs">
-      <DependentUpon>201910080848199_First.cs</DependentUpon>
+    <Compile Include="Migrations\201910160853577_FirstM.cs" />
+    <Compile Include="Migrations\201910160853577_FirstM.Designer.cs">
+      <DependentUpon>201910160853577_FirstM.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910080855350_TimeSpan.cs" />
-    <Compile Include="Migrations\201910080855350_TimeSpan.Designer.cs">
-      <DependentUpon>201910080855350_TimeSpan.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910100813096_UpdateRoom.cs" />
-    <Compile Include="Migrations\201910100813096_UpdateRoom.Designer.cs">
-      <DependentUpon>201910100813096_UpdateRoom.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910150803440_AddReservedModel.cs" />
-    <Compile Include="Migrations\201910150803440_AddReservedModel.Designer.cs">
-      <DependentUpon>201910150803440_AddReservedModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910150805515_UpdateReserved.cs" />
-    <Compile Include="Migrations\201910150805515_UpdateReserved.Designer.cs">
-      <DependentUpon>201910150805515_UpdateReserved.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910150952286_FirstChangeDb.cs" />
-    <Compile Include="Migrations\201910150952286_FirstChangeDb.Designer.cs">
-      <DependentUpon>201910150952286_FirstChangeDb.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910150955394_UpdateReservedsDb.cs" />
-    <Compile Include="Migrations\201910150955394_UpdateReservedsDb.Designer.cs">
-      <DependentUpon>201910150955394_UpdateReservedsDb.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910151004535_FirstChangeDb1.cs" />
-    <Compile Include="Migrations\201910151004535_FirstChangeDb1.Designer.cs">
-      <DependentUpon>201910151004535_FirstChangeDb1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910151013040_UpdateRoomTb.cs" />
-    <Compile Include="Migrations\201910151013040_UpdateRoomTb.Designer.cs">
-      <DependentUpon>201910151013040_UpdateRoomTb.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910151132562_UpdateBookingContext.cs" />
-    <Compile Include="Migrations\201910151132562_UpdateBookingContext.Designer.cs">
-      <DependentUpon>201910151132562_UpdateBookingContext.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910151140528_UpdateReserveds.cs" />
-    <Compile Include="Migrations\201910151140528_UpdateReserveds.Designer.cs">
-      <DependentUpon>201910151140528_UpdateReserveds.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910151148405_UpdateReserved1.cs" />
-    <Compile Include="Migrations\201910151148405_UpdateReserved1.Designer.cs">
-      <DependentUpon>201910151148405_UpdateReserved1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910151208284_UpdateReserved2.cs" />
-    <Compile Include="Migrations\201910151208284_UpdateReserved2.Designer.cs">
-      <DependentUpon>201910151208284_UpdateReserved2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910151249562_UpdateReserved3.cs" />
-    <Compile Include="Migrations\201910151249562_UpdateReserved3.Designer.cs">
-      <DependentUpon>201910151249562_UpdateReserved3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910151254112_UpdateReserved4.cs" />
-    <Compile Include="Migrations\201910151254112_UpdateReserved4.Designer.cs">
-      <DependentUpon>201910151254112_UpdateReserved4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910160715597_UpdateRoomReserved.cs" />
-    <Compile Include="Migrations\201910160715597_UpdateRoomReserved.Designer.cs">
-      <DependentUpon>201910160715597_UpdateRoomReserved.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910160745174_UpdateRoom1.cs" />
-    <Compile Include="Migrations\201910160745174_UpdateRoom1.Designer.cs">
-      <DependentUpon>201910160745174_UpdateRoom1.cs</DependentUpon>
+    <Compile Include="Migrations\201910160857520_AddRoomReserved.cs" />
+    <Compile Include="Migrations\201910160857520_AddRoomReserved.Designer.cs">
+      <DependentUpon>201910160857520_AddRoomReserved.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\BookingContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RolesViewModel.cs" />
@@ -271,12 +210,12 @@
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Admin\Views\AdminRooms\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\AdminRooms\Delete.cshtml" />
-    <Content Include="Areas\Admin\Views\AdminRooms\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\AdminRooms\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\AdminRooms\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\AdminRooms\Booking.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\GetRoles.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Index.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -348,56 +287,11 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910080848199_First.resx">
-      <DependentUpon>201910080848199_First.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910160853577_FirstM.resx">
+      <DependentUpon>201910160853577_FirstM.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910080855350_TimeSpan.resx">
-      <DependentUpon>201910080855350_TimeSpan.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910100813096_UpdateRoom.resx">
-      <DependentUpon>201910100813096_UpdateRoom.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910150803440_AddReservedModel.resx">
-      <DependentUpon>201910150803440_AddReservedModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910150805515_UpdateReserved.resx">
-      <DependentUpon>201910150805515_UpdateReserved.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910150952286_FirstChangeDb.resx">
-      <DependentUpon>201910150952286_FirstChangeDb.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910150955394_UpdateReservedsDb.resx">
-      <DependentUpon>201910150955394_UpdateReservedsDb.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910151004535_FirstChangeDb1.resx">
-      <DependentUpon>201910151004535_FirstChangeDb1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910151013040_UpdateRoomTb.resx">
-      <DependentUpon>201910151013040_UpdateRoomTb.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910151132562_UpdateBookingContext.resx">
-      <DependentUpon>201910151132562_UpdateBookingContext.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910151140528_UpdateReserveds.resx">
-      <DependentUpon>201910151140528_UpdateReserveds.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910151148405_UpdateReserved1.resx">
-      <DependentUpon>201910151148405_UpdateReserved1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910151208284_UpdateReserved2.resx">
-      <DependentUpon>201910151208284_UpdateReserved2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910151249562_UpdateReserved3.resx">
-      <DependentUpon>201910151249562_UpdateReserved3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910151254112_UpdateReserved4.resx">
-      <DependentUpon>201910151254112_UpdateReserved4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910160715597_UpdateRoomReserved.resx">
-      <DependentUpon>201910160715597_UpdateRoomReserved.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910160745174_UpdateRoom1.resx">
-      <DependentUpon>201910160745174_UpdateRoom1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910160857520_AddRoomReserved.resx">
+      <DependentUpon>201910160857520_AddRoomReserved.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

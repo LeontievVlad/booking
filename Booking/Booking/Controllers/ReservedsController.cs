@@ -13,12 +13,13 @@ namespace Booking.Controllers
 {
     public class ReservedsController : Controller
     {
-        private BookingContext db = new BookingContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Reserveds
         public ActionResult Index()
         {
             var reserveds = db.Reserveds.Include(r => r.Room);
+            
             return View(reserveds.ToList());
         }
 
@@ -41,6 +42,8 @@ namespace Booking.Controllers
         public ActionResult Create()
         {
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
+            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName"); 
+                
             return View();
         }
 
@@ -59,6 +62,7 @@ namespace Booking.Controllers
             }
 
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
+            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName", reserved.User.Id);
             return View(reserved);
         }
 

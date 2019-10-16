@@ -16,12 +16,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Booking", "Index", "Rooms", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Booking", "Booking", "AdminRooms")</li>
-                    <li>@Html.ActionLink("Index", "Index", "AdminRooms")</li>
+                    <li>@Html.ActionLink("Домашняя страница", "Index", "Admin")</li>
+                    <li>@Html.ActionLink("GetRoles", "GetRoles", "Admin")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
