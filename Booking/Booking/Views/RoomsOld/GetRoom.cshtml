@@ -1,4 +1,4 @@
-﻿@model Booking.Models.Room
+﻿@model Booking.Entity_Models.Room
 @{
     ViewBag.Title = "GetRoom";
 }
@@ -12,14 +12,14 @@
 
 @using (Html.BeginForm("GetRoom", "Rooms", FormMethod.Post))
 {
-    <input name="roomId" value="@Model.RoomId" hidden/>
+    
     <p>
         Time:
-        <input type="date" min="@Model.MinTime" max="@Model.MaxTime" />
+        <input type="date" name="ReservedTime" min="@Model.MinTime" max="@Model.MaxTime" required/>
     </p>
     <p>
         People:
-        <input type="number" min="0" max="@Model.MaxPeople" />
+        <input type="number"  min="0" max="@Model.MaxPeople" required/>
     </p>
     <input type="submit" onclick="this.form.submit();" />
 }

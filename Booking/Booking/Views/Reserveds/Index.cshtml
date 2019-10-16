@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Booking.Entity_Models.Reserved>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Room.NameRoom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EventName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReservedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReservedTimeFrom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReservedTimeTo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UsersId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Room.NameRoom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EventName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReservedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReservedTimeFrom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReservedTimeTo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UsersId)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ReservedId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ReservedId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ReservedId })
+        </td>
+    </tr>
+}
+
+</table>

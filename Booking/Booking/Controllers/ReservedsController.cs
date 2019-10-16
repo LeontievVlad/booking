@@ -11,107 +11,112 @@ using Booking.Models;
 
 namespace Booking.Controllers
 {
-    public class RoomsController : Controller
+    public class ReservedsController : Controller
     {
         private BookingContext db = new BookingContext();
 
-        // GET: Rooms
+        // GET: Reserveds
         public ActionResult Index()
         {
-            return View(db.Rooms.ToList());
+            var reserveds = db.Reserveds.Include(r => r.Room);
+            return View(reserveds.ToList());
         }
 
-        // GET: Rooms/Details/5
+        // GET: Reserveds/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Room room = db.Rooms.Find(id);
-            if (room == null)
+            Reserved reserved = db.Reserveds.Find(id);
+            if (reserved == null)
             {
                 return HttpNotFound();
             }
-            return View(room);
+            return View(reserved);
         }
 
-        // GET: Rooms/Create
+        // GET: Reserveds/Create
         public ActionResult Create()
         {
+            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
             return View();
         }
 
-        // POST: Rooms/Create
+        // POST: Reserveds/Create
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RoomId,NameRoom,Date,MinTime,BusyTime,MaxTime,MaxPeople")] Room room)
+        public ActionResult Create([Bind(Include = "ReservedId,EventName,ReservedDate,ReservedTimeFrom,ReservedTimeTo,RoomId,UsersId")] Reserved reserved)
         {
             if (ModelState.IsValid)
             {
-                db.Rooms.Add(room);
+                db.Reserveds.Add(reserved);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(room);
+            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
+            return View(reserved);
         }
 
-        // GET: Rooms/Edit/5
+        // GET: Reserveds/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Room room = db.Rooms.Find(id);
-            if (room == null)
+            Reserved reserved = db.Reserveds.Find(id);
+            if (reserved == null)
             {
                 return HttpNotFound();
             }
-            return View(room);
+            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
+            return View(reserved);
         }
 
-        // POST: Rooms/Edit/5
+        // POST: Reserveds/Edit/5
         // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RoomId,NameRoom,Date,MinTime,BusyTime,MaxTime,MaxPeople")] Room room)
+        public ActionResult Edit([Bind(Include = "ReservedId,EventName,ReservedDate,ReservedTimeFrom,ReservedTimeTo,RoomId,UsersId")] Reserved reserved)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(room).State = EntityState.Modified;
+                db.Entry(reserved).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(room);
+            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
+            return View(reserved);
         }
 
-        // GET: Rooms/Delete/5
+        // GET: Reserveds/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Room room = db.Rooms.Find(id);
-            if (room == null)
+            Reserved reserved = db.Reserveds.Find(id);
+            if (reserved == null)
             {
                 return HttpNotFound();
             }
-            return View(room);
+            return View(reserved);
         }
 
-        // POST: Rooms/Delete/5
+        // POST: Reserveds/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Room room = db.Rooms.Find(id);
-            db.Rooms.Remove(room);
+            Reserved reserved = db.Reserveds.Find(id);
+            db.Reserveds.Remove(reserved);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
