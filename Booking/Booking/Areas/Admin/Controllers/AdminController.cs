@@ -139,14 +139,18 @@ namespace Booking.Areas.Admin.Controllers
                     //BusyTime = Convert.ToDateTime(createRoomViewModel.MaxTime - createRoomViewModel.MinTime),
                     MaxPeople = createRoomViewModel.MaxPeople
                 };
+
                 db.Rooms.Add(room);
-                //db.Rooms.Add(createRoomViewModel);
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
             return View(createRoomViewModel);
         }
+
+
+        
 
         // GET: Admin/Admin/Edit/5
         public ActionResult Edit(int? id)

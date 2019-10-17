@@ -4,20 +4,6 @@
     ViewBag.Title = "Index";
 }
 
-<style>
-    #container {
-        float: left;
-        width: 100%;
-        text-align: center;
-    }
-
-    span, #Room {
-        float: left;
-        padding: 5px;
-        min-width: 140px;
-    }
-</style>
-
 <div id="container">
     <div id="head">
         <span>@Html.DisplayNameFor(model => model.NameRoom) </span>
@@ -41,7 +27,7 @@
 
                 <input name="RoomId" value="@item.RoomId" hidden />
                 <span id="NameRoom" name="NameRoom">@item.NameRoom</span>
-                <span id="Date" name="Date">@item.Date</span>
+                <span id="Date" name="Date">@item.Date.ToString("dd-MM-yyyy")</span>
                 <span id="MinTime" name="MinTime">@item.MinTime</span>
                 <span id="MaxTime" name="MaxTime">@item.MaxTime</span>
                 <span id="MaxPeole" name="MaxPeole">@item.MaxPeople</span>

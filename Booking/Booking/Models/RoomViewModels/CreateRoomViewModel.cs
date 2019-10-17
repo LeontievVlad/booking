@@ -23,13 +23,14 @@ namespace Booking.Models.RoomViewModels
 
         [Display(Name = "From (time)")]
         [DataType(DataType.Time)]
-        public DateTime MinTime { get; set; }
+        
+        public TimeSpan MinTime { get; set; }
 
 
 
         [Display(Name = "To (time)")]
         [DataType(DataType.Time)]
-        public DateTime MaxTime { get; set; }
+        public TimeSpan MaxTime { get; set; }
 
 
         [Display(Name = "Max count of people")]

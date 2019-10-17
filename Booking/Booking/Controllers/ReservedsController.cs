@@ -8,18 +8,27 @@ using System.Web;
 using System.Web.Mvc;
 using Booking.Entity_Models;
 using Booking.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Booking.Controllers
 {
+
     public class ReservedsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Reserveds
+
         public ActionResult Index()
         {
             var reserveds = db.Reserveds.Include(r => r.Room);
-            
+            //reserveds=reserveds.Where(x => x.UsersId == System.Web.HttpContext.Current.User.Identity.GetUserId());
+
+            //var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+            //reserveds = reserveds.Where(x => x.OwnerId == userId);
+
             return View(reserveds.ToList());
         }
 
@@ -42,8 +51,8 @@ namespace Booking.Controllers
         public ActionResult Create()
         {
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName"); 
-                
+            ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
+
             return View();
         }
 
@@ -56,13 +65,23 @@ namespace Booking.Controllers
         {
             if (ModelState.IsValid)
             {
+                reserved.OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
                 db.Reserveds.Add(reserved);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            
+
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
-            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName", reserved.UsersId);
+            ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName", reserved.OwnerId);
+            return View(reserved);
+        }
+
+        
+        public ActionResult AddUsersToEvent(int? ReservedId)
+        {
+            
+            Reserved reserved = db.Reserveds.Find(ReservedId);
+            
             return View(reserved);
         }
 
@@ -78,6 +97,17 @@ namespace Booking.Controllers
             {
                 return HttpNotFound();
             }
+
+
+
+            var userStore = new UserStore<ApplicationUser>(db);
+            List<string> select = new List<string>();
+            foreach (var item in userStore.Users)
+            {
+                select.Add(item.UserName);
+            }
+
+            ViewBag.select = new SelectList(select);
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
             return View(reserved);
         }
@@ -87,14 +117,24 @@ namespace Booking.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ReservedId,EventName,ReservedDate,ReservedTimeFrom,ReservedTimeTo,RoomId,UsersId")] Reserved reserved)
+        public ActionResult Edit(Reserved reserved)
         {
             if (ModelState.IsValid)
             {
+                reserved.OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                
                 db.Entry(reserved).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            var userStore = new UserStore<ApplicationUser>(db);
+            List<string> select = new List<string>();
+            foreach (var item in userStore.Users)
+            {
+                select.Add(item.UserName);
+            }
+            ViewBag.select = new SelectList(select);
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
             return View(reserved);
         }

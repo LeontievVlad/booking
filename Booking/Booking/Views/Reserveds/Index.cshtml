@@ -27,37 +27,59 @@
             @Html.DisplayNameFor(model => model.ReservedTimeTo)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UsersId)
+            @Html.DisplayNameFor(model => model.OwnerId)
         </th>
+        <th>UsersEmails</th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Room.NameRoom)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EventName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReservedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReservedTimeFrom)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReservedTimeTo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UsersId)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ReservedId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ReservedId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ReservedId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Room.NameRoom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservedTimeFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservedTimeTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OwnerId)
+            </td>
+            <td>
+                @*@if (item.UsersEmails != null)
+                    {
+                        foreach (var emails in item.UsersEmails)
+                        {
+                            <p>
+                                @emails
+                            </p>
+                        }
+                    }
+                    else
+                    {
+                        <p>
+                            empty
+                        </p>
+                    }*@
+                @Html.DisplayFor(modelItem => item.UsersEmails)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ReservedId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ReservedId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ReservedId })
+                <br />
+                @Html.ActionLink("Add Users", "AddUsersToEvent", new { ReservedId = item.ReservedId })
+            </td>
+        </tr>
+    }
 
 </table>

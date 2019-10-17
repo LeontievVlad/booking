@@ -51,11 +51,24 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.OwnerId)
+            @Html.DisplayNameFor(model => model.UsersEmails)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.OwnerId)
+            @*@Html.DisplayFor(model => model.OwnerId)*@
+            @if (Model.UsersEmails != null)
+            {
+
+                foreach (var emails in Model.UsersEmails)
+                {
+                    <p>@emails</p>
+                }
+            }
+            else
+            {
+                <p>UsersEmails is empty</p>
+            }
+
         </dd>
 
     </dl>

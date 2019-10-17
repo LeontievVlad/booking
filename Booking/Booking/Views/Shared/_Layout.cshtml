@@ -8,6 +8,10 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
+
+    <link href="~/Content/select2.css" rel="stylesheet" />
+
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -42,8 +46,22 @@
         </footer>
     </div>
 
+
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script src="~/Scripts/select2/select2.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#UsersEmails").select2({
+                multiple: true,
+                placeholder: "Select a Room",
+                dropdownAutoWidth: true
+
+            });
+        });
+
+    </script>
 </body>
 </html>

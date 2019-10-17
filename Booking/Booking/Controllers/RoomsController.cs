@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Booking.Entity_Models;
 using Booking.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Booking.Controllers
 {
@@ -18,29 +19,41 @@ namespace Booking.Controllers
         // GET: Rooms
         public ActionResult Index()
         {
+            
+
+            //ViewBag.select = db.Rooms.Select(x => x.NameRoom).ToList();
             return View(db.Rooms.ToList());
         }
 
         [HttpGet]
         public ActionResult Reserve(int? RoomId)
         {
+           
             ViewBag.work = RoomId;
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName");
+            ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
             return View();
         }
 
         [HttpPost]
-        public ActionResult Reserve(Reserved reserved)
+        public ActionResult Reserve(Reserved reserved, int RoomId)
         {
             if (ModelState.IsValid)
             {
+
+
+                reserved.OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                   var a = System.Web.HttpContext.Current.User.Identity.Name;
+                reserved.UsersEmails = new List<string> { a};
                 db.Reserveds.Add(reserved);
                 db.SaveChanges();
                 return RedirectToAction("Index");
+
             }
+
+            ViewBag.work = RoomId;
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
-            ViewBag.UserId = new SelectList(db.Users, "Id", "UserName");
+            ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
             return View();
         }
 

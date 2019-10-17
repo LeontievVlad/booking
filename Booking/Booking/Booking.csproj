@@ -200,10 +200,23 @@
     <Compile Include="Migrations\201910161852111_Update_CreateRoomViewModel.Designer.cs">
       <DependentUpon>201910161852111_Update_CreateRoomViewModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910170743063_UpdateRoom.cs" />
+    <Compile Include="Migrations\201910170743063_UpdateRoom.Designer.cs">
+      <DependentUpon>201910170743063_UpdateRoom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910170834536_UpdateReserved.cs" />
+    <Compile Include="Migrations\201910170834536_UpdateReserved.Designer.cs">
+      <DependentUpon>201910170834536_UpdateReserved.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910170945403_UpdateReserved1.cs" />
+    <Compile Include="Migrations\201910170945403_UpdateReserved1.Designer.cs">
+      <DependentUpon>201910170945403_UpdateReserved1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ReservedViewModels\CreateReserveViewModel.cs" />
     <Compile Include="Models\RolesViewModel.cs" />
     <Compile Include="Models\RoomViewModels\CreateRoomViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -214,6 +227,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\select2.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -242,6 +256,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\ReservedDate.js" />
+    <Content Include="Scripts\select2\select2.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -280,6 +295,7 @@
     <Content Include="Views\Reserveds\Edit.cshtml" />
     <Content Include="Views\Reserveds\Index.cshtml" />
     <Content Include="Views\Rooms\Reserve.cshtml" />
+    <Content Include="Views\Reserveds\AddUsersToEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -313,6 +329,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910161852111_Update_CreateRoomViewModel.resx">
       <DependentUpon>201910161852111_Update_CreateRoomViewModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910170743063_UpdateRoom.resx">
+      <DependentUpon>201910170743063_UpdateRoom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910170834536_UpdateReserved.resx">
+      <DependentUpon>201910170834536_UpdateReserved.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910170945403_UpdateReserved1.resx">
+      <DependentUpon>201910170945403_UpdateReserved1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
