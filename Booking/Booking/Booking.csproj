@@ -212,10 +212,15 @@
     <Compile Include="Migrations\201910170945403_UpdateReserved1.Designer.cs">
       <DependentUpon>201910170945403_UpdateReserved1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910201725519_UsersEmailsArray.cs" />
+    <Compile Include="Migrations\201910201725519_UsersEmailsArray.Designer.cs">
+      <DependentUpon>201910201725519_UsersEmailsArray.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ReservedViewModels\AddUsersToEvent.cs" />
     <Compile Include="Models\ReservedViewModels\CreateReserveViewModel.cs" />
     <Compile Include="Models\RolesViewModel.cs" />
     <Compile Include="Models\RoomViewModels\CreateRoomViewModel.cs" />
@@ -296,6 +301,7 @@
     <Content Include="Views\Reserveds\Index.cshtml" />
     <Content Include="Views\Rooms\Reserve.cshtml" />
     <Content Include="Views\Reserveds\AddUsersToEvent.cshtml" />
+    <Content Include="Views\Reserveds\AddList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -338,6 +344,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910170945403_UpdateReserved1.resx">
       <DependentUpon>201910170945403_UpdateReserved1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910201725519_UsersEmailsArray.resx">
+      <DependentUpon>201910201725519_UsersEmailsArray.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

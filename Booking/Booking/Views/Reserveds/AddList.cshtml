@@ -1,0 +1,19 @@
+﻿@model Booking.Models.ReservedViewModels.CreateReserveViewModel
+@{
+    ViewBag.Title = "AddList";
+}
+@using (Html.BeginForm())
+{
+    <br />
+    @Html.ListBox("selectedEmails", new MultiSelectList(Model.UsersEmails) , new { style = "width: 300px;" })
+
+
+    <input type="submit" value="submit" onclick="this.form.submit();" />
+}
+<br />
+<br />
+
+@foreach (var emails in Model.UsersEmails)
+{
+    <p>@emails</p>
+}

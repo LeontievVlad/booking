@@ -8,12 +8,13 @@ using System.Web;
 using System.Web.Mvc;
 using Booking.Entity_Models;
 using Booking.Models;
+using Booking.Models.ReservedViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Booking.Controllers
 {
-
+    [Authorize]
     public class ReservedsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -30,6 +31,35 @@ namespace Booking.Controllers
             //reserveds = reserveds.Where(x => x.OwnerId == userId);
 
             return View(reserveds.ToList());
+        }
+
+        [HttpGet]
+        public ActionResult AddList()
+        {
+
+            var allUserNames = db.Users.Select(x => x.UserName);
+
+
+            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
+            {
+                UsersEmails = allUserNames.ToArray()
+            };
+
+
+
+            return View(createReserveViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult AddList(string[] selectedEmails)
+        {
+
+            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
+            {
+                UsersEmails = selectedEmails
+            };
+
+            return View(createReserveViewModel);
         }
 
         // GET: Reserveds/Details/5
@@ -77,13 +107,8 @@ namespace Booking.Controllers
         }
 
         
-        public ActionResult AddUsersToEvent(int? ReservedId)
-        {
-            
-            Reserved reserved = db.Reserveds.Find(ReservedId);
-            
-            return View(reserved);
-        }
+
+       
 
         // GET: Reserveds/Edit/5
         public ActionResult Edit(int? id)
@@ -97,17 +122,10 @@ namespace Booking.Controllers
             {
                 return HttpNotFound();
             }
+            var allUserNames = db.Users.Select(x => x.UserName);
+            reserved.UsersEmails = allUserNames.ToArray();
 
-
-
-            var userStore = new UserStore<ApplicationUser>(db);
-            List<string> select = new List<string>();
-            foreach (var item in userStore.Users)
-            {
-                select.Add(item.UserName);
-            }
-
-            ViewBag.select = new SelectList(select);
+            
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
             return View(reserved);
         }
@@ -121,20 +139,17 @@ namespace Booking.Controllers
         {
             if (ModelState.IsValid)
             {
-                reserved.OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                
+                //reserved.OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                //var oldreserve = db.Reserveds.Find(reserved.ReservedId);
+
+                //reserved.OwnerId = oldreserve.OwnerId;
                 db.Entry(reserved).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            var userStore = new UserStore<ApplicationUser>(db);
-            List<string> select = new List<string>();
-            foreach (var item in userStore.Users)
-            {
-                select.Add(item.UserName);
-            }
-            ViewBag.select = new SelectList(select);
+
+
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
             return View(reserved);
         }

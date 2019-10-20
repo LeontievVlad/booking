@@ -20,7 +20,7 @@ namespace Booking.Entity_Models
         [DataType(DataType.Time)]
         public TimeSpan ReservedTimeTo { get; set; }
 
-        public List<string> UsersEmails { get; set; }
+        public string[] UsersEmails { get; set; }
         
         public int? RoomId { get; set; }
         public Room Room { get; set; }
