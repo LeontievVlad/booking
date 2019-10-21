@@ -9,7 +9,20 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+<br />
+
+<div>
+    @using (Ajax.BeginForm("SearchRoom", new AjaxOptions { UpdateTargetId = "results" }))
+    {
+        <input type="text" name="name"  />
+        <input type="submit" value="Search" class="btn-primary" />
+    }
+
+    <div id="results"></div>
+</div>
+<br />
 <table class="table">
+
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Room.NameRoom)
@@ -32,7 +45,6 @@
         <th>@Html.DisplayNameFor(model => model.SelectedUsersEmails)</th>
         <th></th>
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
@@ -58,13 +70,13 @@
                 @Html.DisplayFor(modelItem => item.SelectedUsersEmails)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ReservedId, date = item.ReservedDate }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.ReservedId }) |
                 @Html.ActionLink("Details", "Details", new { id = item.ReservedId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.ReservedId })
-                <br />
+
                 @*@Html.ActionLink("Add Users", "AddUsersToEvent", new { ReservedId = item.ReservedId })*@
                 @*@Html.ActionLink("AddList", "AddList", new { id = item.ReservedId })*@
-                
+
 
             </td>
         </tr>

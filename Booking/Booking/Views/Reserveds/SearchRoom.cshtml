@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Booking.Entity_Models.Reserved>
+
+<div id="searchresults">
+    @foreach (var item in Model)
+    {
+        <p>
+            @item.EventName |
+            @item.ReservedDate |
+            @item.OwnerId
+        </p>
+    }
+
+
+
+
+</div>

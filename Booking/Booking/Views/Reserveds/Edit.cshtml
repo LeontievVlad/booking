@@ -69,25 +69,28 @@
 
 
 
-
-
-                    @foreach (var em in ViewBag.selected)
+                    @if (ViewBag.selected != null)
                     {
-                        foreach (var item in Model.UsersEmails)
+
+
+                        foreach (var em in ViewBag.selected)
                         {
-                            if (item != em)
+                            foreach (var item in Model.UsersEmails)
                             {
-                                <option selected>
-                                    @item
-                                </option>
+                                if (item != em)
+                                {
+                                    <option selected>
+                                        @item
+                                    </option>
+                                }
+
                             }
-                            
                         }
+
+
+
                     }
 
-
-
-                    
                 </select>
 
 
@@ -108,4 +111,26 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-<script src="~/Scripts/ReservedDate.js"></script>
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/ReservedDate.js")
+
+    <script>
+        $(document).ready(function () {
+            $("#UsersEmails").select2({
+                placeholder: "Select a user email",
+                multiple: true,
+                width: 280
+
+                //placeholder: "Select a users",
+
+
+            });
+        });
+
+
+    </script>
+}

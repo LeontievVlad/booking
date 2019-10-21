@@ -60,7 +60,7 @@
                 @Html.DisplayFor(model => model.OwnerId, new { htmlAttributes = new { @class = "form-control" } })
                 @*@Html.DropDownList("OwnerId", null, htmlAttributes: new { @class = "form-control" })*@
                 @*@Html.ValidationMessageFor(model => model.OwnerId, "", new { @class = "text-danger" })*@
-                
+
             </div>
         </div>
 
@@ -75,4 +75,9 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-<script src="~/Scripts/ReservedDate.js"></script>
+
+
+
+@section Scripts {
+    <script src="~/Scripts/ReservedDate.js"></script>
+}

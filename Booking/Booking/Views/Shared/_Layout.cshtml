@@ -7,9 +7,9 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
-
     <link href="~/Content/select2.css" rel="stylesheet" />
+
+
 
 
 </head>
@@ -48,24 +48,13 @@
 
 
 
+    @Scripts.Render("~/Scripts/jquery-3.3.1.js")
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.js")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
     <script src="~/Scripts/select2/select2.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#UsersEmails").select2({
-                placeholder: "Select a user email",
-                multiple: true,
-                width: 280
-                
-                //placeholder: "Select a users",
-                
+    @RenderSection("scripts", required: false)
 
-            });
-        });
-        
 
-    </script>
 </body>
 </html>

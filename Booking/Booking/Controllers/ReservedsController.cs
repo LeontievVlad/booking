@@ -38,6 +38,22 @@ namespace Booking.Controllers
             return View(reserveds.ToList());
         }
 
+        [HttpPost]
+        public ActionResult SearchRoom(string name)
+        {
+
+           
+            var reserveds = db.Reserveds.Where(x => x.EventName.Contains(name)).ToList();
+           if(name == "")
+            {
+                reserveds = null;
+            }
+
+
+            return PartialView(reserveds);
+        }
+
+
         [HttpGet]
         public ActionResult AddList()
         {
@@ -86,7 +102,7 @@ namespace Booking.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Reserved reserved = db.Reserveds.Find(id);
-            
+
             if (reserved == null)
             {
                 return HttpNotFound();
@@ -176,8 +192,10 @@ namespace Booking.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            var selected = reserved.SelectedUsersEmails.Split(',');
 
-            
+            ViewBag.selected = selected;
+
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
             return View(reserved);
         }
