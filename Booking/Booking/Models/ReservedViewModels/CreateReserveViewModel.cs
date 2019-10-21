@@ -20,6 +20,7 @@ namespace Booking.Models.ReservedViewModels
         public TimeSpan ReservedTimeTo { get; set; }
 
         public string[] UsersEmails { get; set; }
+        public string SelectedUsersEmails { get; set; }
 
         public int? RoomId { get; set; }
         public Room Room { get; set; }

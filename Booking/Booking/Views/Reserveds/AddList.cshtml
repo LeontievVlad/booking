@@ -2,10 +2,23 @@
 @{
     ViewBag.Title = "AddList";
 }
+
+
+<br />
 @using (Html.BeginForm())
 {
-    <br />
-    @Html.ListBox("selectedEmails", new MultiSelectList(Model.UsersEmails) , new { style = "width: 300px;" })
+
+
+    <p>
+        @*@Model.ReservedId*@
+        <br />
+        @*@Model.RoomId*@
+        <br />
+        @*@Model.EventName*@
+    </p>
+
+
+    @Html.DropDownList("UsersEmails", new SelectList(Model.UsersEmails,null), new { style = "width: 300px;" })
 
 
     <input type="submit" value="submit" onclick="this.form.submit();" />

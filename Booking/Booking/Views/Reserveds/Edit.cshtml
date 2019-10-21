@@ -27,6 +27,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ReservedDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+                @*@ViewBag.ReservedDate*@
+                @*@Model.ReservedDate*@
                 @Html.EditorFor(model => model.ReservedDate, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ReservedDate, "", new { @class = "text-danger" })
             </div>
@@ -57,15 +59,44 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.UsersEmails, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.SelectedUsersEmails, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @*@Html.DropDownList("UsersEmails", ViewBag.select as SelectList, new { style = "width: 300px;" })*@
+                @Model.SelectedUsersEmails
+                <br />
 
-                @Html.ListBoxFor(model=>model.UsersEmails, new MultiSelectList(Model.UsersEmails), new { style = "width: 300px;" })
-                
+                <select id="UsersEmails" name="UsersEmails">
+
+
+
+
+
+                    @foreach (var em in ViewBag.selected)
+                    {
+                        foreach (var item in Model.UsersEmails)
+                        {
+                            if (item != em)
+                            {
+                                <option selected>
+                                    @item
+                                </option>
+                            }
+                            
+                        }
+                    }
+
+
+
+                    
+                </select>
+
+
+                @*@Html.DropDownListFor(model => model.UsersEmails, new SelectList(Model.UsersEmails, ViewBag.selected),
+                    "")*@
+
             </div>
         </div>
-        @Html.TextBox("OwnerId", Model.OwnerId, new { hidden="hidden"})
+        @Html.TextBox("OwnerId", Model.OwnerId, new { hidden = "hidden" })
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />

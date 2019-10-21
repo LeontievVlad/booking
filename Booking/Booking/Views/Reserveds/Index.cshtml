@@ -5,7 +5,7 @@
 }
 
 <h2>Index</h2>
-<p>@Html.ActionLink("AddList", "AddList")</p>
+
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -29,7 +29,7 @@
         <th>
             @Html.DisplayNameFor(model => model.OwnerId)
         </th>
-        <th>UsersEmails</th>
+        <th>@Html.DisplayNameFor(model => model.SelectedUsersEmails)</th>
         <th></th>
     </tr>
 
@@ -55,30 +55,16 @@
                 @Html.DisplayFor(modelItem => item.OwnerId)
             </td>
             <td>
-                @*@if (item.UsersEmails != null)
-                    {
-                        foreach (var emails in item.UsersEmails)
-                        {
-                            <p>
-                                @emails
-                            </p>
-                        }
-                    }
-                    else
-                    {
-                        <p>
-                            empty
-                        </p>
-                    }*@
-                @Html.DisplayFor(modelItem => item.UsersEmails)
+                @Html.DisplayFor(modelItem => item.SelectedUsersEmails)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ReservedId }) |
+                @Html.ActionLink("Edit", "Edit", new { id = item.ReservedId, date = item.ReservedDate }) |
                 @Html.ActionLink("Details", "Details", new { id = item.ReservedId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.ReservedId })
                 <br />
-                @Html.ActionLink("Add Users", "AddUsersToEvent", new { ReservedId = item.ReservedId })
-
+                @*@Html.ActionLink("Add Users", "AddUsersToEvent", new { ReservedId = item.ReservedId })*@
+                @*@Html.ActionLink("AddList", "AddList", new { id = item.ReservedId })*@
+                
 
             </td>
         </tr>

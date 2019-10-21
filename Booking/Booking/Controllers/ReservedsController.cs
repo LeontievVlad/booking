@@ -17,10 +17,15 @@ namespace Booking.Controllers
     [Authorize]
     public class ReservedsController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
+
+        public char[] separateComa = { ',' };
+
+        private readonly string currentUserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+        private readonly string currentUserName = System.Web.HttpContext.Current.User.Identity.Name;
 
         // GET: Reserveds
-
         public ActionResult Index()
         {
             var reserveds = db.Reserveds.Include(r => r.Room);
@@ -37,11 +42,19 @@ namespace Booking.Controllers
         public ActionResult AddList()
         {
 
+
+            //var reserved = db.Reserveds.Find(ReserveId);
             var allUserNames = db.Users.Select(x => x.UserName);
+            //string temp = "";
+            //foreach(var item in allUserNames)
+            //{
+            //    temp += $"{item},";
+            //}
 
 
             CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
             {
+                //ReservedId = ReserveId,
                 UsersEmails = allUserNames.ToArray()
             };
 
@@ -51,13 +64,16 @@ namespace Booking.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddList(string[] selectedEmails)
+        public ActionResult AddList(string[] UsersEmails, CreateReserveViewModel createReserveViewModel)
         {
+            //if (ModelState.IsValid)
+            //{
 
-            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
-            {
-                UsersEmails = selectedEmails
-            };
+            //}
+
+
+            //createReserveViewModel.ReservedId = ReserveId;
+            createReserveViewModel.UsersEmails = UsersEmails;
 
             return View(createReserveViewModel);
         }
@@ -70,6 +86,7 @@ namespace Booking.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Reserved reserved = db.Reserveds.Find(id);
+            
             if (reserved == null)
             {
                 return HttpNotFound();
@@ -81,9 +98,14 @@ namespace Booking.Controllers
         public ActionResult Create()
         {
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
+            //ViewBag.OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
-            return View();
+            Reserved reserved = new Reserved
+            {
+                OwnerId = currentUserId
+            };
+
+            return View(reserved);
         }
 
         // POST: Reserveds/Create
@@ -91,24 +113,25 @@ namespace Booking.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ReservedId,EventName,ReservedDate,ReservedTimeFrom,ReservedTimeTo,RoomId,UsersId")] Reserved reserved)
+        public ActionResult Create(Reserved reserved)
         {
+            reserved.OwnerId = currentUserId;
             if (ModelState.IsValid)
             {
-                reserved.OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
                 db.Reserveds.Add(reserved);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName", reserved.OwnerId);
+
             return View(reserved);
         }
 
-        
 
-       
+
+
 
         // GET: Reserveds/Edit/5
         public ActionResult Edit(int? id)
@@ -122,10 +145,14 @@ namespace Booking.Controllers
             {
                 return HttpNotFound();
             }
+
             var allUserNames = db.Users.Select(x => x.UserName);
             reserved.UsersEmails = allUserNames.ToArray();
 
-            
+            var selected = reserved.SelectedUsersEmails.Split(',');
+
+            ViewBag.selected = selected;
+
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
             return View(reserved);
         }
@@ -143,13 +170,14 @@ namespace Booking.Controllers
                 //var oldreserve = db.Reserveds.Find(reserved.ReservedId);
 
                 //reserved.OwnerId = oldreserve.OwnerId;
+
+                reserved.SelectedUsersEmails = string.Join(",", reserved.UsersEmails);
                 db.Entry(reserved).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-
-
+            
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);
             return View(reserved);
         }

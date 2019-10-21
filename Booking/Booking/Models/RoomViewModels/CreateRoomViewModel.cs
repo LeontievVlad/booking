@@ -23,7 +23,6 @@ namespace Booking.Models.RoomViewModels
 
         [Display(Name = "From (time)")]
         [DataType(DataType.Time)]
-        
         public TimeSpan MinTime { get; set; }
 
 

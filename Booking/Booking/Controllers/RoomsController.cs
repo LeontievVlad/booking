@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Booking.Entity_Models;
 using Booking.Models;
+using Booking.Models.RoomViewModels;
 using Booking.Models.ReservedViewModels;
 using Microsoft.AspNet.Identity;
 
@@ -18,39 +19,47 @@ namespace Booking.Controllers
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
 
+        private readonly string currentUserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+        private readonly string currentUserName = System.Web.HttpContext.Current.User.Identity.Name;
+
         // GET: Rooms
         [AllowAnonymous]
         public ActionResult Index()
         {
-            
+
+
 
             //ViewBag.select = db.Rooms.Select(x => x.NameRoom).ToList();
             return View(db.Rooms.ToList());
         }
 
         [HttpGet]
-        public ActionResult Reserve(int? RoomId)
+        public ActionResult Reserve()
         {
 
-            
+            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
+            {
+
+            };
 
 
 
-            ViewBag.work = RoomId;
+            //ViewBag.work = RoomId;
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
             ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
-            return View();
+            return View(createReserveViewModel);
         }
 
         [HttpPost]
-        public ActionResult Reserve(CreateReserveViewModel createReserveViewModel, int RoomId)
+        public ActionResult Reserve(CreateReserveViewModel createReserveViewModel)
         {
             if (ModelState.IsValid)
             {
 
 
                 //createReserveViewModel.OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                   string[] currentName = { System.Web.HttpContext.Current.User.Identity.Name };
+                string[] currentName = { currentUserName };
                 //createReserveViewModel.UsersEmails = new List<string> { a};
 
                 Reserved reserve = new Reserved
@@ -61,7 +70,7 @@ namespace Booking.Controllers
                     ReservedTimeTo = createReserveViewModel.ReservedTimeTo,
                     EventName = createReserveViewModel.EventName,
                     RoomId = createReserveViewModel.RoomId,
-                    OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId(),
+                    OwnerId = currentUserId,
                     UsersEmails = currentName
 
                 };
@@ -72,7 +81,7 @@ namespace Booking.Controllers
 
             }
 
-            ViewBag.work = RoomId;
+            //ViewBag.work = RoomId;
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
             ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
             return View();
