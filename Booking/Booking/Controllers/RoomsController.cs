@@ -11,6 +11,7 @@ using Booking.Models;
 using Booking.Models.RoomViewModels;
 using Booking.Models.ReservedViewModels;
 using Microsoft.AspNet.Identity;
+using AutoMapper;
 
 namespace Booking.Controllers
 {
@@ -22,6 +23,12 @@ namespace Booking.Controllers
         private readonly string currentUserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
         private readonly string currentUserName = System.Web.HttpContext.Current.User.Identity.Name;
+
+        private MapperConfiguration CreateReserveViewModelToReserved = new MapperConfiguration(
+            cfg => cfg.CreateMap<CreateReserveViewModel, Reserved>()
+            );
+
+        //public IMapper mapper = config.CreateMapper();
 
         // GET: Rooms
         [AllowAnonymous]
@@ -35,20 +42,20 @@ namespace Booking.Controllers
         }
 
         [HttpGet]
-        public ActionResult Reserve()
+        public ActionResult Reserve(Room room)
         {
 
-            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
+            var createReserve = new CreateReserveViewModel
             {
-
+                OwnerId = currentUserId,
+                RoomId = room.RoomId
             };
 
 
-
-            //ViewBag.work = RoomId;
-            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
-            return View(createReserveViewModel);
+            ViewBag.RoomName = room.NameRoom;
+            //ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
+            //ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
+            return View();
         }
 
         [HttpPost]
@@ -57,35 +64,29 @@ namespace Booking.Controllers
             if (ModelState.IsValid)
             {
 
+                createReserveViewModel.OwnerId = currentUserId;
 
-                //createReserveViewModel.OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                string[] currentName = { currentUserName };
-                //createReserveViewModel.UsersEmails = new List<string> { a};
+                db.Reserveds.Add(
+                    CreateReserveViewModelToReserved.CreateMapper()
+                    .Map<CreateReserveViewModel, Reserved>(createReserveViewModel
+                    ));
 
-                Reserved reserve = new Reserved
-                {
-                    ReservedId = createReserveViewModel.ReservedId,
-                    ReservedDate = createReserveViewModel.ReservedDate,
-                    ReservedTimeFrom = createReserveViewModel.ReservedTimeFrom,
-                    ReservedTimeTo = createReserveViewModel.ReservedTimeTo,
-                    EventName = createReserveViewModel.EventName,
-                    RoomId = createReserveViewModel.RoomId,
-                    OwnerId = currentUserId,
-                    UsersEmails = currentName
-
-                };
-
-                db.Reserveds.Add(reserve);
                 db.SaveChanges();
+
                 return RedirectToAction("Index", "Reserveds");
 
             }
 
+
+
+            ViewBag.RoomName = createReserveViewModel.Room.NameRoom;
             //ViewBag.work = RoomId;
-            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
-            return View();
+            //ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", createReserveViewModel.RoomId);
+            //ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName",);
+            return View(createReserveViewModel);
         }
+
+
 
         protected override void Dispose(bool disposing)
         {

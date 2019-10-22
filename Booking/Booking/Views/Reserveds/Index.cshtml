@@ -1,5 +1,8 @@
-﻿@model IEnumerable<Booking.Entity_Models.Reserved>
+﻿@model PagedList.IPagedList<Booking.Entity_Models.Reserved>
+@using PagedList.Mvc;
 
+
+@*@model IEnumerable<Booking.Entity_Models.Reserved>*@
 @{
     ViewBag.Title = "Index";
 }
@@ -12,10 +15,20 @@
 <br />
 
 <div>
-    @using (Ajax.BeginForm("SearchRoom", new AjaxOptions { UpdateTargetId = "results" }))
+    @using (Ajax.BeginForm("SearchRoom", new AjaxOptions
     {
-        <input type="text" name="name"  />
+        UpdateTargetId = "results",
+        LoadingElementId = "loading",
+        LoadingElementDuration = 1000,
+        Confirm = "Выполнить AJAX-запрос?"
+    }))
+    {
+        <input type="text" name="name" />
         <input type="submit" value="Search" class="btn-primary" />
+        @*<span id="loading" style="display:none; color:Red; font-weight:bold;">
+                Идет загрузка...
+            </span>*@
+        <img id="loading" src="@Url.Content("~/Images/loader.gif")" style="display:none" />
     }
 
     <div id="results"></div>
@@ -25,24 +38,26 @@
 
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Room.NameRoom)
+            NameRoom
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EventName)
+            EventName
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ReservedDate)
+            ReservedDate
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ReservedTimeFrom)
+            ReservedTimeFrom
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ReservedTimeTo)
+            ReservedTimeTo
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.OwnerId)
+            OwnerId
         </th>
-        <th>@Html.DisplayNameFor(model => model.SelectedUsersEmails)</th>
+        <th>
+            SelectedUsersEmails
+        </th>
         <th></th>
     </tr>
     @foreach (var item in Model)
@@ -50,6 +65,8 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Room.NameRoom)
+                
+                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EventName)
@@ -83,3 +100,7 @@
     }
 
 </table>
+<br />
+Страница @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) из @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

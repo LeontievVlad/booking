@@ -21,9 +21,12 @@
         <div id="Room">
 
 
-            @using (Html.BeginForm("Reserve", "Rooms", FormMethod.Get))
+            @using (Html.BeginForm("Reserve", "Rooms", FormMethod.Get, new { room = item }))
             {
 
+
+
+                <input name="NameRoom" value="@item.NameRoom" hidden />
 
                 <input name="RoomId" value="@item.RoomId" hidden />
                 <span id="NameRoom" name="NameRoom">@item.NameRoom</span>
@@ -33,6 +36,7 @@
                 <span id="MaxPeole" name="MaxPeole">@item.MaxPeople</span>
 
                 <input type="submit" value="Reserve" onclick="this.form.submit();" />
+                @*@Html.ActionLink("Reserve", "Reserve", new { room = item, onclick="this.form.submit();" })*@
             }
         </div>
     }

@@ -11,6 +11,7 @@ using Booking.Models;
 using Booking.Models.ReservedViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using PagedList;
 
 namespace Booking.Controllers
 {
@@ -26,16 +27,18 @@ namespace Booking.Controllers
         private readonly string currentUserName = System.Web.HttpContext.Current.User.Identity.Name;
 
         // GET: Reserveds
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            var reserveds = db.Reserveds.Include(r => r.Room);
+            var reserveds = db.Reserveds.Include(r => r.Room).ToList();
             //reserveds=reserveds.Where(x => x.UsersId == System.Web.HttpContext.Current.User.Identity.GetUserId());
 
             //var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
             //reserveds = reserveds.Where(x => x.OwnerId == userId);
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
 
-            return View(reserveds.ToList());
+            return View(reserveds.ToPagedList(pageNumber, pageSize));
         }
 
         [HttpPost]
@@ -165,8 +168,11 @@ namespace Booking.Controllers
             var allUserNames = db.Users.Select(x => x.UserName);
             reserved.UsersEmails = allUserNames.ToArray();
 
-            var selected = reserved.SelectedUsersEmails.Split(',');
 
+
+
+            var selected = reserved.SelectedUsersEmails.Split(',');
+            
             ViewBag.selected = selected;
 
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", reserved.RoomId);

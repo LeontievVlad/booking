@@ -5,6 +5,7 @@
 }
 
 <h2>Edit</h2>
+@*@Ajax.BeginForm()*@
 
 @using (Html.BeginForm())
 {
@@ -61,11 +62,11 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SelectedUsersEmails, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @*@Html.DropDownList("UsersEmails", ViewBag.select as SelectList, new { style = "width: 300px;" })*@
                 @Model.SelectedUsersEmails
+                @Html.DropDownList("UsersEmails",  new SelectList(Model.UsersEmails),"", new { style = "width: 300px;" })
                 <br />
 
-                <select id="UsersEmails" name="UsersEmails">
+                @*<select id="UsersEmails" name="UsersEmails">
 
 
 
@@ -91,7 +92,7 @@
 
                     }
 
-                </select>
+                </select>*@
 
 
                 @*@Html.DropDownListFor(model => model.UsersEmails, new SelectList(Model.UsersEmails, ViewBag.selected),
