@@ -1,4 +1,4 @@
-﻿@model Booking.Entity_Models.Reserved
+﻿@model Booking.Models.ReservedViewModels.EditReserveViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -7,7 +7,12 @@
 <h2>Edit</h2>
 @*@Ajax.BeginForm()*@
 
-@using (Html.BeginForm())
+@using (Ajax.BeginForm("Edit", new AjaxOptions
+{
+
+    HttpMethod = "Post",
+    UpdateTargetId = "result"
+}))
 {
     @Html.AntiForgeryToken()
 
@@ -63,36 +68,36 @@
             @Html.LabelFor(model => model.SelectedUsersEmails, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Model.SelectedUsersEmails
-                @Html.DropDownList("UsersEmails",  new SelectList(Model.UsersEmails),"", new { style = "width: 300px;" })
+                @Html.ListBoxFor(model=>model.UsersEmails, ViewBag.UsersEmails as MultiSelectList, new {id="usersEmails", multiple="multiple" })
                 <br />
 
                 @*<select id="UsersEmails" name="UsersEmails">
 
 
 
-                    @if (ViewBag.selected != null)
-                    {
-
-
-                        foreach (var em in ViewBag.selected)
+                        @if (ViewBag.selected != null)
                         {
-                            foreach (var item in Model.UsersEmails)
-                            {
-                                if (item != em)
-                                {
-                                    <option selected>
-                                        @item
-                                    </option>
-                                }
 
+
+                            foreach (var em in ViewBag.selected)
+                            {
+                                foreach (var item in Model.UsersEmails)
+                                {
+                                    if (item != em)
+                                    {
+                                        <option selected>
+                                            @item
+                                        </option>
+                                    }
+
+                                }
                             }
+
+
+
                         }
 
-
-
-                    }
-
-                </select>*@
+                    </select>*@
 
 
                 @*@Html.DropDownListFor(model => model.UsersEmails, new SelectList(Model.UsersEmails, ViewBag.selected),
@@ -120,17 +125,22 @@
     @Scripts.Render("~/Scripts/ReservedDate.js")
 
     <script>
-        $(document).ready(function () {
-            $("#UsersEmails").select2({
-                placeholder: "Select a user email",
-                multiple: true,
-                width: 280
-
-                //placeholder: "Select a users",
-
-
-            });
+        $(function() {
+            $("usersEmails").chosen();
         });
+
+
+        //$(document).ready(function () {
+        //    $("#UsersEmails").select2({
+        //        placeholder: "Select a user email",
+        //        multiple: true,
+        //        width: 280
+
+        //        //placeholder: "Select a users",
+
+
+        //    });
+        //});
 
 
     </script>

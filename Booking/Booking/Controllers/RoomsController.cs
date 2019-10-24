@@ -12,6 +12,7 @@ using Booking.Models.RoomViewModels;
 using Booking.Models.ReservedViewModels;
 using Microsoft.AspNet.Identity;
 using AutoMapper;
+using PagedList;
 
 namespace Booking.Controllers
 {
@@ -28,38 +29,48 @@ namespace Booking.Controllers
             cfg => cfg.CreateMap<CreateReserveViewModel, Reserved>()
             );
 
+        private MapperConfiguration RoomToCreateRoomViewModel = new MapperConfiguration(
+            cfg => cfg.CreateMap<Room, CreateRoomViewModel>()
+            );
+
+
+        //IMapper mapper = RoomToCreateRoomViewModel.CreateMapper();
+
+        //CreateRoomViewModel createRoomViewModel = new CreateRoomViewModel();
+
+        //createRoomViewModel = mapper.Map<Room, CreateRoomViewModel>(room1);
+
         //public IMapper mapper = config.CreateMapper();
 
         // GET: Rooms
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-
-
-
             //ViewBag.select = db.Rooms.Select(x => x.NameRoom).ToList();
-            return View(db.Rooms.ToList());
+
+            var room = db.Rooms.ToList();
+            var roomIndexModel = room
+                .OrderBy(a => a.NameRoom).Select(a => new IndexRoomViewModel(a));
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(roomIndexModel.ToPagedList(pageNumber, pageSize));
         }
 
         [HttpGet]
-        public ActionResult Reserve(Room room)
+        public ActionResult Reserve(string NameRoom)
         {
 
-            var createReserve = new CreateReserveViewModel
-            {
-                OwnerId = currentUserId,
-                RoomId = room.RoomId
-            };
 
+            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel();
 
-            ViewBag.RoomName = room.NameRoom;
+            ViewBag.RoomName = NameRoom;
             //ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
             //ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
-            return View();
+            return View(createReserveViewModel);
         }
 
         [HttpPost]
-        public ActionResult Reserve(CreateReserveViewModel createReserveViewModel)
+        public ActionResult Reserve(CreateReserveViewModel createReserveViewModel, string NameRoom)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +90,7 @@ namespace Booking.Controllers
 
 
 
-            ViewBag.RoomName = createReserveViewModel.Room.NameRoom;
+            ViewBag.RoomName = NameRoom;
             //ViewBag.work = RoomId;
             //ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", createReserveViewModel.RoomId);
             //ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName",);

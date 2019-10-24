@@ -14,15 +14,13 @@ namespace Booking.Entity_Models
     {
         public int ReservedId { get; set; }
         public string EventName { get; set; }
-        [DataType(DataType.Date)]
+
         public DateTime ReservedDate { get; set; }
 
-        [DataType(DataType.Time)]
-        [DefaultValue("0:0:0")]
+
         public TimeSpan ReservedTimeFrom { get; set; }
 
-        [DataType(DataType.Time)]
-        [DefaultValue("0:0:0")]
+
         public TimeSpan ReservedTimeTo { get; set; }
 
         public string[] UsersEmails { get; set; }
@@ -34,9 +32,5 @@ namespace Booking.Entity_Models
         public string OwnerId { get; set; }
         public ApplicationUser User { get; set; }
 
-
-        //public string UserId = HttpContext.Current.User.Identity.GetUserId();
-        //public List<string> UsersEmails{ get; set; }
-        //public string UserName = HttpContext.Current.User.Identity.Name;
     }
 }

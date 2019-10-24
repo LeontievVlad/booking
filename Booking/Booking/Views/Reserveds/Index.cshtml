@@ -1,18 +1,17 @@
-﻿@model PagedList.IPagedList<Booking.Entity_Models.Reserved>
+﻿@model PagedList.IPagedList<Booking.Models.ReservedViewModels.IndexReserveViewModel>
 @using PagedList.Mvc;
 
 
 @*@model IEnumerable<Booking.Entity_Models.Reserved>*@
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Reserved";
 }
 
-<h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<br />
+
 
 <div>
     @using (Ajax.BeginForm("SearchRoom", new AjaxOptions
@@ -24,7 +23,7 @@
     }))
     {
         <input type="text" name="name" />
-        <input type="submit" value="Search" class="btn-primary" />
+        <input type="submit" value="Поиск" class="btn-primary" />
         @*<span id="loading" style="display:none; color:Red; font-weight:bold;">
                 Идет загрузка...
             </span>*@
@@ -65,8 +64,8 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Room.NameRoom)
-                
-                
+
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EventName)
@@ -87,9 +86,21 @@
                 @Html.DisplayFor(modelItem => item.SelectedUsersEmails)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ReservedId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ReservedId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ReservedId })
+                @if (item.OwnerId == ViewBag.CurrentId)
+                {
+                    <p>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ReservedId })
+                    </p>
+
+                    <p>
+                        @Html.ActionLink("Details", "Details", new { id = item.ReservedId })
+                    </p>
+                    <p>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ReservedId })
+                    </p>
+
+                }
+                
 
                 @*@Html.ActionLink("Add Users", "AddUsersToEvent", new { ReservedId = item.ReservedId })*@
                 @*@Html.ActionLink("AddList", "AddList", new { id = item.ReservedId })*@
@@ -101,6 +112,6 @@
 
 </table>
 <br />
-Страница @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) из @Model.PageCount
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

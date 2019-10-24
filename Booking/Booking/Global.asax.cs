@@ -16,6 +16,8 @@ namespace Booking
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            HtmlHelper.ClientValidationEnabled = true;
+            HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
         }
     }
 }

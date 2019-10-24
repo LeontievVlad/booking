@@ -26,13 +26,15 @@ textarea {
 
 
 #container {
-        float: left;
-        width: 100%;
-        text-align: center;
-    }
+    float: left;
+    width: 100%;
+    text-align: center;
+}
 
-    #container span, #Room {
-        float: left;
-        padding: 5px;
-        min-width: 140px;
-    }
+#container span, #Room {
+    float: left;
+    padding: 5px;
+    min-width: 140px;
+}
+
+
