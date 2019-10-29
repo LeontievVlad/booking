@@ -1,6 +1,8 @@
 ﻿using Booking.Entity_Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -24,14 +26,17 @@ namespace Booking.Models.ReservedViewModels
             User = reserved.User;
         }
         public int ReservedId { get; set; }
+        [Required]
         public string EventName { get; set; }
-
+        [DataType(DataType.Date)]
         public DateTime ReservedDate { get; set; }
 
-
+        [DataType(DataType.Time)]
+        [DefaultValue("0:0:0")]
         public TimeSpan ReservedTimeFrom { get; set; }
 
-
+        [DataType(DataType.Time)]
+        [DefaultValue("0:0:0")]
         public TimeSpan ReservedTimeTo { get; set; }
 
         public string[] UsersEmails { get; set; }

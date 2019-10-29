@@ -32,6 +32,9 @@ namespace Booking.Controllers
         private MapperConfiguration RoomToCreateRoomViewModel = new MapperConfiguration(
             cfg => cfg.CreateMap<Room, CreateRoomViewModel>()
             );
+        private MapperConfiguration EditReserveViewModelToReserved = new MapperConfiguration(
+            cfg => cfg.CreateMap<CreateReserveViewModel, Reserved>()
+            );
 
 
         //IMapper mapper = RoomToCreateRoomViewModel.CreateMapper();
@@ -57,11 +60,14 @@ namespace Booking.Controllers
         }
 
         [HttpGet]
-        public ActionResult Reserve(string NameRoom)
+        public ActionResult Reserve(int? RoomId, string NameRoom)
         {
 
 
-            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel();
+            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
+            {
+                RoomId = RoomId
+            };
 
             ViewBag.RoomName = NameRoom;
             //ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
@@ -76,11 +82,11 @@ namespace Booking.Controllers
             {
 
                 createReserveViewModel.OwnerId = currentUserId;
-
+                //createReserveViewModel. = currentUserId;
                 db.Reserveds.Add(
                     CreateReserveViewModelToReserved.CreateMapper()
-                    .Map<CreateReserveViewModel, Reserved>(createReserveViewModel
-                    ));
+                    .Map<CreateReserveViewModel, Reserved>(createReserveViewModel)
+                    );
 
                 db.SaveChanges();
 
@@ -97,7 +103,18 @@ namespace Booking.Controllers
             return View(createReserveViewModel);
         }
 
+        public ActionResult AddUsersToEvent(int? RoomId)
+        {
 
+            var allUserNames = db.Users.Select(x => x.UserName).ToList();
+            ViewBag.UsersEmails = allUserNames;
+
+
+
+            ViewBag.RoomId = RoomId;
+            //ViewBag.ReservedId = ReservedId;
+            return PartialView();
+        }
 
         protected override void Dispose(bool disposing)
         {

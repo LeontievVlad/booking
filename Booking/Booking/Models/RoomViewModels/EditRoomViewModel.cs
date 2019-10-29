@@ -8,14 +8,21 @@ using System.Web;
 
 namespace Booking.Models.RoomViewModels
 {
-    public class CreateRoomViewModel
+    public class EditRoomViewModel
     {
+        public EditRoomViewModel() { }
+        public EditRoomViewModel(Room room)
+        {
+            RoomId = room.RoomId;
+            NameRoom = room.NameRoom;
+            Date = room.Date;
+            MinTime = room.MinTime;
+            MaxTime = room.MaxTime;
+            MaxPeople = room.MaxPeople;
+            Reserveds = room.Reserveds;
+        }
         public int RoomId { get; set; }
-
-        [Required]
-        [Display(Name = "Name")]
         public string NameRoom { get; set; }
-
 
         [Display(Name = "Date")]
         [DataType(DataType.Date)]
@@ -33,12 +40,7 @@ namespace Booking.Models.RoomViewModels
         [DataType(DataType.Time)]
         [DefaultValue("0:0:0")]
         public TimeSpan MaxTime { get; set; }
-
-
-        [Display(Name = "Max count of people")]
-        [Range(0, 20)]
         public int MaxPeople { get; set; }
-
-
+        public IList<Reserved> Reserveds { get; set; }
     }
 }

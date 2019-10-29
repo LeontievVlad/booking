@@ -52,7 +52,7 @@
             ReservedTimeTo
         </th>
         <th>
-            OwnerId
+            @*Owner*@
         </th>
         <th>
             SelectedUsersEmails
@@ -80,7 +80,8 @@
                 @Html.DisplayFor(modelItem => item.ReservedTimeTo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OwnerId)
+                
+                @Html.DisplayFor(modelItem => item.User.UserName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SelectedUsersEmails)

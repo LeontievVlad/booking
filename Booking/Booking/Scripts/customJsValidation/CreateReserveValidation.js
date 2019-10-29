@@ -13,7 +13,7 @@ function ReserveValidation() {
     var fail = "";
 
     if (EventName.length < 3) fail = "Ім'я не менше 3-х символів <br/>";
-    if (ReservedTimeFrom >= ReservedTimeTo) fail += "Доцільно бронювати на додатній проміжок часу <br/>";
+    if (ReservedTimeFrom >= ReservedTimeTo) fail += "Увага! Дата закінчення передує даті початку <br/>";
 
 
 
@@ -51,8 +51,6 @@ function fnSuccess() {
 
 function fnFailure() {
     alert("fnFailure");
-    var RoomId = $('#RoomId').val();
-    var NameRoom = $('#NameRoom').val();
-    var url = "/Rooms/Reserve?RoomId=" + RoomId + "&NameRoom=" + NameRoom;
-    window.location.href = url;
+   
+    window.location.href = this;
 };

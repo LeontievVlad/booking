@@ -22,9 +22,9 @@ namespace Booking.Controllers
         private readonly ApplicationDbContext db = new ApplicationDbContext();
 
 
-        private readonly string currentUserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+        private string currentUserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
-        private readonly string currentUserName = System.Web.HttpContext.Current.User.Identity.Name;
+        private string currentUserName = System.Web.HttpContext.Current.User.Identity.Name;
 
         private MapperConfiguration CreateReserveViewModelToReserved = new MapperConfiguration(
             cfg => cfg.CreateMap<CreateReserveViewModel, Reserved>()
@@ -35,7 +35,7 @@ namespace Booking.Controllers
             );
 
         private MapperConfiguration EditReserveViewModelToReserved = new MapperConfiguration(
-            cfg => cfg.CreateMap<CreateReserveViewModel, Reserved>()
+            cfg => cfg.CreateMap<EditReserveViewModel, Reserved>()
             );
 
         public char[] separateComa = { ',' };
@@ -44,12 +44,14 @@ namespace Booking.Controllers
         [AllowAnonymous]
         public ActionResult Index(int? page)
         {
-            var reserveds = db.Reserveds.Include(r => r.Room).ToList();
+            var reserveds = db.Reserveds.Include(x=>x.User).Include(r => r.Room).ToList();
+
             var reserveIndexModel = reserveds
                 .OrderBy(a => a.Room.NameRoom)
                 .Select(a => new IndexReserveViewModel(a));
             //reserveds = reserveds.Where(x => x.OwnerId == currentUserId).ToList();
             ViewBag.CurrentId = currentUserId;
+            ViewBag.CurrentName = currentUserName;
             //reserveds=reserveds.Where(x => x.UsersId == System.Web.HttpContext.Current.User.Identity.GetUserId());
 
             //var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
@@ -144,11 +146,11 @@ namespace Booking.Controllers
             CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
             {
                 OwnerId = currentUserId,
-                
+
             };
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
 
-            
+
 
             return View(createReserveViewModel);
         }
@@ -172,9 +174,6 @@ namespace Booking.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
-
-
 
 
         // GET: Reserveds/Edit/5
@@ -202,11 +201,17 @@ namespace Booking.Controllers
 
             //ViewBag.selected = selected;
 
-            var editReserveViewModel = new EditReserveViewModel(reserved){};
+            var editReserveViewModel = new EditReserveViewModel(reserved) { };
+
 
             var allUserNames = db.Users.Select(x => x.UserName).ToList();
-            ViewBag.UsersEmails = new MultiSelectList(allUserNames);
 
+            ViewBag.UsersEmails = allUserNames;
+            ViewBag.selected = currentUserName;
+            if (editReserveViewModel.SelectedUsersEmails != null)
+            {
+                ViewBag.selected = editReserveViewModel.SelectedUsersEmails.Split(',').ToList();
+            }
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", editReserveViewModel.RoomId);
             return View(editReserveViewModel);
         }
@@ -222,11 +227,16 @@ namespace Booking.Controllers
             {
                 //reserved.OwnerId = System.Web.HttpContext.Current.User.Identity.GetUserId();
                 //var oldreserve = db.Reserveds.Find(reserved.ReservedId);
-
                 //reserved.OwnerId = oldreserve.OwnerId;
 
-                //reserved.SelectedUsersEmails = string.Join(",", reserved.UsersEmails);
-                db.Entry(EditReserveViewModelToReserved.CreateMapper()
+                //Reserved reserved = Mapper.Map<EditReserveViewModel, Reserved>(editReserveViewModel);
+
+                //IMapper mapper = RoomToCreateRoomViewModel.CreateMapper();
+                //CreateRoomViewModel createRoomViewModel = new CreateRoomViewModel();
+                //createRoomViewModel = mapper.Map<Room, CreateRoomViewModel>(room1);
+                if (editReserveViewModel.UsersEmails != null)
+                    editReserveViewModel.SelectedUsersEmails = string.Join(",", editReserveViewModel.UsersEmails);
+                db.Entry((Reserved)EditReserveViewModelToReserved.CreateMapper()
                     .Map<EditReserveViewModel, Reserved>(editReserveViewModel)).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -238,8 +248,8 @@ namespace Booking.Controllers
 
 
             var allUserNames = db.Users.Select(x => x.UserName).ToList();
-            ViewBag.UsersEmails = new MultiSelectList(allUserNames);
-
+            ViewBag.UsersEmails = allUserNames;
+            //ViewBag.selected = currentUserName.ToList();
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", editReserveViewModel.RoomId);
             return View(editReserveViewModel);
         }

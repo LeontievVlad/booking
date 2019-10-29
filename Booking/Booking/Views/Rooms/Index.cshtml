@@ -19,27 +19,27 @@
 
     @foreach (var item in Model)
     {
-        <div id="Room">
+<div id="Room">
 
 
-            @using (Html.BeginForm("Reserve", "Rooms", FormMethod.Get, new { room = item }))
-            {
+    @using (Html.BeginForm("Reserve", "Rooms", FormMethod.Get))
+    {
 
 
+      
+        <input name="NameRoom" value="@item.NameRoom" hidden />
+        <input name="RoomId" value="@item.RoomId" hidden />
 
-                <input name="NameRoom" value="@item.NameRoom" hidden />
+        <span id="NameRoom" name="NameRoom">@item.NameRoom</span>
+        <span id="Date" name="Date">@item.Date.ToString("dd-MM-yyyy")</span>
+        <span id="MinTime" name="MinTime">@item.MinTime</span>
+        <span id="MaxTime" name="MaxTime">@item.MaxTime</span>
+        <span id="MaxPeole" name="MaxPeole">@item.MaxPeople</span>
 
-                <input name="RoomId" value="@item.RoomId" hidden />
-                <span id="NameRoom" name="NameRoom">@item.NameRoom</span>
-                <span id="Date" name="Date">@item.Date.ToString("dd-MM-yyyy")</span>
-                <span id="MinTime" name="MinTime">@item.MinTime</span>
-                <span id="MaxTime" name="MaxTime">@item.MaxTime</span>
-                <span id="MaxPeole" name="MaxPeole">@item.MaxPeople</span>
-
-                <input type="submit" value="Reserve" onclick="this.form.submit();" />
-                @*@Html.ActionLink("Reserve", "Reserve", new { room = item, onclick="this.form.submit();" })*@
-            }
-        </div>
+        <input type="submit" value="Reserve" onclick="this.form.submit();" />
+        @*@Html.ActionLink("Reserve", "Reserve", new { room = item, onclick="this.form.submit();" })*@
+    }
+</div>
     }
 
 

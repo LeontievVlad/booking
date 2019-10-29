@@ -14,7 +14,6 @@ namespace Booking.Entity_Models
     {
         public int ReservedId { get; set; }
         public string EventName { get; set; }
-
         public DateTime ReservedDate { get; set; }
 
 

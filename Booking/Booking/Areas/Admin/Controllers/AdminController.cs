@@ -6,11 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
 using Booking.Entity_Models;
 using Booking.Models;
 using Booking.Models.RoomViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using PagedList;
 
 namespace Booking.Areas.Admin.Controllers
 {
@@ -18,6 +20,13 @@ namespace Booking.Areas.Admin.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
+        private MapperConfiguration CreateRoomViewModelToRoom = new MapperConfiguration(
+            cfg => cfg.CreateMap<CreateRoomViewModel, Room>()
+            );
+
+        private MapperConfiguration EditRoomViewModelToRoom = new MapperConfiguration(
+            cfg => cfg.CreateMap<EditRoomViewModel, Room>()
+            );
 
 
         [Authorize(Roles = "SuperAdmin")]
@@ -92,10 +101,24 @@ namespace Booking.Areas.Admin.Controllers
 
 
         // GET: Admin/Admin
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
 
-            return View(db.Rooms.ToList());
+            var rooms = db.Rooms.ToList();
+            var indexRoomViewModels = rooms
+                .OrderBy(a => a.NameRoom)
+                .Select(a => new IndexRoomViewModel(a));
+            //reserveds = reserveds.Where(x => x.OwnerId == currentUserId).ToList();
+            //ViewBag.CurrentId = currentUserId;
+            //reserveds=reserveds.Where(x => x.UsersId == System.Web.HttpContext.Current.User.Identity.GetUserId());
+
+            //var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
+            //reserveds = reserveds.Where(x => x.OwnerId == userId);
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+
+            return View(indexRoomViewModels.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Admin/Admin/Details/5
@@ -110,7 +133,8 @@ namespace Booking.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
-            return View(room);
+            var detailsRoomViewModel = new DetailsRoomViewModel(room);
+            return View(detailsRoomViewModel);
         }
 
         // GET: Admin/Admin/Create
@@ -129,18 +153,8 @@ namespace Booking.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                Room room = new Room
-                {
-                    RoomId = createRoomViewModel.RoomId,
-                    NameRoom = createRoomViewModel.NameRoom,
-                    Date = createRoomViewModel.Date,
-                    MinTime = createRoomViewModel.MinTime,
-                    MaxTime = createRoomViewModel.MaxTime,
-                    //BusyTime = Convert.ToDateTime(createRoomViewModel.MaxTime - createRoomViewModel.MinTime),
-                    MaxPeople = createRoomViewModel.MaxPeople
-                };
-
-                db.Rooms.Add(room);
+                db.Rooms.Add(CreateRoomViewModelToRoom.CreateMapper()
+                    .Map<CreateRoomViewModel, Room>(createRoomViewModel));
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
@@ -150,7 +164,7 @@ namespace Booking.Areas.Admin.Controllers
         }
 
 
-        
+
 
         // GET: Admin/Admin/Edit/5
         public ActionResult Edit(int? id)
@@ -164,7 +178,9 @@ namespace Booking.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
-            return View(room);
+
+            var editRoomViewModel = new EditRoomViewModel(room) { };
+            return View(editRoomViewModel);
         }
 
         // POST: Admin/Admin/Edit/5
@@ -172,15 +188,16 @@ namespace Booking.Areas.Admin.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RoomId,NameRoom,Date,MinTime,BusyTime,MaxTime,MaxPeople")] Room room)
+        public ActionResult Edit(EditRoomViewModel editRoomViewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(room).State = EntityState.Modified;
+                db.Entry(EditRoomViewModelToRoom.CreateMapper()
+                    .Map<EditRoomViewModel, Room>(editRoomViewModel)).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(room);
+            return View(editRoomViewModel);
         }
 
         // GET: Admin/Admin/Delete/5
@@ -195,7 +212,8 @@ namespace Booking.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
-            return View(room);
+            var deleteRoomViewModel = new DeleteRoomViewModel(room) { };
+            return View(deleteRoomViewModel);
         }
 
         // POST: Admin/Admin/Delete/5

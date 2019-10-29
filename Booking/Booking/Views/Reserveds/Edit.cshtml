@@ -5,19 +5,21 @@
 }
 
 <h2>Edit</h2>
-@*@Ajax.BeginForm()*@
+
 
 @using (Ajax.BeginForm("Edit", new AjaxOptions
 {
 
     HttpMethod = "Post",
-    UpdateTargetId = "result"
+    OnBegin = "ReserveValidation",
+    OnSuccess = "fnSuccess",
+    OnFailure = "fnFailure"
 }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Reserved</h4>
+
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ReservedId)
@@ -67,41 +69,13 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SelectedUsersEmails, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Model.SelectedUsersEmails
-                @Html.ListBoxFor(model=>model.UsersEmails, ViewBag.UsersEmails as MultiSelectList, new {id="usersEmails", multiple="multiple" })
+                <div id="selected">
+                    @Model.SelectedUsersEmails
+                </div>
+
                 <br />
-
-                @*<select id="UsersEmails" name="UsersEmails">
-
-
-
-                        @if (ViewBag.selected != null)
-                        {
-
-
-                            foreach (var em in ViewBag.selected)
-                            {
-                                foreach (var item in Model.UsersEmails)
-                                {
-                                    if (item != em)
-                                    {
-                                        <option selected>
-                                            @item
-                                        </option>
-                                    }
-
-                                }
-                            }
-
-
-
-                        }
-
-                    </select>*@
-
-
-                @*@Html.DropDownListFor(model => model.UsersEmails, new SelectList(Model.UsersEmails, ViewBag.selected),
-                    "")*@
+                @Html.DropDownList("usersEmails", new SelectList(ViewBag.UsersEmails, ViewBag.selected), new { id = "usersEmails", multiple = "multiple" })
+                <br />
 
             </div>
         </div>
@@ -109,6 +83,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
+                <div id="messageShow" class="text-danger"></div>
             </div>
         </div>
     </div>
@@ -123,24 +98,32 @@
 
 @section Scripts {
     @Scripts.Render("~/Scripts/ReservedDate.js")
-
+<script src="~/Scripts/customJsValidation/CreateReserveValidation.js"></script>
     <script>
-        $(function() {
-            $("usersEmails").chosen();
+
+
+
+
+        $(function () {
+            $("#usersEmails").chosen();
+            var my_val = $('#selected').val();
+            var str_array = my_val.split(',');
+
+
+            $("#usersEmails").val(str_array).trigger("chosen:updated");
+            //$('#meet_participants').val(["hola", "mundo", "cruel"]).trigger('chosen:updated');
         });
+                        //$(document).ready(function () {
+                        //    $("#UsersEmails").select2({
+                        //        placeholder: "Select a user email",
+                        //        multiple: true,
+                        //        width: 280
+
+                        //        //placeholder: "Select a users",
 
 
-        //$(document).ready(function () {
-        //    $("#UsersEmails").select2({
-        //        placeholder: "Select a user email",
-        //        multiple: true,
-        //        width: 280
-
-        //        //placeholder: "Select a users",
-
-
-        //    });
-        //});
+                        //    });
+                        //});
 
 
     </script>

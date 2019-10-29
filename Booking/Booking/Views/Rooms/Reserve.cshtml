@@ -6,15 +6,18 @@
 }
 
 
-@*@using (Ajax.BeginForm("Reserve", new AjaxOptions
-    {
+@using (Ajax.BeginForm("Reserve", new AjaxOptions
+{
 
-        HttpMethod = "Post"
+    HttpMethod = "Post",
+    OnBegin = "ReserveValidation",
+    OnSuccess = "fnSuccess",
+    OnFailure = "fnFailure"
 
-    }))
-    {*@
+}))
+{
 
-    
+
 
 @Html.AntiForgeryToken()
     <div class="form-horizontal" id="result">
@@ -61,7 +64,7 @@
         <div class="form-group">
 
 
-            @Html.TextBoxFor(model => model.RoomId, null, htmlAttributes: new { hidden = "hidden" })
+            @Html.TextBoxFor(model => model.RoomId,"", htmlAttributes: new {hidden="hidden"})
             @Html.ValidationMessageFor(model => model.RoomId, "", new { @class = "text-danger" })
 
         </div>
@@ -78,7 +81,7 @@
 
     </div>
 
-
+}
 
 @section Scripts {
     <script src="~/Scripts/ReservedDate.js"></script>

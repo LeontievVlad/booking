@@ -244,6 +244,9 @@
     <Compile Include="Models\ReservedViewModels\IndexReserveViewModel.cs" />
     <Compile Include="Models\RolesViewModel.cs" />
     <Compile Include="Models\RoomViewModels\CreateRoomViewModel.cs" />
+    <Compile Include="Models\RoomViewModels\DeleteRoomViewModel.cs" />
+    <Compile Include="Models\RoomViewModels\DetailsRoomViewModel.cs" />
+    <Compile Include="Models\RoomViewModels\EditRoomViewModel.cs" />
     <Compile Include="Models\RoomViewModels\IndexRoomViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -275,6 +278,8 @@
     <Content Include="Areas\Admin\Views\Admin\Index.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\chosen.jquery.js" />
+    <Content Include="Scripts\customJsValidation\AUTEValidation.js" />
+    <Content Include="Scripts\customJsValidation\CreateReserveValidation.js" />
     <Content Include="Scripts\customJsValidation\ReserveValidation.js" />
     <Content Include="Scripts\DateNow.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -332,6 +337,7 @@
     <Content Include="Views\Reserveds\AddUsersToEvent.cshtml" />
     <Content Include="Views\Reserveds\AddList.cshtml" />
     <Content Include="Views\Reserveds\SearchRoom.cshtml" />
+    <Content Include="Views\Rooms\AddUsersToEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

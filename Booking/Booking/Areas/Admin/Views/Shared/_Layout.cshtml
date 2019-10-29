@@ -27,9 +27,9 @@
                     }
 
                 </ul>
-                
-                
-                    
+
+
+
                 <span class="navbar-right navbar-text">
                     @using Microsoft.AspNet.Identity
                     @Html.ActionLink(User.Identity.GetUserName(), "Index", "../Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
@@ -53,6 +53,8 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+
+    
     @RenderSection("scripts", required: false)
 </body>
 </html>

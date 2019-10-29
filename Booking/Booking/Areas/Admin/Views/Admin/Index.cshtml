@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Booking.Entity_Models.Room>
+﻿@model PagedList.IPagedList<Booking.Models.RoomViewModels.IndexRoomViewModel>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Index";
@@ -12,52 +13,51 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.NameRoom)
+            NameRoom
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Date)
+            Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MinTime)
+            MinTime
         </th>
         <th>
-            @*@Html.DisplayNameFor(model => model.BusyTime)*@
+            MaxTime
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.MaxTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MaxPeople)
+            MaxPeople
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.NameRoom)
-        </td>
-        <td>
-            @item.Date.ToString("dd-MM-yyyy")
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MinTime)
-        </td>
-        <td>
-            @*@Html.DisplayFor(modelItem => item.BusyTime)*@
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MaxTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MaxPeople)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.RoomId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.RoomId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.RoomId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameRoom)
+            </td>
+            <td>
+                @item.Date.ToString("dd-MM-yyyy")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MinTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxPeople)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.RoomId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.RoomId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.RoomId })
+            </td>
+        </tr>
+    }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
