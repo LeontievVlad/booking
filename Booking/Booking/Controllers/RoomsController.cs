@@ -59,50 +59,6 @@ namespace Booking.Controllers
             return View(roomIndexModel.ToPagedList(pageNumber, pageSize));
         }
 
-        [HttpGet]
-        public ActionResult Reserve(int? RoomId, string NameRoom)
-        {
-
-
-            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
-            {
-                RoomId = RoomId
-            };
-
-            ViewBag.RoomName = NameRoom;
-            //ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
-            //ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
-            return View(createReserveViewModel);
-        }
-
-        [HttpPost]
-        public ActionResult Reserve(CreateReserveViewModel createReserveViewModel, string NameRoom)
-        {
-            if (ModelState.IsValid)
-            {
-
-                createReserveViewModel.OwnerId = currentUserId;
-                //createReserveViewModel. = currentUserId;
-                db.Reserveds.Add(
-                    CreateReserveViewModelToReserved.CreateMapper()
-                    .Map<CreateReserveViewModel, Reserved>(createReserveViewModel)
-                    );
-
-                db.SaveChanges();
-
-                return RedirectToAction("Index", "Reserveds");
-
-            }
-
-
-
-            ViewBag.RoomName = NameRoom;
-            //ViewBag.work = RoomId;
-            //ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", createReserveViewModel.RoomId);
-            //ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName",);
-            return View(createReserveViewModel);
-        }
-
         public ActionResult AddUsersToEvent(int? RoomId)
         {
 

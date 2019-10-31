@@ -1,12 +1,30 @@
 ﻿@model IEnumerable<Booking.Entity_Models.Reserved>
 
 <div id="searchresults">
-    @foreach (var item in Model)
+    @if (Model != null)
+    {
+
+        foreach (var item in Model)
+        {
+            <p>
+                <span>
+                    @item.Room.NameRoom
+                </span>
+                <span>
+                    @item.EventName
+                </span>
+                <span>
+                    @item.User.UserName
+                </span>
+
+            </p>
+            
+        }
+    }
+    else
     {
         <p>
-            @item.EventName |
-            @item.ReservedDate |
-            @item.OwnerId
+            Збігів не знайдено
         </p>
     }
 

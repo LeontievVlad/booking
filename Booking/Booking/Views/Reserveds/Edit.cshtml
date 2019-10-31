@@ -12,7 +12,7 @@
 
     HttpMethod = "Post",
     OnBegin = "ReserveValidation",
-    OnSuccess = "fnSuccess",
+    OnSuccess = "fnSuccess(data)",
     OnFailure = "fnFailure"
 }))
 {
@@ -25,7 +25,7 @@
         @Html.HiddenFor(model => model.ReservedId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EventName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.EventName,"Event", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.EventName, "", new { @class = "text-danger" })
@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ReservedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ReservedDate,"Date", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @*@ViewBag.ReservedDate*@
                 @*@Model.ReservedDate*@
@@ -43,7 +43,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ReservedTimeFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ReservedTimeFrom,"From", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.ReservedTimeFrom, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ReservedTimeFrom, "", new { @class = "text-danger" })
@@ -51,7 +51,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ReservedTimeTo, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ReservedTimeTo,"To", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.ReservedTimeTo, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ReservedTimeTo, "", new { @class = "text-danger" })
@@ -59,7 +59,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.RoomId, "RoomId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.RoomId, "Room", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("RoomId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.RoomId, "", new { @class = "text-danger" })
@@ -67,19 +67,19 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.SelectedUsersEmails, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.SelectedUsersEmails,"People", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div id="selected">
                     @Model.SelectedUsersEmails
                 </div>
 
-                <br />
-                @Html.DropDownList("usersEmails", new SelectList(ViewBag.UsersEmails, ViewBag.selected), new { id = "usersEmails", multiple = "multiple" })
+                
+                @Html.DropDownList("UsersEmails", new SelectList(ViewBag.UsersEmails, ViewBag.selected), new { id = "UsersEmails", multiple = "multiple",@class="form-control" })
                 <br />
 
             </div>
         </div>
-        @Html.TextBox("OwnerId", Model.OwnerId, new { hidden = "hidden" })
+        @Html.TextBox("UserId", Model.UserId, new { hidden = "hidden" })
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
@@ -105,26 +105,14 @@
 
 
         $(function () {
-            $("#usersEmails").chosen();
+            $("#UsersEmails").chosen();
             var my_val = $('#selected').val();
             var str_array = my_val.split(',');
 
 
-            $("#usersEmails").val(str_array).trigger("chosen:updated");
-            //$('#meet_participants').val(["hola", "mundo", "cruel"]).trigger('chosen:updated');
+            $("#UsersEmails").val(str_array).trigger("chosen:updated");
+            
         });
-                        //$(document).ready(function () {
-                        //    $("#UsersEmails").select2({
-                        //        placeholder: "Select a user email",
-                        //        multiple: true,
-                        //        width: 280
-
-                        //        //placeholder: "Select a users",
-
-
-                        //    });
-                        //});
-
-
+                 
     </script>
 }

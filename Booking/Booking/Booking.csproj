@@ -59,12 +59,21 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
@@ -173,11 +182,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiControllers\ReservedsController.cs" />
+    <Compile Include="ApiControllers\RoomsController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -193,45 +205,9 @@
     <Compile Include="Migrations\201910160853577_FirstM.Designer.cs">
       <DependentUpon>201910160853577_FirstM.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910160857520_AddRoomReserved.cs" />
-    <Compile Include="Migrations\201910160857520_AddRoomReserved.Designer.cs">
-      <DependentUpon>201910160857520_AddRoomReserved.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910161114547_Update.cs" />
-    <Compile Include="Migrations\201910161114547_Update.Designer.cs">
-      <DependentUpon>201910161114547_Update.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910161846590_Add_CreateRoomViewModel.cs" />
-    <Compile Include="Migrations\201910161846590_Add_CreateRoomViewModel.Designer.cs">
-      <DependentUpon>201910161846590_Add_CreateRoomViewModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910161852111_Update_CreateRoomViewModel.cs" />
-    <Compile Include="Migrations\201910161852111_Update_CreateRoomViewModel.Designer.cs">
-      <DependentUpon>201910161852111_Update_CreateRoomViewModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910170743063_UpdateRoom.cs" />
-    <Compile Include="Migrations\201910170743063_UpdateRoom.Designer.cs">
-      <DependentUpon>201910170743063_UpdateRoom.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910170834536_UpdateReserved.cs" />
-    <Compile Include="Migrations\201910170834536_UpdateReserved.Designer.cs">
-      <DependentUpon>201910170834536_UpdateReserved.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910170945403_UpdateReserved1.cs" />
-    <Compile Include="Migrations\201910170945403_UpdateReserved1.Designer.cs">
-      <DependentUpon>201910170945403_UpdateReserved1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910201725519_UsersEmailsArray.cs" />
-    <Compile Include="Migrations\201910201725519_UsersEmailsArray.Designer.cs">
-      <DependentUpon>201910201725519_UsersEmailsArray.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910210734473_UpdateReserveds.cs" />
-    <Compile Include="Migrations\201910210734473_UpdateReserveds.Designer.cs">
-      <DependentUpon>201910210734473_UpdateReserveds.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910210747371_UpdateReserveds1.cs" />
-    <Compile Include="Migrations\201910210747371_UpdateReserveds1.Designer.cs">
-      <DependentUpon>201910210747371_UpdateReserveds1.cs</DependentUpon>
+    <Compile Include="Migrations\201910301009196_UpdateRoom1.cs" />
+    <Compile Include="Migrations\201910301009196_UpdateRoom1.Designer.cs">
+      <DependentUpon>201910301009196_UpdateRoom1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -278,7 +254,6 @@
     <Content Include="Areas\Admin\Views\Admin\Index.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\chosen.jquery.js" />
-    <Content Include="Scripts\customJsValidation\AUTEValidation.js" />
     <Content Include="Scripts\customJsValidation\CreateReserveValidation.js" />
     <Content Include="Scripts\customJsValidation\ReserveValidation.js" />
     <Content Include="Scripts\DateNow.js" />
@@ -333,11 +308,12 @@
     <Content Include="Views\Reserveds\Details.cshtml" />
     <Content Include="Views\Reserveds\Edit.cshtml" />
     <Content Include="Views\Reserveds\Index.cshtml" />
-    <Content Include="Views\Rooms\Reserve.cshtml" />
+    <Content Include="Views\Rooms\Reserve1.cshtml" />
     <Content Include="Views\Reserveds\AddUsersToEvent.cshtml" />
     <Content Include="Views\Reserveds\AddList.cshtml" />
     <Content Include="Views\Reserveds\SearchRoom.cshtml" />
     <Content Include="Views\Rooms\AddUsersToEvent.cshtml" />
+    <Content Include="Views\Reserveds\Reserve.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -361,35 +337,8 @@
     <EmbeddedResource Include="Migrations\201910160853577_FirstM.resx">
       <DependentUpon>201910160853577_FirstM.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910160857520_AddRoomReserved.resx">
-      <DependentUpon>201910160857520_AddRoomReserved.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910161114547_Update.resx">
-      <DependentUpon>201910161114547_Update.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910161846590_Add_CreateRoomViewModel.resx">
-      <DependentUpon>201910161846590_Add_CreateRoomViewModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910161852111_Update_CreateRoomViewModel.resx">
-      <DependentUpon>201910161852111_Update_CreateRoomViewModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910170743063_UpdateRoom.resx">
-      <DependentUpon>201910170743063_UpdateRoom.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910170834536_UpdateReserved.resx">
-      <DependentUpon>201910170834536_UpdateReserved.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910170945403_UpdateReserved1.resx">
-      <DependentUpon>201910170945403_UpdateReserved1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910201725519_UsersEmailsArray.resx">
-      <DependentUpon>201910201725519_UsersEmailsArray.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910210734473_UpdateReserveds.resx">
-      <DependentUpon>201910210734473_UpdateReserveds.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910210747371_UpdateReserveds1.resx">
-      <DependentUpon>201910210747371_UpdateReserveds1.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910301009196_UpdateRoom1.resx">
+      <DependentUpon>201910301009196_UpdateRoom1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

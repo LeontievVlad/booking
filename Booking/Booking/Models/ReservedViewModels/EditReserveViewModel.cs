@@ -17,11 +17,12 @@ namespace Booking.Models.ReservedViewModels
             EventName = reserved.EventName;
             ReservedDate = reserved.ReservedDate;
             ReservedTimeFrom = reserved.ReservedTimeFrom;
-            ReservedTimeTo = reserved.ReservedTimeFrom;
+            ReservedTimeTo = reserved.ReservedTimeTo;
             SelectedUsersEmails = reserved.SelectedUsersEmails;
             UsersEmails = reserved.UsersEmails;
             RoomId = reserved.RoomId;
-            OwnerId = reserved.OwnerId;
+            UserId = reserved.UserId;
+            
             Room = reserved.Room;
             User = reserved.User;
         }
@@ -45,7 +46,7 @@ namespace Booking.Models.ReservedViewModels
         public int? RoomId { get; set; }
         public Room Room { get; set; }
 
-        public string OwnerId { get; set; }
+        public string UserId { get; set; }
         public ApplicationUser User { get; set; }
     }
 }

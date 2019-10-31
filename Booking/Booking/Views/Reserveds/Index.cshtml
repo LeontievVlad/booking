@@ -6,56 +6,54 @@
 @{
     ViewBag.Title = "Reserved";
 }
-
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
-
+<br />
 <div>
-    @using (Ajax.BeginForm("SearchRoom", new AjaxOptions
-    {
-        UpdateTargetId = "results",
-        LoadingElementId = "loading",
-        LoadingElementDuration = 1000,
-        Confirm = "Выполнить AJAX-запрос?"
-    }))
-    {
-        <input type="text" name="name" />
-        <input type="submit" value="Поиск" class="btn-primary" />
-        @*<span id="loading" style="display:none; color:Red; font-weight:bold;">
-                Идет загрузка...
-            </span>*@
-        <img id="loading" src="@Url.Content("~/Images/loader.gif")" style="display:none" />
-    }
+    фыва
+    <input type="text" name="name" />
+    <input type="submit" value="Submit" id="submit" class="btn-primary" />
 
-    <div id="results"></div>
 </div>
+
+@*<div>
+        @using (Ajax.BeginForm("SearchRoom", new AjaxOptions
+        {
+            UpdateTargetId = "searchresults",
+
+        }))
+        {   <br />
+            <div>
+                <input type="text" name="name" />
+                <input type="submit" value="Поиск" class="btn-primary" />
+
+            </div>
+        }
+
+        <div id="searchresults"></div>
+    </div>*@
 <br />
 <table class="table">
 
     <tr>
         <th>
-            NameRoom
+            Room
         </th>
         <th>
-            EventName
+            Event
         </th>
         <th>
-            ReservedDate
+            Date
         </th>
         <th>
-            ReservedTimeFrom
+            From
         </th>
         <th>
-            ReservedTimeTo
+            To
         </th>
         <th>
-            @*Owner*@
+            Owner
         </th>
         <th>
-            SelectedUsersEmails
+            Users
         </th>
         <th></th>
     </tr>
@@ -71,7 +69,8 @@
                 @Html.DisplayFor(modelItem => item.EventName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ReservedDate)
+                @Html.HiddenFor(modelItem => item.ReservedDate)
+                @item.ReservedDate.ToString("dd-MM-yyyy")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReservedTimeFrom)
@@ -80,14 +79,14 @@
                 @Html.DisplayFor(modelItem => item.ReservedTimeTo)
             </td>
             <td>
-                
+
                 @Html.DisplayFor(modelItem => item.User.UserName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SelectedUsersEmails)
             </td>
             <td>
-                @if (item.OwnerId == ViewBag.CurrentId)
+                @if (item.UserId == ViewBag.CurrentId)
                 {
                     <p>
                         @Html.ActionLink("Edit", "Edit", new { id = item.ReservedId })
@@ -101,7 +100,7 @@
                     </p>
 
                 }
-                
+
 
                 @*@Html.ActionLink("Add Users", "AddUsersToEvent", new { ReservedId = item.ReservedId })*@
                 @*@Html.ActionLink("AddList", "AddList", new { id = item.ReservedId })*@
@@ -116,3 +115,31 @@
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+
+
+
+
+@section Scripts {
+
+    <script>
+
+$(function () {
+
+    $("#submit").click(function ()
+    {
+        //var name = $('#name').val();
+        $.ajax({
+        url: '/api/Rooms',
+        type: 'GET',
+        dataType: "text",
+            success: function (data) {
+                alert(data);
+        },
+        error: function () {
+            alert("error");
+        }
+    });
+
+    });
+    </script>
+}

@@ -41,10 +41,10 @@ namespace Booking.Controllers
         public char[] separateComa = { ',' };
 
         // GET: Reserveds
-        [AllowAnonymous]
+        
         public ActionResult Index(int? page)
         {
-            var reserveds = db.Reserveds.Include(x=>x.User).Include(r => r.Room).ToList();
+            var reserveds = db.Reserveds.Include(x => x.User).Include(r => r.Room).ToList();
 
             var reserveIndexModel = reserveds
                 .OrderBy(a => a.Room.NameRoom)
@@ -66,60 +66,20 @@ namespace Booking.Controllers
         [HttpPost]
         public ActionResult SearchRoom(string name)
         {
+            
+           
 
-
-            var reserveds = db.Reserveds.Where(x => x.EventName.Contains(name)).ToList();
-            if (name == "")
-            {
-                reserveds = null;
-            }
+            var reserveds = db.Reserveds.Include(x => x.User)
+                .Include(x => x.Room)
+                .Where(x => x.EventName
+                .Contains(name))
+                .ToList();
 
 
             return PartialView(reserveds);
         }
 
 
-        [HttpGet]
-        public ActionResult AddList()
-        {
-
-
-            //var reserved = db.Reserveds.Find(ReserveId);
-            var allUserNames = db.Users.Select(x => x.UserName).ToList();
-            //string temp = "";
-            //foreach(var item in allUserNames)
-            //{
-            //    temp += $"{item},";
-            //}
-
-            ViewBag.UsersEmails = new MultiSelectList(allUserNames);
-
-            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
-            {
-                //ReservedId = ReserveId,
-                UsersEmails = allUserNames.ToArray()
-            };
-
-
-
-            return View(createReserveViewModel);
-        }
-
-        [HttpPost]
-        public ActionResult AddList(string[] UsersEmails, CreateReserveViewModel createReserveViewModel)
-        {
-            //if (ModelState.IsValid)
-            //{
-
-            //}
-
-
-            //createReserveViewModel.ReservedId = ReserveId;
-            createReserveViewModel.UsersEmails = UsersEmails;
-            var allUserNames = db.Users.Select(x => x.UserName).ToList();
-            ViewBag.UsersEmails = new MultiSelectList(allUserNames);
-            return View(createReserveViewModel);
-        }
 
         // GET: Reserveds/Details/5
         public ActionResult Details(int? id)
@@ -138,6 +98,75 @@ namespace Booking.Controllers
             return View(detailsReserveViewModel);
         }
 
+        // GET: Reserveds/Reserve/5
+        [HttpGet]
+        public ActionResult Reserve(int? RoomId)
+        {
+            var room = db.Rooms.Find(RoomId);
+
+            CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
+            {
+                ReservedTimeFrom = room.MinTime,
+                ReservedTimeTo = room.MaxTime,
+                RoomId = RoomId
+            };
+            var allUserNames = db.Users.Select(x => x.UserName).ToList();
+            ViewBag.UsersEmails = allUserNames;
+            ViewBag.selected = currentUserName;
+            if (createReserveViewModel.SelectedUsersEmails != null)
+            {
+                ViewBag.selected = createReserveViewModel.SelectedUsersEmails.Split(',').ToList();
+            }
+            ViewBag.NameRoom = room.NameRoom;
+            //ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
+            //ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
+            return View(createReserveViewModel);
+        }
+
+        // POST: Reserveds/Reserve/
+        [HttpPost]
+        public ActionResult Reserve(CreateReserveViewModel createReserveViewModel)
+        {
+
+            var room = db.Rooms.Find(createReserveViewModel.RoomId);
+            ViewBag.NameRoom = room.NameRoom;
+            ViewBag.UsersEmails = db.Users.Select(x => x.UserName).ToList();
+
+            if (createReserveViewModel.ReservedTimeFrom < room.MinTime ||
+                createReserveViewModel.ReservedTimeTo > room.MaxTime)
+            {
+                return Json("час виходить за межі ( "
+                    + room.MinTime + " "
+                    + room.MaxTime + " )",
+                    JsonRequestBehavior.AllowGet);
+            }
+
+            return Json("success", JsonRequestBehavior.AllowGet);
+
+
+        }
+
+
+        [HttpPost]
+        public JsonResult SaveReserve(CreateReserveViewModel createReserveViewModel)
+        {
+            createReserveViewModel.UserId = currentUserId;
+            if (createReserveViewModel.UsersEmails != null)
+                createReserveViewModel.SelectedUsersEmails = string
+                    .Join(",", createReserveViewModel.UsersEmails);
+
+            db.Reserveds.Add(
+                CreateReserveViewModelToReserved.CreateMapper()
+                .Map<CreateReserveViewModel, Reserved>(createReserveViewModel)
+                );
+
+            db.SaveChanges();
+
+            return Json("Saved", JsonRequestBehavior.AllowGet);
+        }
+
+
+
         // GET: Reserveds/Create
         public ActionResult Create()
         {
@@ -145,10 +174,12 @@ namespace Booking.Controllers
 
             CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
             {
-                OwnerId = currentUserId,
+                UserId = currentUserId,
 
             };
+
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
+            ViewBag.UsersEmails = db.Users.Select(x => x.UserName).ToList();
 
 
 
@@ -162,17 +193,20 @@ namespace Booking.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreateReserveViewModel createReserveViewModel)
         {
-            createReserveViewModel.OwnerId = currentUserId;
+            createReserveViewModel.UserId = currentUserId;
             if (!ModelState.IsValid)
             {
-                ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", createReserveViewModel.RoomId);
-                return View(createReserveViewModel);
-            }
 
+                ViewBag.UsersEmails = db.Users.Select(x => x.UserName).ToList();
+                ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", createReserveViewModel.RoomId);
+                return Json("model is not valid", JsonRequestBehavior.AllowGet);
+            }
+            if (createReserveViewModel.UsersEmails != null)
+                createReserveViewModel.SelectedUsersEmails = string.Join(",", createReserveViewModel.UsersEmails);
             db.Reserveds.Add(CreateReserveViewModelToReserved.CreateMapper()
                     .Map<CreateReserveViewModel, Reserved>(createReserveViewModel));
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return Json("success", JsonRequestBehavior.AllowGet);
         }
 
 
@@ -204,8 +238,8 @@ namespace Booking.Controllers
             var editReserveViewModel = new EditReserveViewModel(reserved) { };
 
 
-            var allUserNames = db.Users.Select(x => x.UserName).ToList();
 
+            var allUserNames = db.Users.Select(x => x.UserName).ToList();
             ViewBag.UsersEmails = allUserNames;
             ViewBag.selected = currentUserName;
             if (editReserveViewModel.SelectedUsersEmails != null)
@@ -239,7 +273,7 @@ namespace Booking.Controllers
                 db.Entry((Reserved)EditReserveViewModelToReserved.CreateMapper()
                     .Map<EditReserveViewModel, Reserved>(editReserveViewModel)).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json("success", JsonRequestBehavior.AllowGet);
             }
             //var selected = reserved.SelectedUsersEmails.Split(',');
 
@@ -249,9 +283,14 @@ namespace Booking.Controllers
 
             var allUserNames = db.Users.Select(x => x.UserName).ToList();
             ViewBag.UsersEmails = allUserNames;
+            ViewBag.selected = currentUserName;
+            if (editReserveViewModel.SelectedUsersEmails != null)
+            {
+                ViewBag.selected = editReserveViewModel.SelectedUsersEmails.Split(',').ToList();
+            }
             //ViewBag.selected = currentUserName.ToList();
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", editReserveViewModel.RoomId);
-            return View(editReserveViewModel);
+            return Json("model is not valid", JsonRequestBehavior.AllowGet);
         }
 
         // GET: Reserveds/Delete/5

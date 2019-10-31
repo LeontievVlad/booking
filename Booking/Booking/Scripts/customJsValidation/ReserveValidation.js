@@ -1,58 +1,56 @@
 ﻿
+$(function () {
+        $("#UsersEmails").chosen();
+});
 
-function ReserveValidation() {
+$(function () {
 
+        $("#submit").click(function () {
+            $('#messageShow').hide();
+            var createReserveViewModel = {
+                'EventName': $("#EventName").val(),
+                'ReservedDate': $("#ReservedDate").val(),
+                'ReservedTimeFrom': $("#ReservedTimeFrom").val(),
+                'ReservedTimeTo': $("#ReservedTimeTo").val(),
+                'UsersEmails': $("#UsersEmails").val(),
+                'RoomId': $("#RoomId").val()
+            };
+            var fail = "";
+            if (createReserveViewModel.EventName.length < 3) fail = "Ім'я не менше 3-х символів <br/>";
+            if (createReserveViewModel.ReservedTimeFrom >= createReserveViewModel.ReservedTimeTo)
+                fail += "Увага! Дата закінчення передує даті початку <br/>";
 
-    $('#messageShow').hide();
+            if (fail != "") {
+                $('#messageShow').html(fail);
+                $('#messageShow').show();
 
-    var EventName = $("#EventName").val();
+            } else {
 
-    var ReservedTimeFrom = $("#ReservedTimeFrom").val();
-    var ReservedTimeTo = $("#ReservedTimeTo").val();
+                //alert("обробка запиту");
 
-    var fail = "";
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Reserve","Reserveds")',
+                    data: JSON.stringify(createReserveViewModel),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data, status) {
+                        $('#messageShow').hide();
+                        if (data == "success") {
+                            alert(data);
+                            var url = "/Reserveds/Index";
+                            window.location.href = url;
+                        } else {
+                            alert(data);
+                        }
 
-    if (EventName.length < 3) fail = "Ім'я не менше 3-х символів <br/>";
-    if (ReservedTimeFrom >= ReservedTimeTo) fail += "Доцільно бронювати на додатній проміжок часу <br/>";
-
-
-
-    if (fail != "") {
-        $('#messageShow').html(fail);
-        $('#messageShow').show();
-        return false;
-    } else {
-        return true;
-    }
-
-    //$.ajax({
-    //    url: '../Rooms/Reserve.cshtml',
-    //    type: 'Post',
-    //    cache: false,
-    //    data: { EventName, ReservedDate, ReservedTimeFrom, ReservedTimeTo },
-    //    dataType: 'html',
-    //    success: function (data) {
-    //        alert('success');
-    //    },
-    //    error: function (data) {
-    //        alert('error');
-    //    }
-    //});
-};
-
-function fnSuccess() {
-    alert("fnSuccess");
-
-    var url = "/Reserveds/Index";
-    window.location.href = url;
-
-};
-
-
-function fnFailure() {
-    alert("fnFailure");
-    var RoomId = $('#RoomId').val();
-    var NameRoom = $('#NameRoom').val();
-    var url = "/Rooms/Reserve?RoomId=" + RoomId + "&NameRoom=" + NameRoom;
-    window.location.href = url;
-};
+                    },
+                    error: function () {
+                        $('#messageShow').hide();
+                        alert("Error while inserting data");
+                    }
+                });
+            }
+        });
+});
+    

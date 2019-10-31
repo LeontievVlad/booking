@@ -4,11 +4,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Booking Room</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href="~/Content/chosen.css" rel="stylesheet" />
-    @*<link href="~/Content/select2.css" rel="stylesheet" />*@
+    <link href="~/Content/select2.css" rel="stylesheet" />
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 
@@ -23,15 +23,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Имя приложения", "Index", "Rooms", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Booking Room", "Index", "Rooms", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Домашняя страница", "Index", "Rooms")</li>
-                    <li>@Html.ActionLink("Reserved", "Index", "Reserveds")</li>
+                    <li>@Html.ActionLink("Головна", "Index", "Rooms")</li>
+                    <li>@Html.ActionLink("Події", "Index", "Reserveds")</li>
+                    <li>@Html.ActionLink("Створити подію", "Create", "Reserveds")</li>
                     @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                     {
-                        <li>@Html.ActionLink("Admin", "Admin", "Admin")</li>
+                        <li>@Html.ActionLink("Адмін", "Admin", "Admin")</li>
                     }
 
                 </ul>
@@ -43,7 +44,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - мое приложение ASP.NET</p>
+            <p>&copy; @DateTime.Now.Year - Booking Room</p>
         </footer>
     </div>
 
@@ -55,7 +56,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script src="~/Scripts/chosen.jquery.js"></script>
-    @*<script src="~/Scripts/select2/select2.js"></script>*@
+    <script src="~/Scripts/select2/select2.js"></script>
     @RenderSection("scripts", required: false)
 
 

@@ -15,7 +15,6 @@ namespace Booking.Models.RoomViewModels
         {
             RoomId = room.RoomId;
             NameRoom = room.NameRoom;
-            Date = room.Date;
             MinTime = room.MinTime;
             MaxTime = room.MaxTime;
             MaxPeople = room.MaxPeople;

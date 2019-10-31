@@ -7,13 +7,13 @@ namespace Booking.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class UpdateReserved : IMigrationMetadata
+    public sealed partial class UpdateRoom1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateReserved));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateRoom1));
         
         string IMigrationMetadata.Id
         {
-            get { return "201910170834536_UpdateReserved"; }
+            get { return "201910301009196_UpdateRoom1"; }
         }
         
         string IMigrationMetadata.Source

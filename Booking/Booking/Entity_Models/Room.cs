@@ -11,7 +11,6 @@ namespace Booking.Entity_Models
     {
         public int RoomId { get; set; }
         public string NameRoom { get; set; }
-        public DateTime Date {get;set;}
         public TimeSpan MinTime { get; set; }
         public TimeSpan MaxTime { get; set; }
         public int MaxPeople { get; set; }

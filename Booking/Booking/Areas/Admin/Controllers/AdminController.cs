@@ -83,6 +83,7 @@ namespace Booking.Areas.Admin.Controllers
 
         [Authorize]
         [HttpPost]
+        
         public ActionResult GetRoom(Reserved reserved)
         {
 

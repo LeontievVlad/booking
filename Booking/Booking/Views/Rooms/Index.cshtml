@@ -8,11 +8,11 @@
 <div id="container">
     <div id="head">
         <span>NameRoom</span>
-        <span>Date</span>
+        
         <span>MinTime</span>
         <span>MaxTime</span>
         <span>MaxPeople</span>
-        <span>Reserve</span>
+        
     </div>
 
 
@@ -22,16 +22,16 @@
 <div id="Room">
 
 
-    @using (Html.BeginForm("Reserve", "Rooms", FormMethod.Get))
+    @using (Html.BeginForm("Reserve", "Reserveds", FormMethod.Get))
     {
 
 
       
-        <input name="NameRoom" value="@item.NameRoom" hidden />
+        @*<input name="NameRoom" value="@item.NameRoom" hidden />*@
         <input name="RoomId" value="@item.RoomId" hidden />
 
         <span id="NameRoom" name="NameRoom">@item.NameRoom</span>
-        <span id="Date" name="Date">@item.Date.ToString("dd-MM-yyyy")</span>
+        
         <span id="MinTime" name="MinTime">@item.MinTime</span>
         <span id="MaxTime" name="MaxTime">@item.MaxTime</span>
         <span id="MaxPeole" name="MaxPeole">@item.MaxPeople</span>
