@@ -37,9 +37,9 @@ namespace Booking.Controllers
             );
 
 
-        //IMapper mapper = RoomToCreateRoomViewModel.CreateMapper();
-
         //CreateRoomViewModel createRoomViewModel = new CreateRoomViewModel();
+
+        //IMapper mapper = RoomToCreateRoomViewModel.CreateMapper();
 
         //createRoomViewModel = mapper.Map<Room, CreateRoomViewModel>(room1);
 

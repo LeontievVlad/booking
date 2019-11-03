@@ -209,6 +209,10 @@
     <Compile Include="Migrations\201910301009196_UpdateRoom1.Designer.cs">
       <DependentUpon>201910301009196_UpdateRoom1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911021132558_UpdateReserved.cs" />
+    <Compile Include="Migrations\201911021132558_UpdateReserved.Designer.cs">
+      <DependentUpon>201911021132558_UpdateReserved.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -254,7 +258,7 @@
     <Content Include="Areas\Admin\Views\Admin\Index.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\chosen.jquery.js" />
-    <Content Include="Scripts\customJsValidation\CreateReserveValidation.js" />
+    <Content Include="Scripts\customJsValidation\EditValidation.js" />
     <Content Include="Scripts\customJsValidation\ReserveValidation.js" />
     <Content Include="Scripts\DateNow.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -314,6 +318,11 @@
     <Content Include="Views\Reserveds\SearchRoom.cshtml" />
     <Content Include="Views\Rooms\AddUsersToEvent.cshtml" />
     <Content Include="Views\Reserveds\Reserve.cshtml" />
+    <Content Include="Views\Reserveds\MyEvents.cshtml" />
+    <Content Include="Views\Reserveds\Sent.cshtml" />
+    <Content Include="Views\Reserveds\AcceptInvite.cshtml" />
+    <Content Include="Views\Reserveds\EmailMessage.cshtml" />
+    <Content Include="Views\Reserveds\EmptyPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -339,6 +348,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910301009196_UpdateRoom1.resx">
       <DependentUpon>201910301009196_UpdateRoom1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911021132558_UpdateReserved.resx">
+      <DependentUpon>201911021132558_UpdateReserved.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

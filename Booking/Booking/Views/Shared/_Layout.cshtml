@@ -27,9 +27,12 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Головна", "Index", "Rooms")</li>
-                    <li>@Html.ActionLink("Події", "Index", "Reserveds")</li>
+                    <li>@Html.ActionLink("Забронювати", "Index", "Rooms")</li>
+                    <li>@Html.ActionLink("Всі події", "Index", "Reserveds")</li>
+                    <li>@Html.ActionLink("Мої події", "MyEvents", "Reserveds")</li>
                     <li>@Html.ActionLink("Створити подію", "Create", "Reserveds")</li>
+                    
+                    
                     @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                     {
                         <li>@Html.ActionLink("Адмін", "Admin", "Admin")</li>

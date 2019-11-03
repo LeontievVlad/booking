@@ -1,118 +1,112 @@
 ﻿@model Booking.Models.ReservedViewModels.EditReserveViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Редагувати";
 }
 
-<h2>Edit</h2>
 
 
-@using (Ajax.BeginForm("Edit", new AjaxOptions
-{
+@Html.AntiForgeryToken()
 
-    HttpMethod = "Post",
-    OnBegin = "ReserveValidation",
-    OnSuccess = "fnSuccess(data)",
-    OnFailure = "fnFailure"
-}))
-{
-    @Html.AntiForgeryToken()
+<div class="form-horizontal">
 
-    <div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ReservedId)
 
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ReservedId)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.EventName,"Event", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EventName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ReservedDate,"Date", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @*@ViewBag.ReservedDate*@
-                @*@Model.ReservedDate*@
-                @Html.EditorFor(model => model.ReservedDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ReservedDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ReservedTimeFrom,"From", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ReservedTimeFrom, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ReservedTimeFrom, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ReservedTimeTo,"To", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ReservedTimeTo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ReservedTimeTo, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.RoomId, "Room", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("RoomId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.RoomId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.SelectedUsersEmails,"People", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div id="selected">
-                    @Model.SelectedUsersEmails
-                </div>
-
-                
-                @Html.DropDownList("UsersEmails", new SelectList(ViewBag.UsersEmails, ViewBag.selected), new { id = "UsersEmails", multiple = "multiple",@class="form-control" })
-                <br />
-
-            </div>
-        </div>
-        @Html.TextBox("UserId", Model.UserId, new { hidden = "hidden" })
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-                <div id="messageShow" class="text-danger"></div>
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.EventName, "Подія", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EventName, "", new { @class = "text-danger" })
         </div>
     </div>
-}
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, "Опис", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.ReservedDate, "Дата", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+            <input value="@Model.ReservedDate" class="form-control text-box single-line" data-val="true" data-val-date="The field ReservedDate must be a date" id="ReservedDate" name="ReservedDate" />
+
+            @*@Html.EditorFor(model => model.ReservedDate, new { htmlAttributes = new { @class = "form-control" } })*@
+            @Html.ValidationMessageFor(model => model.ReservedDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ReservedTimeFrom, "Час початку", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ReservedTimeFrom, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ReservedTimeFrom, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ReservedTimeTo, "Час кінця", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ReservedTimeTo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ReservedTimeTo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.RoomId, "Кімната", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("RoomId", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.RoomId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SelectedUsersEmails, "Люди", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div id="selected">
+                @Model.SelectedUsersEmails
+            </div>
+            @Html.DropDownList("UsersEmails", new SelectList(ViewBag.UsersEmails, ViewBag.selected), new { id = "UsersEmails", multiple = "multiple", @class = "form-control" })
+            <br />
+
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsPrivate, "Закрита", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.CheckBoxFor(model => model.IsPrivate)
+            @Html.ValidationMessageFor(model => model.IsPrivate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.UserId)
+    @*@Html.TextBox("UserId", Model.UserId, new { hidden = "hidden" })*@
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="button" name="submit" id="submit" value="Перевірити" class="btn btn-default" onclick="CheckIsValid();" />
+            <input type="submit" name="save" id="save" value="Підтвердити" class="btn btn-success" onclick="SaveToDb();" hidden />
+            <div id="messageWarning" class="text-danger"></div>
+            <div id="messageWait" class="text-success"></div>
+            <div id="messageAlert" class="text-warning"></div>
+        </div>
+    </div>
 </div>
 
 
 
-
 @section Scripts {
-    @Scripts.Render("~/Scripts/ReservedDate.js")
-<script src="~/Scripts/customJsValidation/CreateReserveValidation.js"></script>
+    @*@Scripts.Render("~/Scripts/ReservedDate.js")*@
+    <script src="~/Scripts/customJsValidation/EditValidation.js"></script>
     <script>
 
-
-
-
-        $(function () {
-            $("#UsersEmails").chosen();
-            var my_val = $('#selected').val();
-            var str_array = my_val.split(',');
-
-
-            $("#UsersEmails").val(str_array).trigger("chosen:updated");
-            
+        $(document).ready(function () {
+            $("#UsersEmails").select2({
+                placeholder: "Додати людей",
+                multiple: true
+            });
         });
-                 
+        $('#save').hide();
     </script>
 }

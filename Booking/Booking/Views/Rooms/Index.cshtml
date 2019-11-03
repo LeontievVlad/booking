@@ -2,44 +2,43 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Головна";
 }
 
 <div id="container">
     <div id="head">
-        <span>NameRoom</span>
-        
-        <span>MinTime</span>
-        <span>MaxTime</span>
-        <span>MaxPeople</span>
-        
+        <span>Кімната</span>
+        <span>Працює з</span>
+        <span>Працює до</span>
+        <span>Макс. людей</span>
+
     </div>
 
 
 
     @foreach (var item in Model)
     {
-<div id="Room">
+        <div id="Room">
 
 
-    @using (Html.BeginForm("Reserve", "Reserveds", FormMethod.Get))
-    {
+            @using (Html.BeginForm("Reserve", "Reserveds", FormMethod.Get))
+            {
 
 
-      
-        @*<input name="NameRoom" value="@item.NameRoom" hidden />*@
-        <input name="RoomId" value="@item.RoomId" hidden />
 
-        <span id="NameRoom" name="NameRoom">@item.NameRoom</span>
-        
-        <span id="MinTime" name="MinTime">@item.MinTime</span>
-        <span id="MaxTime" name="MaxTime">@item.MaxTime</span>
-        <span id="MaxPeole" name="MaxPeole">@item.MaxPeople</span>
+                @*<input name="NameRoom" value="@item.NameRoom" hidden />*@
+                <input name="RoomId" value="@item.RoomId" hidden />
 
-        <input type="submit" value="Reserve" onclick="this.form.submit();" />
-        @*@Html.ActionLink("Reserve", "Reserve", new { room = item, onclick="this.form.submit();" })*@
-    }
-</div>
+                <span id="NameRoom" name="NameRoom">@item.NameRoom</span>
+
+                <span id="MinTime" name="MinTime">@item.MinTime</span>
+                <span id="MaxTime" name="MaxTime">@item.MaxTime</span>
+                <span id="MaxPeole" name="MaxPeole">@item.MaxPeople</span>
+
+                <input type="button" value="Забронювати" class="btn btn-default" onclick="this.form.submit();" />
+                @*@Html.ActionLink("Reserve", "Reserve", new { room = item, onclick="this.form.submit();" })*@
+            }
+        </div>
     }
 
 
@@ -47,6 +46,13 @@
 
 </div>
 <br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+<div>
+    @if (Model.PageCount > 1)
+    {
+        <span>
+            Сторінка @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) з @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+        </span>
+    }
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Bookin Room (Admin)</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -16,14 +16,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Booking", "Index", "Rooms", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Booking Room", "Index", "Rooms", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Домашняя страница", "Index", "Admin")</li>
+                    <li>@Html.ActionLink("Головна", "Index", "Admin")</li>
                     @if (User.IsInRole("SuperAdmin"))
                     {
-                        <li>@Html.ActionLink("GetRoles", "GetRoles", "Admin")</li>
+                        <li>@Html.ActionLink("Керування статусами", "GetRoles", "Admin")</li>
                     }
 
                 </ul>
@@ -32,7 +32,7 @@
 
                 <span class="navbar-right navbar-text">
                     @using Microsoft.AspNet.Identity
-                    @Html.ActionLink(User.Identity.GetUserName(), "Index", "../Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    @Html.ActionLink(User.Identity.GetUserName(), "Index", "../Manage", routeValues: null, htmlAttributes: new { @class="btn btn-default btn-sm" })
                 </span>
 
             </div>
@@ -47,7 +47,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Bookin Room (Admin)</p>
         </footer>
     </div>
 

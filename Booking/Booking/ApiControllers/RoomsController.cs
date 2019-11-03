@@ -17,15 +17,15 @@ namespace Booking.ApiControllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/Rooms
-        public string Get()
-        {
+        //// GET: api/Rooms
+        //public string Get()
+        //{
 
-            string requestInfo = "Контроллер: " + ControllerContext.ControllerDescriptor.ControllerName;
-            requestInfo += " Url: " + ControllerContext.Request.RequestUri +
-                " " + ControllerContext.Request.Method.Method;
-            return requestInfo;
-        }
+        //    string requestInfo = "Контроллер: " + ControllerContext.ControllerDescriptor.ControllerName;
+        //    requestInfo += " Url: " + ControllerContext.Request.RequestUri +
+        //        " " + ControllerContext.Request.Method.Method;
+        //    return requestInfo;
+        //}
 
         // GET: api/Rooms
         public IQueryable<Room> GetRooms()

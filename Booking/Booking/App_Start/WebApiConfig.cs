@@ -11,6 +11,7 @@ namespace Booking
         {
             config.MapHttpAttributeRoutes();
 
+            
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
@@ -18,7 +19,7 @@ namespace Booking
             );
 
             // отключаем возможность вывода данных в формате xml
-            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            //config.Formatters.Remove(config.Formatters.XmlFormatter);
         }
     }
 }

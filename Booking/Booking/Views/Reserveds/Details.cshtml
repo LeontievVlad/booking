@@ -1,16 +1,14 @@
 ﻿@model Booking.Models.ReservedViewModels.DetailsReserveViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Деталі";
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>Reserved</h4>
+    
     <hr />
     <dl class="dl-horizontal">
-        
+
         <dt>
             @Html.DisplayNameFor(model => model.EventName)
         </dt>
@@ -18,7 +16,13 @@
         <dd>
             @Html.DisplayFor(model => model.EventName)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ReservedDate)
         </dt>
@@ -50,10 +54,30 @@
         <dd>
             @Html.DisplayFor(model => model.SelectedUsersEmails)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AcceptedEmails)
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.AcceptedEmails)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DeniedEmails)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeniedEmails)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsPrivate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsPrivate)
+        </dd>
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ReservedId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Редагувати", "Edit", new { id = Model.ReservedId }) |
+    @Html.ActionLink("Всі події", "Index")
 </p>

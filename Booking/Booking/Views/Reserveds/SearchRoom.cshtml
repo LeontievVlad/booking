@@ -1,34 +1,39 @@
-﻿@model IEnumerable<Booking.Entity_Models.Reserved>
+﻿@model IEnumerable<Booking.Models.ReservedViewModels.IndexReserveViewModel>
 
-<div id="searchresults">
     @if (Model != null)
     {
-
-        foreach (var item in Model)
+    <table class="table table-hover">
+        <tr>
+            <th>
+                Room
+            </th>
+            <th>
+                Event
+            </th>
+            <th>
+                User
+            </th>
+        </tr>
+        @foreach (var item in Model)
         {
-            <p>
-                <span>
+            <tr>
+                <td>
                     @item.Room.NameRoom
-                </span>
-                <span>
+                </td>
+                <td>
                     @item.EventName
-                </span>
-                <span>
+                </td>
+                <td>
                     @item.User.UserName
-                </span>
-
-            </p>
-            
+                </td>
+            </tr>
         }
+    </table>
     }
     else
     {
-        <p>
+        <span class="text-danger">
             Збігів не знайдено
-        </p>
+        </span>
     }
 
-
-
-
-</div>

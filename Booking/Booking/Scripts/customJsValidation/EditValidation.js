@@ -1,7 +1,8 @@
 ﻿
 //get from html
-function GetAllValueReserve() {
-    var createReserveViewModel = {
+function GetAllValueForEdit() {
+    var editReserveViewModel = {
+        'ReservedId': $("#ReservedId").val(),
         'EventName': $("#EventName").val(),
         'Description': $("#Description").val(),
         'ReservedDate': $("#ReservedDate").val(),
@@ -11,7 +12,7 @@ function GetAllValueReserve() {
         'UsersEmails': $("#UsersEmails").val(),
         'IsPrivate': $("#IsPrivate").val()
     };
-    return createReserveViewModel;
+    return editReserveViewModel;
 };
 
 //check is valid on client
@@ -21,11 +22,11 @@ function CheckIsValid() {
     //alert("валідація для клієнта");
 
 
-    var createReserveViewModel = GetAllValueReserve();
+    var editReserveViewModel = GetAllValueForEdit();
     var fail = "";
 
-    if (createReserveViewModel.EventName.length < 3) fail = "Ім'я не менше 3-х символів <br/>";
-    if (createReserveViewModel.ReservedTimeFrom >= createReserveViewModel.ReservedTimeTo)
+    if (editReserveViewModel.EventName.length < 3) fail = "Ім'я не менше 3-х символів <br/>";
+    if (editReserveViewModel.ReservedTimeFrom >= editReserveViewModel.ReservedTimeTo)
         fail += "Тривалість повинна бути більша за 0 <br/>";
 
     if (fail != "") {
@@ -34,8 +35,8 @@ function CheckIsValid() {
         return false;
     } else {
         //alert("валідація для клієнта успішно пройдена");
-       
-        ValidationServer(createReserveViewModel);
+
+        ValidationServer(editReserveViewModel);
 
         return true;
     }
@@ -43,13 +44,13 @@ function CheckIsValid() {
 };
 
 //check is valid on server
-function ValidationServer(createReserveViewModel) {
+function ValidationServer(editReserveViewModel) {
     $('messageWarning').hide();
 
     $.ajax({
         type: "POST",
-        url: '../Reserveds/Reserve',
-        data: JSON.stringify(createReserveViewModel),
+        url: '/Reserveds/Edit',
+        data: JSON.stringify(editReserveViewModel),
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (data, status) {
@@ -81,7 +82,7 @@ function ValidationServer(createReserveViewModel) {
 //try to save
 function SaveToDb() {
     //alert("спроба зберегти");
-    var dataToSave = GetAllValueReserve();
+    var dataToSave = GetAllValueForEdit();
     if (CheckIsValid()) {
         //save to db
         //alert("Зберігаю...");
@@ -92,23 +93,23 @@ function SaveToDb() {
         $('#messageWait').show();
         $.ajax({
             type: "POST",
-            url: '../Reserveds/SaveReserve',
+            url: '/Reserveds/SaveEdit',
             data: JSON.stringify(dataToSave),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (data, status) {
+                setTimeout(function () {
                 $('#messageWait').html(data);
                 $('#messageWait').show();
-                setTimeout(function () {
                     $('#save').removeClass('disabled');
                 }, 4000);
                 $('#save').val('Підтвердити');
-                
-                
-                
-                
+
+
+
+
                 //alert(data);
-                
+
                 var url = "/Reserveds/MyEvents";
                 window.location.href = url;
 
@@ -124,8 +125,8 @@ function SaveToDb() {
         });
     }
     //alert("щось не так");
-    //$('#messageWait').hide();
-    //$('#save').hide();
-    //$('#submit').show();
+    $('#messageWait').hide();
+    $('#save').hide();
+    $('#submit').show();
 };
 

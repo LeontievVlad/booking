@@ -2,9 +2,8 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Всі події";
+    ViewBag.Title = "Мої події";
 }
-
 
 
 @using (Ajax.BeginForm("SearchRoom", new AjaxOptions
@@ -22,12 +21,8 @@
 <br />
 <br />
 <div id="searchresults" class="pull-left" style="width:100%;"></div>
-
 <br />
-@*<p>
-        <input type="button" value="Count" id="count" class="btn-success" />
-    </p>
-    <br />*@
+
 <table class="table table-hover">
 
     <tr>
@@ -49,24 +44,20 @@
         <th>
             Організатор
         </th>
-        @*<th>
-            Private
-        </th>*@
-        <th></th>
+        <th>
+            @*Private*@
+        </th>
+        <th>
+        </th>
     </tr>
     @foreach (var item in Model)
     {
         <tr onclick="redirectTo();">
             <td>
                 @Html.HiddenFor(modelItem => item.ReservedId)
-                @Html.HiddenFor(modelItem => item.SelectedUsersEmails)
-                @Html.HiddenFor(modelItem => item.AcceptedEmails)
-                @Html.HiddenFor(modelItem => item.DeniedEmails)
-                @Html.HiddenFor(modelItem => item.Description)
-                @Html.HiddenFor(modelItem => item.RoomId)
-                @Html.HiddenFor(modelItem => item.UserId)
-
                 @Html.DisplayFor(modelItem => item.Room.NameRoom)
+
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EventName)
@@ -85,35 +76,52 @@
 
                 @Html.DisplayFor(modelItem => item.User.UserName)
             </td>
-            @*<td>
-
-                @Html.DisplayFor(modelItem => item.IsPrivate)
-            </td>*@
-
             <td>
-                @*@if (item.IsPrivate)
-                    { }*@
-                @*<p>
-                    @Html.ActionLink("Прийти", "Index", null, new {id="toCome", @class = "btn btn-default" })
-                </p>*@
+
+                @*@Html.DisplayFor(modelItem => item.IsPrivate)*@
+            </td>
+            <td>
+                @if (item.User.UserName == ViewBag.CurrentName)
+                {
+                    <p>
+                        @Html.ActionLink("Редагувати", "Edit", new { id = item.ReservedId }, htmlAttributes: new { @class = "btn btn-default" })
+                    </p>
+                    <p>
+                        @Html.ActionLink("Видалити", "Delete", new { id = item.ReservedId }, htmlAttributes: new { @class = "btn btn-default" })
+                    </p>
+                }
+                else if (item.SelectedUsersEmails != null && item.SelectedUsersEmails.Contains(ViewBag.CurrentName))
+                {
+                    <div>
+
+                        <p>
+                            @Html.ActionLink("Прийняти", "AcceptInvite", new
+                       {
+                           id = item.ReservedId,
+                           email = ViewBag.CurrentName,
+                           accept = true
+                       }, new { @class="btn btn-default"})
+
+                        </p>
+
+                        <p>
+                            @Html.ActionLink("Відхилити", "AcceptInvite", new
+                       {
+                           id = item.ReservedId,
+                           email = ViewBag.CurrentName,
+                           accept = false
+                       }, new { @class="btn btn-default"})
+
+                        </p>
+                    </div>
+
+                }
+                else if (item.AcceptedEmails != null && item.AcceptedEmails.Contains(ViewBag.CurrentName))
+                {
+                    <p>Прийнято</p>
+                }
 
             </td>
-            @*<td>
-                    @if (item.UserId == ViewBag.CurrentId)
-                    {
-                        <p>
-                            @Html.ActionLink("Редагувати", "Edit", new { id = item.ReservedId }, new { @class="btn btn-default"})
-                        </p>
-
-                        <p>
-                            @Html.ActionLink("Видалити", "Delete", new { id = item.ReservedId }, new { @class="btn btn-default"})
-                        </p>
-
-                    }
-
-
-
-                </td>*@
         </tr>
     }
 
@@ -126,29 +134,12 @@
 
     </span>
 }
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
-
+@Html.PagedListPager(Model, page => Url.Action("MyEvents", new { page }))
 <script>
     function redirectTo() {
         var id = $('#item_ReservedId').val();
         var url = "/Reserveds/Details/" + id;
         window.location.href = url;
-    };
-
-    function ToCome() {
-        $.ajax({
-            type: "POST",
-            url: '/Reserveds/ToCome',
-            data: JSON.stringify(createReserveViewModel),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (data, status) {
-                $('#toCome').addClass('disabled');
-                alert("Готово");
-            },
-            error: function () {
-                alert("Помилка");
-            }
-        });
-    };
+    }
 </script>
+

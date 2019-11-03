@@ -1,27 +1,23 @@
 ﻿@model IEnumerable<Booking.Models.RolesViewModel>
 @{
-    ViewBag.Title = "GetRoles";
+    ViewBag.Title = "Контроль статусів";
 }
 
-<style>
-    table td {
-        padding: 10px;
-    }
-</style>
 
-<h2>GetRoles</h2>
-
-
-<table>
+<table class="table" style="margin-top:50px;">
     <tr>
-        <td>Email<hr /></td>
-        <td>Role<hr /></td>
-        
+        <td>
+            Eлектронна пошта
+        </td>
+        <td>Активний статус</td>
+        <td>Змінити на</td>
     </tr>
     @foreach (var user in Model.ToList())
     {
         <tr>
-            <td>@user.UserName</td>
+            <td>
+                @user.UserName
+            </td>
 
             @using (Html.BeginForm("ChangeRole", "Admin", FormMethod.Get))
             {
@@ -34,20 +30,26 @@
                     <td>
                         @role
                         @Html.TextBox("RoleNames", role, new { hidden = "hidden" })
-                        @if (role == "Admin")
-                        {
-                            <input type="submit" value="Down" onclick="this.form.submit();" />
-                        }
-                        else if (role == "User")
-                        {
-                            <input type="submit" value="Up" onclick="this.form.submit();" />
-                        }
-
-
-
-
 
                     </td>
+                    if (role == "Admin")
+                    {
+                        <td>
+                            <input type="submit" value="User" class="btn btn-default" onclick="this.form.submit();" />
+                        </td>
+                    }
+                    else if (role == "User")
+                    {
+                        <td>
+                            <input type="submit" value="Admin" class="btn btn-default" onclick="this.form.submit();" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <input type="submit" value="Boss" class="btn btn-default" disabled />
+                        </td>
+                    }
 
                 }
 
