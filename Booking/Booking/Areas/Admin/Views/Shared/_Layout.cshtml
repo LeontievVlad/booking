@@ -16,7 +16,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Booking Room", "Index", "Rooms", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Booking Room", "IndexRoom", "Reserveds", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -28,12 +28,12 @@
 
                 </ul>
 
+                @Html.Partial("_LoginPartial")
 
-
-                <span class="navbar-right navbar-text">
+                @*<span class="navbar-right navbar-text">
                     @using Microsoft.AspNet.Identity
-                    @Html.ActionLink(User.Identity.GetUserName(), "Index", "../Manage", routeValues: null, htmlAttributes: new { @class="btn btn-default btn-sm" })
-                </span>
+                    @Html.ActionLink(User.Identity.GetUserName(), "Index", "../Manage", routeValues: null, htmlAttributes: new { @class = "btn btn-default btn-sm" })
+                </span>*@
 
             </div>
             <div class="navbar-collapse collapse">

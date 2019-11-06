@@ -20,11 +20,11 @@ namespace Booking.Areas.Admin.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
-        private MapperConfiguration CreateRoomViewModelToRoom = new MapperConfiguration(
+        private readonly MapperConfiguration CreateRoomViewModelToRoom = new MapperConfiguration(
             cfg => cfg.CreateMap<CreateRoomViewModel, Room>()
             );
 
-        private MapperConfiguration EditRoomViewModelToRoom = new MapperConfiguration(
+        private readonly MapperConfiguration EditRoomViewModelToRoom = new MapperConfiguration(
             cfg => cfg.CreateMap<EditRoomViewModel, Room>()
             );
 
@@ -34,7 +34,9 @@ namespace Booking.Areas.Admin.Controllers
         {
             var userRoles = new List<RolesViewModel>();
             var userStore = new UserStore<ApplicationUser>(db);
+#pragma warning disable IDE0068 // Использовать рекомендуемый шаблон Dispose
             var userManager = new UserManager<ApplicationUser>(userStore);
+#pragma warning restore IDE0068 // Использовать рекомендуемый шаблон Dispose
 
             //Get all the usernames
             foreach (var user in userStore.Users)

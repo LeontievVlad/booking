@@ -1,7 +1,36 @@
 ﻿
+//modal
+function ModalSuccess(url) {
+
+
+    var dialog = bootbox.dialog({
+        
+        message: '<p class="text-center mb-0 text-success">Дані успішно збережено</p>',
+        closeButton: false,
+        buttons: {
+            ok: {
+                callback: function () {
+                    window.location.href = url;
+                }
+            }
+        }
+    });
+
+    //dialog.init(function () {
+    //    setTimeout(function () {
+    //        dialog.find('.bootbox-body').html('');
+    //        window.location.href = url;
+    //    }, 3000);
+    //});
+
+    
+
+};
+
 //get from html
 function GetAllValueReserve() {
     var createReserveViewModel = {
+        'EventName': $("#EventName").val(),
         'EventName': $("#EventName").val(),
         'Description': $("#Description").val(),
         'ReservedDate': $("#ReservedDate").val(),
@@ -9,8 +38,10 @@ function GetAllValueReserve() {
         'ReservedTimeTo': $("#ReservedTimeTo").val(),
         'RoomId': $("#RoomId").val(),
         'UsersEmails': $("#UsersEmails").val(),
-        'IsPrivate': $("#IsPrivate").val()
+        'IsPrivate': $("#IsPrivate").is(":checked")
     };
+    //$("#checkbox").is(":checked");
+
     return createReserveViewModel;
 };
 
@@ -31,10 +62,11 @@ function CheckIsValid() {
     if (fail != "") {
         $('#messageWarning').html(fail);
         $('#messageWarning').show();
+        $('#save').hide();
         return false;
     } else {
         //alert("валідація для клієнта успішно пройдена");
-       
+        $('#messageWait').html("Ви можете зберегти дані");
         ValidationServer(createReserveViewModel);
 
         return true;
@@ -86,10 +118,23 @@ function SaveToDb() {
         //save to db
         //alert("Зберігаю...");
         $('#save').addClass('disabled');
+        $('#submit').addClass('disabled');
         $('#save').val('Зберігаю...');
         $('#messageWait').show();
         $('#messageWait').html("Зберігаю...");
         $('#messageWait').show();
+
+        $('#messageAlert').addClass('hidden');
+        var dialog = bootbox.dialog({
+            title: '<p class="text-center mb-0">Повідомлення</p>',
+            message: '<p class="text-center mb-0 text-success">Зберігаю...</p>',
+            closeButton: false
+        });
+        dialog.init(function () {
+            setTimeout(function () {
+                dialog.find('.bootbox-body').html('<p class="text-center mb-0 text-success">Зберігаю...</p>');
+            }, 2000);
+        });
         $.ajax({
             type: "POST",
             url: '../Reserveds/SaveReserve',
@@ -97,35 +142,33 @@ function SaveToDb() {
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (data, status) {
-                $('#messageWait').html(data);
-                $('#messageWait').show();
-                setTimeout(function () {
-                    $('#save').removeClass('disabled');
-                }, 4000);
-                $('#save').val('Підтвердити');
-                
-                
-                
-                
-                //alert(data);
-                
-                var url = "/Reserveds/MyEvents";
-                window.location.href = url;
 
-            },
-            error: function () {
+                $('#messageWait').html("Дані успішно збережено");
+                $('#messageWait').show();
+
+
                 $('#save').removeClass('disabled');
                 $('#save').val('Підтвердити');
-                $('#messageWarning').html("помилка при збереженні");
+
+                var url = "/Reserveds/Details/" + data;
+
+                dialog.modal('hide');
+                ModalSuccess(url);
+                
+            },
+            error: function () {
+                dialog.modal('hide');
+                $('#save').removeClass('disabled');
+                $('#save').val('Підтвердити');
+                $('#messageWarning').html("Помилка при збереженні");
                 $('#messageWarning').show();
+                $('#messageWait').hide();
                 $('#save').hide();
+                $('#submit').removeClass('disabled');
                 $('#submit').show();
             }
         });
     }
-    //alert("щось не так");
-    //$('#messageWait').hide();
-    //$('#save').hide();
-    //$('#submit').show();
+    
 };
 

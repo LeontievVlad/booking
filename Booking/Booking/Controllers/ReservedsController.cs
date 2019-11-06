@@ -14,8 +14,10 @@ using AutoMapper;
 using Booking.Entity_Models;
 using Booking.Models;
 using Booking.Models.ReservedViewModels;
+using Booking.Models.RoomViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.VisualBasic.ApplicationServices;
 using PagedList;
 
 namespace Booking.Controllers
@@ -26,36 +28,47 @@ namespace Booking.Controllers
         private readonly ApplicationDbContext db = new ApplicationDbContext();
 
 
-        private string currentUserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+        private readonly string currentUserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
-        private string currentUserName = System.Web.HttpContext.Current.User.Identity.Name;
+        private readonly string currentUserName = System.Web.HttpContext.Current.User.Identity.Name;
 
-        private MapperConfiguration CreateReserveViewModelToReserved = new MapperConfiguration(
+        private readonly MapperConfiguration CreateReserveViewModelToReserved = new MapperConfiguration(
             cfg => cfg.CreateMap<CreateReserveViewModel, Reserved>()
             );
 
-        private MapperConfiguration ReservedToEditReserveViewModel = new MapperConfiguration(
+        private readonly MapperConfiguration ReservedToEditReserveViewModel = new MapperConfiguration(
             cfg => cfg.CreateMap<Reserved, EditReserveViewModel>()
             );
 
-        private MapperConfiguration EditReserveViewModelToReserved = new MapperConfiguration(
+        private readonly MapperConfiguration EditReserveViewModelToReserved = new MapperConfiguration(
             cfg => cfg.CreateMap<EditReserveViewModel, Reserved>()
             );
 
+
+
         public char[] separateComa = { ',' };
 
-        // GET: Reserveds
+        // GET: Rooms
+        [AllowAnonymous]
+        public ActionResult IndexRoom(int? page)
+        {
+            var room = db.Rooms.ToList();
+            var roomIndexModel = room
+                .OrderBy(x => x.NameRoom).Select(x => new IndexRoomViewModel(x));
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            ViewBag.CountInvites = CountInvites();
+            return View(roomIndexModel.ToPagedList(pageNumber, pageSize));
+        }
 
+        // GET: Reserveds
         public ActionResult Index(int? page)
         {
             var reserveds = db.Reserveds.Include(x => x.User)
                 .Include(r => r.Room)
                 .Where(x =>
-                (x.ReservedDate >= DateTime.Today /*&& x.IsPrivate == false*/) ||
-                ((x.UserId == currentUserId ||
-                x.SelectedUsersEmails.Contains(currentUserName) ||
-                x.AcceptedEmails.Contains(currentUserName)) &&
-                x.ReservedDate >= DateTime.Today))
+                    x.ReservedDate >= DateTime.Now
+                )
                 .ToList();
 
             if (reserveds.Count == 0)
@@ -64,16 +77,19 @@ namespace Booking.Controllers
             }
 
             var reserveIndexModel = reserveds
-                .OrderBy(a => a.Room.NameRoom)
-                .Select(a => new IndexReserveViewModel(a));
+                .OrderByDescending(x => x.ReservedDate)
+                .Select(x => new IndexReserveViewModel(x));
             //reserveds = reserveds.Where(x => x.OwnerId == currentUserId).ToList();
             ViewBag.CurrentId = currentUserId;
             ViewBag.CurrentName = currentUserName;
+            ViewBag.CountInvites = CountInvites();
             //reserveds=reserveds.Where(x => x.UsersId == System.Web.HttpContext.Current.User.Identity.GetUserId());
 
             //var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
             //reserveds = reserveds.Where(x => x.OwnerId == userId);
+
+
             int pageSize = 3;
             int pageNumber = (page ?? 1);
 
@@ -87,7 +103,7 @@ namespace Booking.Controllers
                 .Include(x => x.Room)
                 .Where(x => (x.UserId == currentUserId ||
                 x.SelectedUsersEmails.Contains(currentUserName) ||
-                x.AcceptedEmails.Contains(currentUserName)) && x.ReservedDate >= DateTime.Today)
+                x.AcceptedEmails.Contains(currentUserName)) /*&& x.ReservedDate >= DateTime.Today*/)
                 .ToList();
 
             if (events.Count == 0)
@@ -103,8 +119,24 @@ namespace Booking.Controllers
             int pageNumber = (page ?? 1);
 
             ViewBag.CurrentName = currentUserName;
+            ViewBag.CountInvites = CountInvites();
+
 
             return View(reserveIndexModel.ToPagedList(pageNumber, pageSize));
+        }
+
+        public int CountInvites()
+        {
+            var reserved = db.Reserveds.ToList();
+
+            int count = 0;
+            foreach (var item in reserved)
+            {
+                if (item.SelectedUsersEmails.Contains(currentUserName))
+                    count++;
+            }
+
+            return count;
         }
 
         [HttpPost]
@@ -146,22 +178,28 @@ namespace Booking.Controllers
         }
 
         // GET: Reserveds/Details/5
-        
+
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Reserved reserved = db.Reserveds.Find(id);
-            if(reserved.UserId != currentUserId)
-            {
-                return RedirectToAction("Index");
-            }
+            Reserved reserved = db.Reserveds
+                .Include(x => x.User)
+                .Include(x => x.Room)
+                .First(x => x.ReservedId == id);
+            //reserved.User = (ApplicationUser)db.Users;
+
             if (reserved == null)
             {
                 return HttpNotFound();
             }
+            if (reserved.UserId != currentUserId)
+            {
+                return RedirectToAction("Index");
+            }
+            ViewBag.CountInvites = CountInvites();
             var detailsReserveViewModel = new DetailsReserveViewModel(reserved);
             return View(detailsReserveViewModel);
         }
@@ -171,23 +209,34 @@ namespace Booking.Controllers
         public ActionResult Reserve(int? RoomId)
         {
             var room = db.Rooms.Find(RoomId);
+            ViewBag.CountInvites = CountInvites();
+
+
+
+            //createReserveViewModel.GetUserList = db.Users.Select(x =>
+            //new ApplicationUser { Id = x.Id, UserName = x.UserName }).ToList();
+            //var uEmails = db.Users.Select(x => new ApplicationUser
+            //{
+
+            //}).ToList();
 
             CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
             {
                 ReservedTimeFrom = room.MinTime,
                 ReservedTimeTo = room.MaxTime,
-                RoomId = RoomId
+                RoomId = RoomId,
+                Room = room,
+                GetUserList = db.Users.ToList()
             };
-            var allUserNames = db.Users.Select(x => x.UserName).ToList();
-            ViewBag.UsersEmails = allUserNames;
-            ViewBag.selected = currentUserName;
-            if (createReserveViewModel.SelectedUsersEmails != null)
-            {
-                ViewBag.selected = createReserveViewModel.SelectedUsersEmails.Split(',').ToList();
-            }
+            //var allUserNames = db.Users.Select(x => x.UserName).ToList();
+            //ViewBag.UsersEmails = allUserNames;
+            ViewBag.CurrentUserName = currentUserName;
+
+
             ViewBag.NameRoom = room.NameRoom;
+
+
             //ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
-            //ViewBag.OwnerId = new SelectList(db.Users, "Id", "UserName");
             return View(createReserveViewModel);
         }
 
@@ -202,9 +251,17 @@ namespace Booking.Controllers
             //ViewBag.UsersEmails = db.Users.Select(x => x.UserName).ToList();
 
             string message = "";
-            if (createReserveViewModel.ReservedDate <= DateTime.Today)
+            if (createReserveViewModel.ReservedDate < DateTime.Today ||
+                (createReserveViewModel.ReservedDate == DateTime.Today &&
+                createReserveViewModel.ReservedTimeFrom < DateTime.Now.TimeOfDay)
+               )
             {
-                message += "Забронювати кімнату можна на наступний день або пізніше <br/>";
+                message += "Уваги ви бронюєте на минулий час <br/>";
+            }
+            else if (createReserveViewModel.ReservedDate == DateTime.Today &&
+                createReserveViewModel.ReservedTimeFrom.TotalMinutes < DateTime.Now.TimeOfDay.TotalMinutes)
+            {
+
             }
             if (createReserveViewModel.ReservedTimeFrom < room.MinTime ||
                 createReserveViewModel.ReservedTimeTo > room.MaxTime)
@@ -214,28 +271,13 @@ namespace Booking.Controllers
                     + room.MaxTime + " ) <br/>";
             }
 
-
-            //var allDate = reserveds.Select(x => x.ReservedDate).ToList();
-            //var timeFrom = reserveds.Select(x => x.ReservedTimeFrom).ToList();
-            //var timeTo = reserveds.Select(x => x.ReservedTimeTo).ToList();
-            //var currentTimeDuration = createReserveViewModel.ReservedTimeTo - createReserveViewModel.ReservedTimeFrom;
-
-            //foreach (var date in allDate)
-            //{
-            //    if(date == createReserveViewModel.ReservedDate)
-            //    {
-            //        foreach(var time in timeFrom)
-            //        {
-
-            //        message += " <br/>";
-            //        }
-            //    }
-            //}
-
+            if (createReserveViewModel.UsersEmails != null && createReserveViewModel.UsersEmails.Length > room.MaxPeople)
+            {
+                message += $"Не всі помістяться в кімнаті (максимальна кількість: {room.MaxPeople} ) <br/>";
+            }
 
 
             return Json(message, JsonRequestBehavior.AllowGet);
-
 
         }
 
@@ -244,28 +286,12 @@ namespace Booking.Controllers
         public async Task<ActionResult> SaveReserve(CreateReserveViewModel createReserveViewModel)
         {
             createReserveViewModel.UserId = currentUserId;
-            if (createReserveViewModel.UsersEmails == null)
+            if (createReserveViewModel.UsersEmails.Length > 0)
             {
-                //code here
-            }
-            else if (createReserveViewModel.UsersEmails.Length > 1 &&
-                createReserveViewModel.UsersEmails.Contains(currentUserName))
-            {
-                string[] otherEmails = new string[createReserveViewModel.UsersEmails.Length - 1];
-                int j = 0;
-                foreach (var item in createReserveViewModel.UsersEmails)
-                {
-                    if (item != currentUserName)
-                    {
-                        otherEmails[j] = item;
-                        j++;
-                    }
-                }
-                createReserveViewModel.SelectedUsersEmails = string.Join(",", otherEmails);
-            }
-            else if (createReserveViewModel.UsersEmails.Length > 0)
-            {
-                createReserveViewModel.SelectedUsersEmails = string.Join(",", createReserveViewModel.UsersEmails);
+                var selecteUsersEmails = db.Users.Where(x =>
+                createReserveViewModel.UsersEmails.Contains(x.Id))
+                    .Select(x => x.UserName).ToArray();
+                createReserveViewModel.SelectedUsersEmails = string.Join(",", selecteUsersEmails);
             }
 
             Reserved reserved = new Reserved
@@ -317,7 +343,7 @@ namespace Booking.Controllers
 
                 });
 
-            return Json("Дані збережено", JsonRequestBehavior.AllowGet);
+            return Json(reserved.ReservedId, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -329,13 +355,14 @@ namespace Booking.Controllers
             CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
             {
                 UserId = currentUserId,
+                GetUserList = db.Users.ToList()
 
             };
 
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
-            ViewBag.UsersEmails = db.Users.Select(x => x.UserName).ToList();
-
-
+            //ViewBag.UsersEmails = db.Users.Select(x => x.UserName).ToList();
+            ViewBag.CountInvites = CountInvites();
+            ViewBag.CurrentUserName = currentUserName;
 
             return View(createReserveViewModel);
         }
@@ -371,8 +398,8 @@ namespace Booking.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var reserved = db.Reserveds.Find(id);
-
+            //var reserved = db.Reserveds.Find(id);
+            var reserved = db.Reserveds.Include(x => x.Room).Include(x => x.User).First(x => x.ReservedId == id);
             if (reserved == null)
             {
                 return HttpNotFound();
@@ -397,20 +424,28 @@ namespace Booking.Controllers
                 UserId = reserved.UserId,
 
                 Room = reserved.Room,
-                User = reserved.User
+                User = reserved.User,
 
-
+                GetUserList = db.Users.ToList()
             };
 
 
+            ViewBag.CountInvites = CountInvites();
 
-            var allUserNames = db.Users.Select(x => x.UserName).ToList();
-            ViewBag.UsersEmails = allUserNames;
-            ViewBag.selected = currentUserName.ToList();
-            if (editReserveViewModel.SelectedUsersEmails != null)
-            {
-                ViewBag.selected = editReserveViewModel.SelectedUsersEmails.Split(',').ToList();
-            }
+
+            ViewBag.currentUserName = currentUserName;
+
+            List<string> unionEmail = new List<string>();
+            if (!string.IsNullOrEmpty(editReserveViewModel.SelectedUsersEmails))
+                unionEmail.AddRange(editReserveViewModel.SelectedUsersEmails.Split(',').ToList());
+            if (!string.IsNullOrEmpty(editReserveViewModel.AcceptedEmails))
+                unionEmail.AddRange(editReserveViewModel.AcceptedEmails.Split(',').ToList());
+            if (!string.IsNullOrEmpty(editReserveViewModel.DeniedEmails))
+                unionEmail.AddRange(editReserveViewModel.DeniedEmails.Split(',').ToList());
+
+            //ViewBag.selected = unionEmail;
+            editReserveViewModel.UsersEmails = unionEmail.ToArray();
+
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", editReserveViewModel.RoomId);
             return View(editReserveViewModel);
         }
@@ -423,9 +458,12 @@ namespace Booking.Controllers
             var room = db.Rooms.Find(editReserveViewModel.RoomId);
 
             string message = "";
-            if (editReserveViewModel.ReservedDate <= DateTime.Today)
+            if (editReserveViewModel.ReservedDate < DateTime.Today ||
+                (editReserveViewModel.ReservedDate == DateTime.Today &&
+                editReserveViewModel.ReservedTimeFrom < DateTime.Now.TimeOfDay)
+               )
             {
-                message += "Забронювати кімнату можна на наступний день або пізніше <br/>";
+                message += "Уваги ви бронюєте на минулий час <br/>";
             }
             if (editReserveViewModel.ReservedTimeFrom < room.MinTime ||
                 editReserveViewModel.ReservedTimeTo > room.MaxTime)
@@ -433,6 +471,10 @@ namespace Booking.Controllers
                 message += "Час виходить за межі ( "
                     + room.MinTime + " "
                     + room.MaxTime + " ) <br/>";
+            }
+            if (editReserveViewModel.UsersEmails != null && editReserveViewModel.UsersEmails.Length > room.MaxPeople)
+            {
+                message += $"Не всі помістяться в кімнаті (максимальна кількість: {room.MaxPeople} ) <br/>";
             }
 
             return Json(message, JsonRequestBehavior.AllowGet);
@@ -444,29 +486,16 @@ namespace Booking.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveEdit(EditReserveViewModel editReserveViewModel)
         {
-            //editReserveViewModel.UserId = currentUserId;
-            if (editReserveViewModel.UsersEmails == null)
+
+
+
+
+            if (editReserveViewModel.UsersEmails.Length > 0)
             {
-                //code here
-            }
-            else if (editReserveViewModel.UsersEmails.Length > 1 &&
-                editReserveViewModel.UsersEmails.Contains(currentUserName))
-            {
-                string[] otherEmails = new string[editReserveViewModel.UsersEmails.Length - 1];
-                int j = 0;
-                foreach (var item in editReserveViewModel.UsersEmails)
-                {
-                    if (item != currentUserName)
-                    {
-                        otherEmails[j] = item;
-                        j++;
-                    }
-                }
-                editReserveViewModel.SelectedUsersEmails = string.Join(",", otherEmails);
-            }
-            else if (editReserveViewModel.UsersEmails.Length > 0)
-            {
-                editReserveViewModel.SelectedUsersEmails = string.Join(",", editReserveViewModel.UsersEmails);
+                var selecteUsersEmails = db.Users.Where(x =>
+                editReserveViewModel.UsersEmails.Contains(x.Id))
+                    .Select(x => x.UserName).ToArray();
+                editReserveViewModel.SelectedUsersEmails = string.Join(",", selecteUsersEmails);
             }
 
             var reserved = db.Reserveds.Find(editReserveViewModel.ReservedId);
@@ -478,7 +507,7 @@ namespace Booking.Controllers
             reserved.AcceptedEmails = editReserveViewModel.AcceptedEmails;
             reserved.DeniedEmails = editReserveViewModel.DeniedEmails;
             reserved.Description = editReserveViewModel.Description;
-            reserved.EventName = editReserveViewModel.Description;
+            reserved.EventName = editReserveViewModel.EventName;
             reserved.IsPrivate = editReserveViewModel.IsPrivate;
             reserved.ReservedDate = editReserveViewModel.ReservedDate;
             reserved.ReservedTimeFrom = editReserveViewModel.ReservedTimeFrom;
@@ -517,79 +546,74 @@ namespace Booking.Controllers
                 }
             }
 
-            return Json("Дані збережено", JsonRequestBehavior.AllowGet);
+            return Json(reserved.ReservedId, JsonRequestBehavior.AllowGet);
         }
 
 
-        public async Task<ActionResult> ToCome(EditReserveViewModel editReserveViewModel)
+        public async Task<ActionResult> ToCome(int? id, bool toCome)
         {
-            //editReserveViewModel.UserId = currentUserId;
-            if (editReserveViewModel.UsersEmails == null)
-            {
-                //code here
-            }
-            else if (editReserveViewModel.UsersEmails.Length > 1 &&
-                editReserveViewModel.UsersEmails.Contains(currentUserName))
-            {
-                string[] otherEmails = new string[editReserveViewModel.UsersEmails.Length - 1];
-                int j = 0;
-                foreach (var item in editReserveViewModel.UsersEmails)
-                {
-                    if (item != currentUserName)
-                    {
-                        otherEmails[j] = item;
-                        j++;
-                    }
-                }
-                editReserveViewModel.SelectedUsersEmails = string.Join(",", otherEmails);
-            }
-            else if (editReserveViewModel.UsersEmails.Length > 0)
-            {
-                editReserveViewModel.SelectedUsersEmails = string.Join(",", editReserveViewModel.UsersEmails);
-            }
-
-            var reserved = await db.Reserveds.FindAsync(editReserveViewModel.ReservedId);
+            //bool toCome = true;
+            var reserved = await db.Reserveds.FindAsync(id);
             if (reserved == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            reserved.AcceptedEmails = editReserveViewModel.AcceptedEmails;
-            reserved.DeniedEmails = editReserveViewModel.DeniedEmails;
-            reserved.Description = editReserveViewModel.Description;
-            reserved.EventName = editReserveViewModel.Description;
-            reserved.IsPrivate = editReserveViewModel.IsPrivate;
-            reserved.ReservedDate = editReserveViewModel.ReservedDate;
-            reserved.ReservedTimeFrom = editReserveViewModel.ReservedTimeFrom;
-            reserved.ReservedTimeTo = editReserveViewModel.ReservedTimeTo;
-            reserved.RoomId = editReserveViewModel.RoomId;
-            reserved.SelectedUsersEmails = editReserveViewModel.SelectedUsersEmails;
-            reserved.UsersEmails = editReserveViewModel.UsersEmails;
-            reserved.User = editReserveViewModel.User;
 
-            reserved.AcceptedEmails += string.Join(",", currentUserName);
+            if (toCome)
+            {
+                if (!string.IsNullOrEmpty(reserved.AcceptedEmails))
+                {
+
+                    reserved.AcceptedEmails = AddEmailToString(currentUserName, reserved.AcceptedEmails);
+                }
+                else
+                {
+                    reserved.AcceptedEmails = currentUserName;
+                }
+                if (!string.IsNullOrEmpty(reserved.DeniedEmails) &&
+                    reserved.DeniedEmails.Contains(currentUserName))
+                {
+                    reserved.DeniedEmails = string.Join(",",
+                        RemoveEmailFromString(currentUserName, reserved.DeniedEmails));
+                }
+
+                var user = db.Users.Find(reserved.UserId);
+
+                var date = reserved.ReservedDate.ToShortDateString();
+
+
+                string emailBody = $"<p>User: {currentUserName}</p>" +
+                $"<p>Хоче прийти на {reserved.EventName} <br/>" +
+                $"Дата: {date} <br/>" +
+                $"Час початку: {reserved.ReservedTimeFrom} <br/>" +
+                $"Час кінця: {reserved.ReservedTimeTo} <br/>" +
+                $"Організатор: {user.UserName} <br/></p>";
+                var link = $"https://localhost:44367/Reserveds/AcceptToCome?id={id}&email={currentUserName}&accept=";
+                var linkMsg = $"<p><a href = '{link}true' > Прийняти </a> </p> " +
+                    $" <p><a href = '{link}false' > Відхилити </a></p></div>";
+                await SendEmailAsync(user.UserName, reserved.EventName, emailBody + linkMsg);
+            }
+            else
+            {
+                reserved.AcceptedEmails = string.Join(",",
+                    RemoveEmailFromString(currentUserName, reserved.AcceptedEmails));
+                if (!string.IsNullOrEmpty(reserved.DeniedEmails))
+                {
+                    reserved.DeniedEmails = AddEmailToString(currentUserName, reserved.DeniedEmails);
+                }
+                else
+                {
+                    reserved.DeniedEmails = currentUserName;
+                }
+            }
+
+
+
 
             db.Entry(reserved).State = EntityState.Modified;
             db.SaveChanges();
-
-            var owner = db.Reserveds.Include(x => x.User)
-                .Where(x => x.ReservedId == reserved.ReservedId)
-                .Select(x => x.User.UserName).ToString();
-
-
-            var date = reserved.ReservedDate.ToShortDateString();
-            var id = reserved.ReservedId;
-            var msg = "Прийде на";
-            string emailBody = $"<p>{currentUserName}</p>" +
-            $"<p>{msg} {reserved.EventName} <br/>" +
-            $"Дата: {date} <br/>" +
-            $"Час початку: {reserved.ReservedTimeFrom} <br/>" +
-            $"Час кінця: {reserved.ReservedTimeTo} <br/>" +
-            $"Організатор: {owner} <br/></p>";
-
-            bool isSend = await SendEmailAsync(owner, reserved.EventName, emailBody);
-
-            return Json("Дані збережено", JsonRequestBehavior.AllowGet);
+            return RedirectToAction("Index");
         }
         // GET: Reserveds/Delete/5
         public ActionResult Delete(int? id)
@@ -603,7 +627,7 @@ namespace Booking.Controllers
             {
                 return HttpNotFound();
             }
-
+            ViewBag.CountInvites = CountInvites();
             var deleteReserveViewModel = new DeleteReserveViewModel(reserved);
             return View(deleteReserveViewModel);
         }
@@ -625,140 +649,169 @@ namespace Booking.Controllers
         {
 
             var reserveds = db.Reserveds.Find(id);
-
-            if (reserveds.ReservedDate <= DateTime.Today)
+            string msg;
+            if (reserveds.ReservedDate < DateTime.Today ||
+                (reserveds.ReservedDate == DateTime.Today &&
+                reserveds.ReservedTimeFrom < DateTime.Now.TimeOfDay))
             {
-                ViewBag.msg = "Подія вже відбулася";
-                reserveds.SelectedUsersEmails = null;
+                msg = "Подія вже відбулася";
             }
-            else if ((reserveds.AcceptedEmails != null && reserveds.AcceptedEmails.Contains(email)) ||
-                    (reserveds.DeniedEmails != null && reserveds.DeniedEmails.Contains(email)))
+            else if ((!string.IsNullOrEmpty(reserveds.AcceptedEmails) && reserveds.AcceptedEmails.Contains(email)) ||
+                    (!string.IsNullOrEmpty(reserveds.DeniedEmails) && reserveds.DeniedEmails.Contains(email)))
             {
-                ViewBag.msg = "Ви вже дали відповідь";
-                if (reserveds.SelectedUsersEmails.Contains(email))
-                {
-                    reserveds.UsersEmails = reserveds.SelectedUsersEmails.Split(',').ToArray();
+                msg = "Ви вже дали відповідь";
 
-                    string[] allEmails = new string[reserveds.UsersEmails.Length - 1];
-
-                    int j = 0;
-                    foreach (var item in reserveds.UsersEmails)
-                    {
-                        if (item != email)
-                        {
-                            allEmails[j] = item;
-                            j++;
-                        }
-                    }
-
-                    reserveds.SelectedUsersEmails = string.Join(",", allEmails);
-                }
             }
-            else if (reserveds.SelectedUsersEmails != null && reserveds.SelectedUsersEmails.Contains(email))
+            else if (!string.IsNullOrEmpty(reserveds.SelectedUsersEmails) &&
+                reserveds.SelectedUsersEmails.Contains(email))
             {
-                //Є в списку запрошених
-
-                //int id = Convert.ToInt32(reserveds.ReservedId);
-                //Reserved reserved = db.Reserveds.Find(id);
-
-                //var deleteEmail = 
-                reserveds.UsersEmails = reserveds.SelectedUsersEmails.Split(',').ToArray();
-
-                string[] otherEmails = new string[reserveds.UsersEmails.Length - 1];
-
-                int j = 0;
-                foreach (var item in reserveds.UsersEmails)
-                {
-                    if (item != email)
-                    {
-                        otherEmails[j] = item;
-                        j++;
-                    }
-                }
-
-                reserveds.SelectedUsersEmails = string.Join(",", otherEmails);
-
-
-
                 //Прийнято чи відхилено?
                 if (accept)
                 {
                     if (reserveds.AcceptedEmails != null)
                     {
-                        reserveds.UsersEmails = reserveds.AcceptedEmails.Split(',').ToArray();
-                        string[] arrEmails = new string[reserveds.UsersEmails.Length + 1];
-                        //arrEmails = reserveds.UsersEmails;
-                        //arrEmails[reserveds.UsersEmails.Length] = email;
-
-                        j = 0;
-                        foreach (var item in reserveds.UsersEmails)
-                        {
-                            arrEmails[j] = item;
-                            j++;
-                        }
-                        arrEmails[j] = email;
-                        reserveds.AcceptedEmails = string.Join(",", arrEmails);
+                        reserveds.AcceptedEmails = AddEmailToString(email, reserveds.AcceptedEmails);
                     }
                     else
                     {
                         reserveds.AcceptedEmails = string.Join(",", email);
                     }
-                    ViewBag.msg = "Прийнято";
+                    msg = "Прийнято";
                 }
                 else
                 {
                     if (reserveds.DeniedEmails != null)
                     {
-                        reserveds.UsersEmails = reserveds.DeniedEmails.Split(',').ToArray();
-                        otherEmails = reserveds.UsersEmails;
-                        otherEmails[otherEmails.Length] = email;
-                        reserveds.DeniedEmails = string.Join(",", otherEmails);
+                        reserveds.DeniedEmails = AddEmailToString(email, reserveds.DeniedEmails);
                     }
                     else
                     {
                         reserveds.DeniedEmails = string.Join(",", email);
                     }
-                    ViewBag.msg = "Відхилено";
+                    msg = "Відхилено";
                 }
-
-                db.Entry(reserveds).State = EntityState.Modified;
-                db.SaveChanges();
             }
             else
             {
-                ViewBag.msg = "Вас немає в списку запрошених";
+                msg = "Вас немає в списку запрошених";
             }
 
-            
-            
 
+            if (!string.IsNullOrEmpty(reserveds.SelectedUsersEmails) && reserveds.SelectedUsersEmails.Contains(email))
+            {
+                //Є в списку запрошених
+                reserveds.SelectedUsersEmails = string.Join(",",
+                    RemoveEmailFromString(email, reserveds.SelectedUsersEmails));
+            }
+            ViewBag.msg = msg;
+            ViewBag.CountInvites = CountInvites();
+            db.Entry(reserveds).State = EntityState.Modified;
+            db.SaveChanges();
             return View();
         }
 
+        public ActionResult AcceptToCome(int id, string email, bool accept)
+        {
+
+            var reserveds = db.Reserveds.Find(id);
+            string msg;
+            if (reserveds.ReservedDate < DateTime.Today ||
+                (reserveds.ReservedDate == DateTime.Today &&
+                reserveds.ReservedTimeFrom < DateTime.Now.TimeOfDay))
+            {
+                msg = "Подія вже відбулася";
+            }
+            else if (accept)
+            {
+
+                msg = "Прийнято";
+            }
+            else
+            {
+
+                if (!string.IsNullOrEmpty(reserveds.AcceptedEmails) && reserveds.AcceptedEmails.Contains(email))
+                {
+                    reserveds.AcceptedEmails = string.Join(",",
+                        RemoveEmailFromString(email, reserveds.AcceptedEmails));
+                }
+
+                if (reserveds.DeniedEmails != null)
+                {
+                    reserveds.DeniedEmails = AddEmailToString(email, reserveds.DeniedEmails);
+                }
+                else
+                {
+                    reserveds.DeniedEmails = string.Join(",", email);
+                }
+                msg = "Відхилено";
+            }
+
+            ViewBag.msg = msg;
+            ViewBag.CountInvites = CountInvites();
+            db.Entry(reserveds).State = EntityState.Modified;
+            db.SaveChanges();
+            return View();
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Качество кода", "IDE0067:Ликвидировать объекты перед потерей области", Justification = "<Ожидание>")]
         public async Task<bool> SendEmailAsync(string email, string subject, string emailBody)
         {
 
             string senderEmail = System.Configuration.ConfigurationManager.AppSettings["SenderEmail"].ToString();
             string senderPassword = System.Configuration.ConfigurationManager.AppSettings["SenderPassword"].ToString();
 
-            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-            client.EnableSsl = true;
-            client.Timeout = 100000;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.Credentials = new NetworkCredential(senderEmail, senderPassword);
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
+            {
+                EnableSsl = true,
+                Timeout = 100000,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(senderEmail, senderPassword)
+            };
 
 
-            MailMessage mailMessage = new MailMessage(senderEmail, email, subject, emailBody);
-            mailMessage.IsBodyHtml = true;
-            mailMessage.BodyEncoding = Encoding.UTF8;
+            MailMessage mailMessage = new MailMessage(senderEmail, email, subject, emailBody)
+            {
+                IsBodyHtml = true,
+                BodyEncoding = Encoding.UTF8
+            };
 
             await client.SendMailAsync(mailMessage);
 
             return true;
         }
 
+        public string[] RemoveEmailFromString(string email, string str)
+        {
+            string[] UsersEmails = str.Split(',').ToArray();
+            string[] selected = new string[UsersEmails.Length - 1];
 
+            int j = 0;
+            foreach (var item in UsersEmails)
+            {
+                if (item != email && !string.IsNullOrWhiteSpace(item))
+                {
+                    selected[j] = item;
+                    j++;
+                }
+            }
+            return selected;
+        }
+
+
+        public string AddEmailToString(string email, string str)
+        {
+            string[] UsersEmails = str.Split(',').ToArray();
+            string[] addEmails = new string[UsersEmails.Length + 1];
+            int i = 0;
+            foreach (var item in UsersEmails)
+            {
+                addEmails[i] = item;
+                i++;
+            }
+            addEmails[i] = email;
+            return string.Join(",", addEmails);
+        }
         //---------------------------------------------
 
 

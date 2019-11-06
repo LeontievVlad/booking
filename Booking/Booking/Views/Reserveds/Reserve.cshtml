@@ -8,7 +8,8 @@
 <div class="form-horizontal" id="result">
 
     <h3>
-        @ViewBag.NameRoom
+        @Model.Room.NameRoom
+        @*@ViewBag.NameRoom*@
     </h3>
 
     <hr />
@@ -57,20 +58,39 @@
 
     @Html.HiddenFor(model => model.RoomId)
     <div class="form-group">
-        @Html.LabelFor(model => model.SelectedUsersEmails, "Люди", htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.SelectedUsersEmails, $"Люди ( макс. {Model.Room.MaxPeople})", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
 
+            <select class="form-control" id="UsersEmails" name="UsersEmails" multiple>
+                @foreach (var emails in Model.GetUserList)
+                {
+                    if (emails.UserName == ViewBag.CurrentUserName)
+                    {
+                        <option value="@emails.Id" disabled>@emails.UserName</option>
+                    }
+                    else
+                    {
+                        <option value="@emails.Id">@emails.UserName</option>
+                    }
+                }
+            </select>
+            @*@Html.DropDownList("UsersEmails", new SelectList(ViewBag.UsersEmails), new { id = "UsersEmails", multiple = "multiple", @class = "form-control" })*@
 
-            @Html.DropDownList("UsersEmails", new SelectList(ViewBag.UsersEmails), new { id = "UsersEmails", multiple = "multiple", @class = "form-control" })
-
+            @*@Html.ListBox("UsersEmails", Model.GetUserList.Select(x => new SelectListItem { Text = x.UserName,
+                    Value = x.Id,
+                    Disabled = true
+                    //Disabled = x.
+                    //Selected = ViewBag.Selected
+                }),new { @class="form-control", @multiple="true"})*@
 
         </div>
     </div>
-    @*<input class="checkbox-inline" checked />*@
+
     <div class="form-group">
-        @Html.LabelFor(model => model.IsPrivate, "Закрита", htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.IsPrivate, "Приватна", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <input type="checkbox" value="false" id="IsPrivate" name="IsPrivate" />
+            <input type="checkbox" id="IsPrivate" name="IsPrivate" />
+
             @*@Html.CheckBoxFor(model => model.IsPrivate)*@
             @Html.ValidationMessageFor(model => model.IsPrivate, "", new { @class = "text-danger" })
         </div>
@@ -83,7 +103,7 @@
             <div id="messageWarning" class="text-danger"></div>
             <div id="messageWait" class="text-success"></div>
             <div id="messageAlert" class="text-warning"></div>
-            
+
         </div>
     </div>
 
@@ -92,13 +112,11 @@
 
 </div>
 
-
-
 @section Scripts {
     <script src="~/Scripts/ReservedDate.js"></script>
     <script src="~/Scripts/customJsValidation/ReserveValidation.js"></script>
     <script>
-
+        $('.chosen-select').chosen();
         $(document).ready(function () {
             $("#UsersEmails").select2({
                 placeholder: "Додати людей",
@@ -107,6 +125,8 @@
             $('#save').hide();
         });
 
+
     </script>
+
 }
 

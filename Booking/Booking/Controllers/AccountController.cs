@@ -185,7 +185,7 @@ namespace Booking.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
 
-                    return RedirectToAction("Index", "Rooms");
+                    return RedirectToAction("IndexRoom", "Reserveds");
                 }
                 AddErrors(result);
             }
@@ -414,7 +414,7 @@ namespace Booking.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Rooms");
+            return RedirectToAction("IndexRoom", "Reserveds");
         }
 
         //
@@ -471,7 +471,7 @@ namespace Booking.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Rooms");
+            return RedirectToAction("IndexRoom", "Reserveds");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

@@ -4,80 +4,76 @@
     ViewBag.Title = "Деталі";
 }
 
-<div>
-    
-    <hr />
-    <dl class="dl-horizontal">
-
-        <dt>
-            @Html.DisplayNameFor(model => model.EventName)
-        </dt>
-
-        <dd>
+<table class="table">
+    <tr>
+        <td>
+            Подія
+        </td>
+        <td>
+            Кімната
+        </td>
+        <td>
+            Опис
+        </td>
+        <td>
+            Дата
+        </td>
+        <td>
+            Час початку
+        </td>
+        <td>
+            Час кінця
+        </td>
+        <td>
+            Запрошені
+        </td>
+        <td>
+            Прийняли
+        </td>
+        <td>
+            Відхилили
+        </td>
+        <td>
+            Приватна
+        </td>
+    </tr>
+    <tr>
+        <td>
             @Html.DisplayFor(model => model.EventName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Room.NameRoom)
+        </td>
+        <td>
             @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ReservedDate)
-        </dt>
-
-        <dd>
+        </td>
+        <td>
             @Html.DisplayFor(model => model.ReservedDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ReservedTimeFrom)
-        </dt>
-
-        <dd>
+        </td>
+        <td>
             @Html.DisplayFor(model => model.ReservedTimeFrom)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ReservedTimeTo)
-        </dt>
-
-        <dd>
+        </td>
+        <td>
             @Html.DisplayFor(model => model.ReservedTimeTo)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.SelectedUsersEmails)
-        </dt>
-
-        <dd>
+        </td>
+        <td>
             @Html.DisplayFor(model => model.SelectedUsersEmails)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.AcceptedEmails)
-        </dt>
-
-        <dd>
+        </td>
+        <td>
             @Html.DisplayFor(model => model.AcceptedEmails)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.DeniedEmails)
-        </dt>
-
-        <dd>
+        </td>
+        <td>
             @Html.DisplayFor(model => model.DeniedEmails)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsPrivate)
-        </dt>
-
-        <dd>
+        </td>
+        <td>
             @Html.DisplayFor(model => model.IsPrivate)
-        </dd>
-    </dl>
-</div>
+            @*@Html.Hidden("IsPrivate", Model.IsPrivate)*@
+        </td>
+    </tr>
+</table>
+
 <p>
-    @Html.ActionLink("Редагувати", "Edit", new { id = Model.ReservedId }) |
-    @Html.ActionLink("Всі події", "Index")
+    @Html.ActionLink("Мої події", "MyEvents", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Редагувати", "Edit", new { id = Model.ReservedId }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Видалити", "Delete", new { id = Model.ReservedId }, new { @class = "btn btn-default" })
 </p>

@@ -16,7 +16,7 @@ namespace Booking
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Rooms", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Reserveds", action = "IndexRoom", id = UrlParameter.Optional }
             );
         }
     }

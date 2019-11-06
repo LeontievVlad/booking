@@ -49,16 +49,17 @@
         <th>
             Організатор
         </th>
-        @*<th>
-            Private
-        </th>*@
+        <th>
+            Приватна
+        </th>
         <th></th>
     </tr>
     @foreach (var item in Model)
     {
-        <tr onclick="redirectTo();">
+        <tr onclick="redirectTo(@item.ReservedId);">
             <td>
-                @Html.HiddenFor(modelItem => item.ReservedId)
+                @*@Html.Hidden(item.ReservedId.ToString())*@
+                @*<input class="ReservedId" value="@item.ReservedId" hidden />*@
                 @Html.HiddenFor(modelItem => item.SelectedUsersEmails)
                 @Html.HiddenFor(modelItem => item.AcceptedEmails)
                 @Html.HiddenFor(modelItem => item.DeniedEmails)
@@ -85,35 +86,47 @@
 
                 @Html.DisplayFor(modelItem => item.User.UserName)
             </td>
-            @*<td>
-
-                @Html.DisplayFor(modelItem => item.IsPrivate)
-            </td>*@
-
             <td>
-                @*@if (item.IsPrivate)
-                    { }*@
-                @*<p>
-                    @Html.ActionLink("Прийти", "Index", null, new {id="toCome", @class = "btn btn-default" })
-                </p>*@
+                @Html.DisplayFor(modelItem => item.IsPrivate)
 
             </td>
-            @*<td>
-                    @if (item.UserId == ViewBag.CurrentId)
+
+            <td>
+                @if (!item.IsPrivate && item.UserId != ViewBag.CurrentId)
+                {
+                    if (!string.IsNullOrEmpty(item.AcceptedEmails) && item.AcceptedEmails.Contains(ViewBag.CurrentName))
                     {
-                        <p>
-                            @Html.ActionLink("Редагувати", "Edit", new { id = item.ReservedId }, new { @class="btn btn-default"})
-                        </p>
+                        @*<p>
+                    Ви прийняли запрошення
+                </p>*@
 
-                        <p>
-                            @Html.ActionLink("Видалити", "Delete", new { id = item.ReservedId }, new { @class="btn btn-default"})
-                        </p>
+                        @Html.ActionLink("Скасувати", "ToCome", new { id = item.ReservedId, toCome = false },
+                       new { @class = "btn btn-default" })
+                    }
+                    else if (!string.IsNullOrEmpty(item.DeniedEmails) && item.DeniedEmails.Contains(ViewBag.CurrentName))
+                    {
+                        @*<p>
+                    Ви відхили запрошення
+                </p>*@
+                        @Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
+                       new { @class = "btn btn-default" })
+                    }
+                    else
+                    {
 
+                        @Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
+                       new { @class = "btn btn-default" })
                     }
 
+                }
+                else
+                {
+                    @Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
+                       new { @class = "btn btn-default disabled" })
+                }
 
-
-                </td>*@
+            </td>
+            
         </tr>
     }
 
@@ -128,27 +141,42 @@
 }
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 
-<script>
-    function redirectTo() {
-        var id = $('#item_ReservedId').val();
-        var url = "/Reserveds/Details/" + id;
-        window.location.href = url;
-    };
 
-    function ToCome() {
-        $.ajax({
-            type: "POST",
-            url: '/Reserveds/ToCome',
-            data: JSON.stringify(createReserveViewModel),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (data, status) {
-                $('#toCome').addClass('disabled');
-                alert("Готово");
-            },
-            error: function () {
-                alert("Помилка");
-            }
-        });
-    };
-</script>
+@section Scripts {
+    <script>
+        function redirectTo(id) {
+
+            var url = "/Reserveds/Details/" + id;
+            window.location.href = url;
+        };
+        function onSuccess() {
+            alert("onSuccess");
+        };
+        function onFailure() {
+            alert("onFailure");
+        };
+
+        function ToCome(id) {
+            alert("start");
+            //var toComeData = {
+            //    id = id,
+            //    toCome = true
+            //}
+            $.ajax({
+                type: "POST",
+                url: '/Reserveds/ToCome',
+                data: JSON.stringify(id),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data, status) {
+                    $('#toCome').addClass('disabled');
+                    alert("Готово" + data);
+                },
+                error: function () {
+                    alert("Помилка");
+                }
+            });
+            alert("end");
+        };
+    </script>
+}

@@ -195,7 +195,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ReservedsController.cs" />
-    <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Entity_Models\Reserved.cs" />
     <Compile Include="Entity_Models\Room.cs" />
     <Compile Include="Global.asax.cs">
@@ -245,6 +244,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Admin\Views\web.config" />
@@ -256,6 +256,7 @@
     <Content Include="Areas\Admin\Views\Admin\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Admin\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Admin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_LoginPartial.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\customJsValidation\EditValidation.js" />
@@ -306,23 +307,22 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Rooms\Index.cshtml" />
     <Content Include="Views\Reserveds\Create.cshtml" />
     <Content Include="Views\Reserveds\Delete.cshtml" />
     <Content Include="Views\Reserveds\Details.cshtml" />
     <Content Include="Views\Reserveds\Edit.cshtml" />
     <Content Include="Views\Reserveds\Index.cshtml" />
-    <Content Include="Views\Rooms\Reserve1.cshtml" />
     <Content Include="Views\Reserveds\AddUsersToEvent.cshtml" />
     <Content Include="Views\Reserveds\AddList.cshtml" />
     <Content Include="Views\Reserveds\SearchRoom.cshtml" />
-    <Content Include="Views\Rooms\AddUsersToEvent.cshtml" />
     <Content Include="Views\Reserveds\Reserve.cshtml" />
     <Content Include="Views\Reserveds\MyEvents.cshtml" />
     <Content Include="Views\Reserveds\Sent.cshtml" />
     <Content Include="Views\Reserveds\AcceptInvite.cshtml" />
     <Content Include="Views\Reserveds\EmailMessage.cshtml" />
     <Content Include="Views\Reserveds\EmptyPage.cshtml" />
+    <Content Include="Views\Reserveds\IndexRoom.cshtml" />
+    <Content Include="Views\Reserveds\AcceptToCome.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

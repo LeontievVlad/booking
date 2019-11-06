@@ -44,10 +44,9 @@ namespace Booking.Models.ReservedViewModels
         public string[] UsersEmails { get; set; }
         public string SelectedUsersEmails { get; set; }
         public string AcceptedEmails { get; set; }
-
         public string DeniedEmails { get; set; }
-
         public bool IsPrivate { get; set; }
+
         public int? RoomId { get; set; }
         public Room Room { get; set; }
 

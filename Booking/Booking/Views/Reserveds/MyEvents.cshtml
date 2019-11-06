@@ -45,19 +45,17 @@
             Організатор
         </th>
         <th>
-            @*Private*@
+            Приватна
         </th>
         <th>
         </th>
     </tr>
     @foreach (var item in Model)
     {
-        <tr onclick="redirectTo();">
+        <tr onclick="redirectTo(@item.ReservedId);">
             <td>
-                @Html.HiddenFor(modelItem => item.ReservedId)
+                
                 @Html.DisplayFor(modelItem => item.Room.NameRoom)
-
-
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EventName)
@@ -78,7 +76,7 @@
             </td>
             <td>
 
-                @*@Html.DisplayFor(modelItem => item.IsPrivate)*@
+                @Html.DisplayFor(modelItem => item.IsPrivate)
             </td>
             <td>
                 @if (item.User.UserName == ViewBag.CurrentName)
@@ -136,8 +134,7 @@
 }
 @Html.PagedListPager(Model, page => Url.Action("MyEvents", new { page }))
 <script>
-    function redirectTo() {
-        var id = $('#item_ReservedId').val();
+    function redirectTo(id) {
         var url = "/Reserveds/Details/" + id;
         window.location.href = url;
     }

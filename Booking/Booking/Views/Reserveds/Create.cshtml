@@ -57,13 +57,21 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.SelectedUsersEmails, "Люди", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.SelectedUsersEmails, "Люди ", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <p>
-                    @Model.SelectedUsersEmails
-                </p>
-                @Html.DropDownList("UsersEmails", new SelectList(ViewBag.UsersEmails), new { id = "UsersEmails", multiple = "multiple", @class = "form-control" })
-
+                <select class="form-control" id="UsersEmails" name="UsersEmails" multiple>
+                    @foreach (var emails in Model.GetUserList)
+                    {
+                        if (emails.UserName == ViewBag.CurrentUserName)
+                        {
+                            <option value="@emails.Id" disabled>@emails.UserName</option>
+                        }
+                        else
+                        {
+                            <option value="@emails.Id">@emails.UserName</option>
+                        }
+                    }
+                </select>
             </div>
         </div>
         <div class="form-group">
@@ -76,10 +84,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IsPrivate, "Закрита", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IsPrivate, "Приватна", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="checkbox" value="false" id="IsPrivate" name="IsPrivate" />
-                @*@Html.CheckBoxFor(model => model.IsPrivate,new { value="false"})*@
+                <input type="checkbox" id="IsPrivate" name="IsPrivate" />
+                @*@Html.EditorFor(model => model.IsPrivate)*@
                 @Html.ValidationMessageFor(model => model.IsPrivate, "", new { @class = "text-danger" })
             </div>
         </div>

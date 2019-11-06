@@ -1,4 +1,22 @@
 ﻿
+//modal
+function ModalSuccess(url) {
+
+    var dialog = bootbox.dialog({
+
+        message: '<p class="text-center mb-0 text-success">Дані успішно збережено</p>',
+        closeButton: false,
+        buttons: {
+            ok: {
+                callback: function () {
+                    window.location.href = url;
+                }
+            }
+        }
+    });
+
+
+};
 //get from html
 function GetAllValueForEdit() {
     var editReserveViewModel = {
@@ -10,7 +28,7 @@ function GetAllValueForEdit() {
         'ReservedTimeTo': $("#ReservedTimeTo").val(),
         'RoomId': $("#RoomId").val(),
         'UsersEmails': $("#UsersEmails").val(),
-        'IsPrivate': $("#IsPrivate").val()
+        'IsPrivate': $("#IsPrivate").is(":checked")
     };
     return editReserveViewModel;
 };
@@ -35,6 +53,8 @@ function CheckIsValid() {
         return false;
     } else {
         //alert("валідація для клієнта успішно пройдена");
+
+        $('#messageWait').html("Ви можете зберегти дані");
 
         ValidationServer(editReserveViewModel);
 
@@ -91,6 +111,17 @@ function SaveToDb() {
         $('#messageWait').show();
         $('#messageWait').html("Зберігаю...");
         $('#messageWait').show();
+        $('#messageAlert').addClass('hidden');
+        var dialog = bootbox.dialog({
+            title: '<p class="text-center mb-0">Повідомлення</p>',
+            message: '<p class="text-center mb-0 text-success">Зберігаю...</p>',
+            closeButton: false
+        });
+        dialog.init(function () {
+            setTimeout(function () {
+                dialog.find('.bootbox-body').html('<p class="text-center mb-0 text-success">Зберігаю...</p>');
+            }, 2000);
+        });
         $.ajax({
             type: "POST",
             url: '/Reserveds/SaveEdit',
@@ -98,35 +129,35 @@ function SaveToDb() {
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (data, status) {
-                setTimeout(function () {
-                $('#messageWait').html(data);
+
+                $('#messageWait').html("Дані успішно збережено");
                 $('#messageWait').show();
-                    $('#save').removeClass('disabled');
-                }, 4000);
+
+                $('#save').removeClass('disabled');
                 $('#save').val('Підтвердити');
 
+                var url = "/Reserveds/Details/" + data;
+
+                dialog.modal('hide');
+                ModalSuccess(url);
 
 
 
-                //alert(data);
-
-                var url = "/Reserveds/MyEvents";
-                window.location.href = url;
 
             },
             error: function () {
+                dialog.modal('hide');
                 $('#save').removeClass('disabled');
                 $('#save').val('Підтвердити');
-                $('#messageWarning').html("помилка при збереженні");
+                $('#messageWarning').html("Помилка при збереженні");
                 $('#messageWarning').show();
+                $('#messageWait').hide();
+                
                 $('#save').hide();
                 $('#submit').show();
             }
         });
     }
-    //alert("щось не так");
-    $('#messageWait').hide();
-    $('#save').hide();
-    $('#submit').show();
+
 };
 

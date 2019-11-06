@@ -30,6 +30,8 @@ namespace Booking.Models.ReservedViewModels
             
             Room = reserved.Room;
             User = reserved.User;
+
+            
         }
         public int ReservedId { get; set; }
         [Required]
@@ -60,5 +62,8 @@ namespace Booking.Models.ReservedViewModels
 
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
+
+
+        public List<ApplicationUser> GetUserList { get; set; }
     }
 }
