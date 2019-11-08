@@ -52,9 +52,9 @@
     </tr>
     @foreach (var item in Model)
     {
-        <tr onclick="redirectTo(@item.ReservedId);">
+        <tr onclick="redirectTo(@item.ReservedId);" style="cursor:pointer;">
             <td>
-                
+
                 @Html.DisplayFor(modelItem => item.Room.NameRoom)
             </td>
             <td>
@@ -88,27 +88,33 @@
                         @Html.ActionLink("Видалити", "Delete", new { id = item.ReservedId }, htmlAttributes: new { @class = "btn btn-default" })
                     </p>
                 }
+                else if (item.ReservedDate < DateTime.Today ||
+               (item.ReservedDate == DateTime.Today &&
+               item.ReservedTimeFrom < DateTime.Now.TimeOfDay))
+                {
+                    <p>Подія вже відбулася</p>
+                }
                 else if (item.SelectedUsersEmails != null && item.SelectedUsersEmails.Contains(ViewBag.CurrentName))
                 {
                     <div>
 
                         <p>
                             @Html.ActionLink("Прийняти", "AcceptInvite", new
-                       {
-                           id = item.ReservedId,
-                           email = ViewBag.CurrentName,
-                           accept = true
-                       }, new { @class="btn btn-default"})
+                            {
+                                id = item.ReservedId,
+                                email = ViewBag.CurrentName,
+                                accept = true
+                            }, new { @class = "btn btn-default" })
 
                         </p>
 
                         <p>
                             @Html.ActionLink("Відхилити", "AcceptInvite", new
-                       {
-                           id = item.ReservedId,
-                           email = ViewBag.CurrentName,
-                           accept = false
-                       }, new { @class="btn btn-default"})
+                            {
+                                id = item.ReservedId,
+                                email = ViewBag.CurrentName,
+                                accept = false
+                            }, new { @class = "btn btn-default" })
 
                         </p>
                     </div>

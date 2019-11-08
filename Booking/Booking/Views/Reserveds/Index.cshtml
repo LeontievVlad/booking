@@ -56,7 +56,7 @@
     </tr>
     @foreach (var item in Model)
     {
-        <tr onclick="redirectTo(@item.ReservedId);">
+        <tr onclick="redirectTo(@item.ReservedId);" style="cursor:pointer;">
             <td>
                 @*@Html.Hidden(item.ReservedId.ToString())*@
                 @*<input class="ReservedId" value="@item.ReservedId" hidden />*@
@@ -92,13 +92,19 @@
             </td>
 
             <td>
-                @if (!item.IsPrivate && item.UserId != ViewBag.CurrentId)
+                @if (item.ReservedDate < DateTime.Today ||
+                (item.ReservedDate == DateTime.Today &&
+                item.ReservedTimeFrom < DateTime.Now.TimeOfDay))
+                {
+                    <p>Подія вже відбулася</p>
+                }
+                else if (!item.IsPrivate && item.UserId != ViewBag.CurrentId)
                 {
                     if (!string.IsNullOrEmpty(item.AcceptedEmails) && item.AcceptedEmails.Contains(ViewBag.CurrentName))
                     {
                         @*<p>
-                    Ви прийняли запрошення
-                </p>*@
+                                Ви прийняли запрошення
+                            </p>*@
 
                         @Html.ActionLink("Скасувати", "ToCome", new { id = item.ReservedId, toCome = false },
                        new { @class = "btn btn-default" })
@@ -106,8 +112,8 @@
                     else if (!string.IsNullOrEmpty(item.DeniedEmails) && item.DeniedEmails.Contains(ViewBag.CurrentName))
                     {
                         @*<p>
-                    Ви відхили запрошення
-                </p>*@
+                                Ви відхили запрошення
+                            </p>*@
                         @Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
                        new { @class = "btn btn-default" })
                     }
@@ -126,7 +132,7 @@
                 }
 
             </td>
-            
+
         </tr>
     }
 

@@ -68,6 +68,8 @@
     </div>
     <div class="container body-content">
         @RenderBody()
+        <div><span id="notification" style="color:red;font-size:15px;"></span></div>
+
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Booking Room</p>
@@ -87,7 +89,51 @@
     <script src="~/Scripts/bootbox.min.js"></script>
 
     @RenderSection("scripts", required: false)
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(function () {
 
+            var notificationhub = $.connection.notificationHub;
+
+            notificationhub.client.displayMessage = function (msg) {
+
+                //$('#notification').html(message);
+                //alert(message);
+
+                
+                var dialog = bootbox.dialog({
+
+                    message: '<p class="text-center mb-0 text-success">' + msg + '</p>',
+                    closeButton: false,
+                    size: "small",
+                    buttons: {
+                        ok: {
+                            callback: function () {
+                                dialog.hide();
+                            }
+                        },
+                        check: {
+                            callback: function () {
+                                alert("checked");
+                            }
+                        }
+                    }
+                });
+
+                //dialog.init(function () {
+                //    setTimeout(function () {
+                //        dialog.find('.bootbox-body').html('');
+                //        dialog.hide();
+                //    }, 5000);
+                //});
+            };
+
+            $.connection.hub.start();
+
+        });
+    </script>
 
 </body>
 </html>

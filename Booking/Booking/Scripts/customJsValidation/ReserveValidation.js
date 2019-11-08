@@ -7,6 +7,7 @@ function ModalSuccess(url) {
         
         message: '<p class="text-center mb-0 text-success">Дані успішно збережено</p>',
         closeButton: false,
+        size: "small",
         buttons: {
             ok: {
                 callback: function () {
@@ -119,22 +120,23 @@ function SaveToDb() {
         //alert("Зберігаю...");
         $('#save').addClass('disabled');
         $('#submit').addClass('disabled');
-        $('#save').val('Зберігаю...');
+        $('#save').val('Збереження...');
         $('#messageWait').show();
-        $('#messageWait').html("Зберігаю...");
+        $('#messageWait').html("Збереження...");
         $('#messageWait').show();
 
         $('#messageAlert').addClass('hidden');
         var dialog = bootbox.dialog({
-            title: '<p class="text-center mb-0">Повідомлення</p>',
-            message: '<p class="text-center mb-0 text-success">Зберігаю...</p>',
-            closeButton: false
+            //title: '<p class="text-center mb-0">Повідомлення</p>',
+            message: '<p class="text-center mb-0 text-success">Збереження...</p>',
+            closeButton: false,
+            size: "small"
         });
-        dialog.init(function () {
-            setTimeout(function () {
-                dialog.find('.bootbox-body').html('<p class="text-center mb-0 text-success">Зберігаю...</p>');
-            }, 2000);
-        });
+        //dialog.init(function () {
+        //    setTimeout(function () {
+        //        dialog.find('.bootbox-body').html('<p class="text-center mb-0 text-success">Зберігаю...</p>');
+        //    }, 2000);
+        //});
         $.ajax({
             type: "POST",
             url: '../Reserveds/SaveReserve',

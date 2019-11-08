@@ -74,6 +74,9 @@
 
 <p>
     @Html.ActionLink("Мої події", "MyEvents", null, new { @class = "btn btn-default" })
-    @Html.ActionLink("Редагувати", "Edit", new { id = Model.ReservedId }, new { @class = "btn btn-default" })
-    @Html.ActionLink("Видалити", "Delete", new { id = Model.ReservedId }, new { @class = "btn btn-default" })
+    @if (ViewBag.CurrentUserId == Model.UserId)
+    {
+        @Html.ActionLink("Редагувати", "Edit", new { id = Model.ReservedId }, new { @class = "btn btn-default" })
+        @Html.ActionLink("Видалити", "Delete", new { id = Model.ReservedId }, new { @class = "btn btn-default" })
+    }
 </p>
