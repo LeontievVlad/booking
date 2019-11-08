@@ -7,49 +7,51 @@
 <table class="table" style="margin-top:50px;">
     <tr>
         <td>
-            Eлектронна пошта
+            Ім'я користувача
         </td>
         <td>Активний статус</td>
         <td>Змінити на</td>
     </tr>
-    @foreach (var user in Model.ToList())
+    @foreach (var user in Model)
     {
         <tr>
-            <td>
-                @user.UserName
-            </td>
 
             @using (Html.BeginForm("ChangeRole", "Admin", FormMethod.Get))
             {
+                <td>
+                    @Html.TextBox("UserId", user.UserId, new { hidden = "hidden" })
+                    @user.UserName
+                </td>
                 @Html.TextBox("UserName", user.UserName, new { hidden = "hidden" })
 
                 foreach (var role in user.RoleNames)
                 {
 
+                    
+                    
+                        <td>
+                            @role
+                            @Html.TextBox("RoleNames", role, new { hidden = "hidden" })
 
-                    <td>
-                        @role
-                        @Html.TextBox("RoleNames", role, new { hidden = "hidden" })
+                        </td>
+                    
+                        <td>
+                            @*select will be here*@
+                            @*@Html.DropDownList("allRoles", ViewBag.allRoles as SelectList, new { @class = "allRoles form-control" })*@
+                            @Html.DropDownList("ChangeRoleTo", user.RolesList, new { @class = "form-control pull-right" })
+                            @if (role == "Guest")
+                            {
+                                <input type="submit" class="btn btn-primary pull-right" value="Змінити" onclick="this.form.submit();" />
 
-                    </td>
-                    if (role == "Admin")
-                    {
-                        <td>
-                            <input type="submit" value="User" class="btn btn-default" onclick="this.form.submit();" />
+                            }
+                            else
+                            {
+                            <input type="submit" class="btn btn-default pull-right" value="Змінити" onclick="this.form.submit();" />
+
+                            }
+
+
                         </td>
-                    }
-                    else if (role == "User")
-                    {
-                        <td>
-                            <input type="submit" value="Admin" class="btn btn-default" onclick="this.form.submit();" />
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                        <input type = "submit" value = "Boss" class="btn btn-default" disabled />
-                        </td>
-                    }
 
                 }
 
@@ -61,5 +63,14 @@
 
 </table>
 
+@section Scripts {
+    @*@Scripts.Render("~/Scripts/ReservedDate.js")*@
+    <script>
+                    //$(document).ready(function () {
+                    //    $(".allRoles").select2({
+                    //        placeholder: "Змінити роль"
+                    //    });
+                    //});
 
-
+    </script>
+}

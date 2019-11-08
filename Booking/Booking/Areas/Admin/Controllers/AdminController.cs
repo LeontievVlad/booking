@@ -20,6 +20,8 @@ namespace Booking.Areas.Admin.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
+        private readonly string currentUserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+        private readonly string currentUserName = System.Web.HttpContext.Current.User.Identity.Name;
         private readonly MapperConfiguration CreateRoomViewModelToRoom = new MapperConfiguration(
             cfg => cfg.CreateMap<CreateRoomViewModel, Room>()
             );
@@ -29,21 +31,37 @@ namespace Booking.Areas.Admin.Controllers
             );
 
 
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public ActionResult GetRoles()
         {
+            ViewBag.CountGuests = CountGuests();
             var userRoles = new List<RolesViewModel>();
             var userStore = new UserStore<ApplicationUser>(db);
-#pragma warning disable IDE0068 // Использовать рекомендуемый шаблон Dispose
             var userManager = new UserManager<ApplicationUser>(userStore);
-#pragma warning restore IDE0068 // Использовать рекомендуемый шаблон Dispose
+
+            List<string> disabled = new List<string>();
+            if (User.IsInRole("Admin"))
+            {
+                disabled = db.Roles
+                    .Where(x => x.Name == "Admin" && x.Name == "SuperAdmin")
+                    .Select(x => x.Name)
+                    .ToList();
+
+            }
 
             //Get all the usernames
             foreach (var user in userStore.Users)
             {
                 var r = new RolesViewModel
                 {
-                    UserName = user.UserName
+                    UserName = user.UserName,
+                    UserId = user.Id,
+                    RolesList = db.Roles.Select(x => new SelectListItem
+                    {
+                        Value = x.Id,
+                        Text = x.Name,
+                        Disabled = x.Name == "SuperAdmin" ? true : false
+                    })
                 };
                 userRoles.Add(r);
             }
@@ -51,56 +69,71 @@ namespace Booking.Areas.Admin.Controllers
             foreach (var user in userRoles)
             {
                 user.RoleNames = userManager.GetRoles(userStore.Users.First(s => s.UserName == user.UserName).Id);
+
             }
 
+            //var currentUser = db.Users.Find(currentUserId);
+            //ViewBag.CurrentRole = currentUser.Roles.ToString();
+            //var ro = db.Roles.Where(x=>x.Id).ToList();
+            //List<ApplicationUser> applicationUsers = db.Users.ToList();
+
+
+
+
+            ViewBag.allRoles = new SelectList(db.Roles, "Id", "Name");
             return View(userRoles);
 
         }
 
+
+
         [HttpGet]
-        public ActionResult ChangeRole(string UserName, string RoleNames)
+        public ActionResult ChangeRole(RolesViewModel model)
         {
             var userStore = new UserStore<ApplicationUser>(db);
             var userManager = new UserManager<ApplicationUser>(userStore);
             var user = userStore.Users;
+            var role = db.Roles.Find(model.ChangeRoleTo);
+            userManager.RemoveFromRole(userStore.Users.First(s => s.UserName == model.UserName).Id, model.RoleNames.First());
+            userManager.AddToRole(userStore.Users.First(s => s.UserName == model.UserName).Id, role.Name);
 
-            userManager.RemoveFromRole(userStore.Users.First(s => s.UserName == UserName).Id, RoleNames);
-            userManager.AddToRole(userStore.Users.First(s => s.UserName == UserName).Id,
-                RoleNames == "User" ? "Admin" : "User");
             return RedirectToAction("GetRoles");
         }
 
-        [Authorize]
-        [HttpGet]
-        public ActionResult GetRoom(int? id)
+        public ActionResult AllRoles()
         {
-            var name = System.Web.HttpContext.Current.User.Identity.Name;
-            var userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-            ViewBag.userId = userId;
-            ViewBag.roomId = id;
-            ViewBag.data = $"id: {id}, userId: {userId}, userName: {name}";
-
-            return View(db.Rooms.Find(id));
+            ViewBag.roles = db.Roles.Select(x => x.Name).ToList();
+            return View();
         }
 
-        [Authorize]
-        [HttpPost]
-        
-        public ActionResult GetRoom(Reserved reserved)
+        [HttpGet]
+        public ActionResult CreateRole()
         {
+            var roles = db.Roles.ToList();
 
-            if (ModelState.IsValid)
+            return View(roles);
+        }
+
+        [HttpPost]
+        public ActionResult CreateRole(IdentityRole roles)
+        {
+            if (string.IsNullOrWhiteSpace(roles.Name))
             {
-                //reserved.UserId = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                db.Reserveds.Add(reserved);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            db.Roles.Add(roles);
+            db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return new HttpStatusCodeResult(HttpStatusCode.Created);
         }
-
+        public int CountGuests()
+        {
+            //a694828d-76e3-4c7d-9811-0bf136168c8b
+            var guest = db.Roles.Where(x => x.Name == "Guest").ToList();
+            var users = guest.Select(x => x.Users).ToArray();
+            return users[0].Count;
+        }
 
 
         // GET: Admin/Admin
@@ -120,7 +153,7 @@ namespace Booking.Areas.Admin.Controllers
             //reserveds = reserveds.Where(x => x.OwnerId == userId);
             int pageSize = 3;
             int pageNumber = (page ?? 1);
-
+            ViewBag.CountGuests = CountGuests();
             return View(indexRoomViewModels.ToPagedList(pageNumber, pageSize));
         }
 
@@ -215,6 +248,11 @@ namespace Booking.Areas.Admin.Controllers
             {
                 return HttpNotFound();
             }
+            var reserved = db.Reserveds.Where(x => x.RoomId == id).ToList();
+            if (reserved.Count != 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Ця кімната заброньована");
+            }
             var deleteRoomViewModel = new DeleteRoomViewModel(room) { };
             return View(deleteRoomViewModel);
         }
@@ -225,6 +263,7 @@ namespace Booking.Areas.Admin.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Room room = db.Rooms.Find(id);
+
             db.Rooms.Remove(room);
             db.SaveChanges();
             return RedirectToAction("Index");

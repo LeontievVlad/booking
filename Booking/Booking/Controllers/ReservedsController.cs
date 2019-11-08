@@ -59,6 +59,7 @@ namespace Booking.Controllers
             int pageSize = 3;
             int pageNumber = (page ?? 1);
             ViewBag.CountInvites = CountInvites();
+            ViewBag.CountGuests = CountGuests();
 
             SendPushNotification("Пуш на головній");
             return View(roomIndexModel.ToPagedList(pageNumber, pageSize));
@@ -83,7 +84,7 @@ namespace Booking.Controllers
             ViewBag.CurrentId = currentUserId;
             ViewBag.CurrentName = currentUserName;
             ViewBag.CountInvites = CountInvites();
-
+            ViewBag.CountGuests = CountGuests();
             int pageSize = 3;
             int pageNumber = (page ?? 1);
 
@@ -114,7 +115,7 @@ namespace Booking.Controllers
 
             ViewBag.CurrentName = currentUserName;
             ViewBag.CountInvites = CountInvites();
-
+            ViewBag.CountGuests = CountGuests();
 
             return View(reserveIndexModel.ToPagedList(pageNumber, pageSize));
         }
@@ -123,17 +124,39 @@ namespace Booking.Controllers
         {
             var reserved = db.Reserveds.ToList();
 
+
+
             int count = 0;
             foreach (var item in reserved)
             {
-                if (item.SelectedUsersEmails.Contains(currentUserName) && 
-                    (item.ReservedDate > DateTime.Today ||
+
+                if ((item.ReservedDate > DateTime.Today ||
                     (item.ReservedDate == DateTime.Today &&
                     item.ReservedTimeFrom > DateTime.Now.TimeOfDay)))
-                    count++;
+                {
+                    if (!string.IsNullOrEmpty(item.SelectedUsersEmails))
+                    {
+                        //item.SelectedUsersEmails.Contains(currentUserName)
+                        item.UsersEmails = item.SelectedUsersEmails.Split(',').ToArray();
+                        foreach (var name in item.UsersEmails)
+                        {
+                            if (name == currentUserName)
+                                count++;
+                        }
+
+                    }
+                }
             }
 
             return count;
+        }
+
+        public int CountGuests()
+        {
+            //a694828d-76e3-4c7d-9811-0bf136168c8b
+            var guest = db.Roles.Where(x => x.Name == "Guest").ToList();
+            var users = guest.Select(x => x.Users).ToArray();
+            return users[0].Count;
         }
 
         [HttpPost]
@@ -444,7 +467,7 @@ namespace Booking.Controllers
 
             ViewBag.CountInvites = CountInvites();
 
-
+            ViewBag.CurrentUserId = currentUserId;
             ViewBag.currentUserName = currentUserName;
 
             List<string> unionEmail = new List<string>();
@@ -512,6 +535,8 @@ namespace Booking.Controllers
                 editReserveViewModel.UsersEmails.Contains(x.Id))
                     .Select(x => x.UserName).ToArray();
                 editReserveViewModel.SelectedUsersEmails = string.Join(",", selecteUsersEmails);
+
+                //check for accepted email for sendmail
                 if (reserved.AcceptedEmails != null)
                 {
                     //email from db accepted
@@ -539,6 +564,8 @@ namespace Booking.Controllers
             }
 
             reserved.SelectedUsersEmails = editReserveViewModel.SelectedUsersEmails;
+
+            //sendmail 
             if (!string.IsNullOrEmpty(editReserveViewModel.SelectedUsersEmails))
             {
                 var eventName = reserved.EventName;

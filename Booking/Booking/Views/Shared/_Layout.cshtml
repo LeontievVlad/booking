@@ -59,6 +59,19 @@
                     @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                     {
                         <li>@Html.ActionLink("Адмін", "Admin", "Admin")</li>
+                        if (ViewBag.CountGuests == null || ViewBag.CountGuests == 0)
+                        {
+
+                        }
+                        else
+                        {
+                            <li style="color:white;border-radius:50%;background-color:#3b8cd1;padding:3px;margin-top: 5px;">
+                                <span style="margin-top: 2px;">
+                                    &nbsp;&nbsp;@ViewBag.CountGuests&nbsp;&nbsp;
+
+                                </span>
+                            </li>
+                        }
                     }
 
                 </ul>

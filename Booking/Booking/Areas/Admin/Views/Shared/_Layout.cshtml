@@ -21,9 +21,25 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Головна", "Index", "Admin")</li>
-                    @if (User.IsInRole("SuperAdmin"))
+
+                    <li>@Html.ActionLink("Всі ролі", "AllRoles", "Admin")</li>
+                    <li>@Html.ActionLink("Створити роль", "CreateRole", "Admin")</li>
+                    @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
                     {
-                        <li>@Html.ActionLink("Керування статусами", "GetRoles", "Admin")</li>
+                        <li>@Html.ActionLink("Керування ролями", "GetRoles", "Admin")</li>
+                        if (ViewBag.CountGuests == null || ViewBag.CountGuests == 0)
+                        {
+
+                        }
+                        else
+                        {
+                            <li style="color:white;border-radius:50%;background-color:#3b8cd1;padding:3px;margin-top: 5px;">
+                                <span style="margin-top: 2px;">
+                                    &nbsp;&nbsp;@ViewBag.CountGuests&nbsp;&nbsp;
+
+                                </span>
+                            </li>
+                        }
                     }
 
                 </ul>

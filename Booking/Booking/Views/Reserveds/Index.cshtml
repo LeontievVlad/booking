@@ -97,24 +97,11 @@
                 item.ReservedTimeFrom < DateTime.Now.TimeOfDay))
                 {
                     <p>Подія вже відбулася</p>
-                }
-                else if (!item.IsPrivate && item.UserId != ViewBag.CurrentId)
+                }else if (!item.IsPrivate && item.UserId != ViewBag.CurrentId)
                 {
                     if (!string.IsNullOrEmpty(item.AcceptedEmails) && item.AcceptedEmails.Contains(ViewBag.CurrentName))
                     {
-                        @*<p>
-                                Ви прийняли запрошення
-                            </p>*@
-
                         @Html.ActionLink("Скасувати", "ToCome", new { id = item.ReservedId, toCome = false },
-                       new { @class = "btn btn-default" })
-                    }
-                    else if (!string.IsNullOrEmpty(item.DeniedEmails) && item.DeniedEmails.Contains(ViewBag.CurrentName))
-                    {
-                        @*<p>
-                                Ви відхили запрошення
-                            </p>*@
-                        @Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
                        new { @class = "btn btn-default" })
                     }
                     else
@@ -127,6 +114,7 @@
                 }
                 else
                 {
+
                     @Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
                        new { @class = "btn btn-default disabled" })
                 }

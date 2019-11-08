@@ -86,7 +86,6 @@
                     }
                     else
                     {
-
                         <option value="@emails.Id">@emails.UserName</option>
                     }
                 }
@@ -98,8 +97,8 @@
         <div class="col-md-10">
 
             @if (Model.IsPrivate)
-            {<input type="checkbox" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" checked />
-
+            {
+                <input type="checkbox" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" checked />
             }
             else
             {
