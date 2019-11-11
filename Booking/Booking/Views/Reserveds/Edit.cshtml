@@ -5,119 +5,125 @@
 }
 
 
+<br />
+<br />
+<br />
+<br />
 
 @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
+<div class="text-center">
 
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.ReservedId)
 
     <div class="form-group">
-        @Html.LabelFor(model => model.EventName, "Подія", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.EventName, "", new { @class = "text-danger" })
-        </div>
+        <h5>
+            Подія
+        </h5>
+        @*@Html.LabelFor(model => model.EventName, "Подія", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.Description, "Опис", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-        </div>
+        <h5>
+            Опис
+        </h5>
+        @*@Html.LabelFor(model => model.Description, "Опис", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.ReservedDate, "Дата", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        <h5>
+            Дата
+        </h5>
+        @*@Html.LabelFor(model => model.ReservedDate, "Дата", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <input value="@Model.ReservedDate.ToShortDateString()" class="form-control text-box single-line center-block text-center" style = "width:40%;" id="ReservedDate" name="ReservedDate" />
+        @*@Html.EditorFor(model => model.ReservedDate, new { htmlAttributes = new { @class = "form-control" } })*@
 
-            <input value="@Model.ReservedDate.ToShortDateString()" class="form-control text-box single-line" data-val="true" data-val-date="The field ReservedDate must be a date" id="ReservedDate" name="ReservedDate" />
-
-            @*@Html.EditorFor(model => model.ReservedDate, new { htmlAttributes = new { @class = "form-control" } })*@
-            @Html.ValidationMessageFor(model => model.ReservedDate, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.ReservedTimeFrom, "Час початку", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.ReservedTimeFrom, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.ReservedTimeFrom, "", new { @class = "text-danger" })
-        </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.ReservedTimeTo, "Час кінця", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.ReservedTimeTo, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.ReservedTimeTo, "", new { @class = "text-danger" })
-        </div>
+        <h5>
+            Час початку
+        </h5>
+        @*@Html.LabelFor(model => model.ReservedTimeFrom, "Час початку", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        @Html.EditorFor(model => model.ReservedTimeFrom, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.RoomId, "Кімната", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownList("RoomId", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.RoomId, "", new { @class = "text-danger" })
-        </div>
+        <h5>
+            Час кінця
+        </h5>
+        @*@Html.LabelFor(model => model.ReservedTimeTo, "Час кінця", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        @Html.EditorFor(model => model.ReservedTimeTo, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.SelectedUsersEmails, $"Люди ( {Model.Room.MaxPeople} )", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @*<div id="selected">
-                    @Model.SelectedUsersEmails
-                </div>
-                @Html.ListBox("UsersEmails", ViewBag.UsersEmails as SelectList, new { id = "UsersEmails", multiple = "multiple", @class = "form-control" })
-                <br />*@
-            <select class="form-control" id="UsersEmails" name="UsersEmails" multiple>
+        <h5>
+            Кімната
+        </h5>
+        @*@Html.LabelFor(model => model.RoomId, "Кімната", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        @Html.DropDownList("RoomId", null, htmlAttributes: new { @class = "form-control center-block text-center", style = "width:40%;" })
+
+    </div>
+
+    <div class="form-group">
+        @*@Html.LabelFor(model => model.SelectedUsersEmails, $"Люди ( {Model.Room.MaxPeople} )", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <h5>
+            Люди ( маскимум @Model.Room.MaxPeople )
+        </h5>
+        <select class="form-control center-block text-center" style = "width:40%;" id="UsersEmails" name="UsersEmails" multiple>
 
 
-                @foreach (var emails in Model.GetUserList)
+            @foreach (var emails in Model.GetUserList)
+            {
+                if (emails.UserName == ViewBag.CurrentUserName)
                 {
-                    if (emails.UserName == ViewBag.CurrentUserName)
-                    {
-                        <option value="@emails.Id" disabled>@emails.UserName</option>
-                    }
-                    else if (Model.UsersEmails.Length > 0 && Model.UsersEmails.Contains(emails.UserName))
-                    {
-                        <option value="@emails.Id" selected>@emails.UserName</option>
-                    }
-                    else
-                    {
-                        <option value="@emails.Id">@emails.UserName</option>
-                    }
+                    <option value="@emails.Id" disabled>@emails.UserName</option>
                 }
-            </select>
-        </div>
+                else if (Model.UsersEmails.Length > 0 && Model.UsersEmails.Contains(emails.UserName))
+                {
+                    <option value="@emails.Id" selected>@emails.UserName</option>
+                }
+                else
+                {
+                    <option value="@emails.Id">@emails.UserName</option>
+                }
+            }
+        </select>
+
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.IsPrivate, "Приватна", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        @*@Html.LabelFor(model => model.IsPrivate, "Приватна", htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <h5>
+            Приватна
+        </h5>
+        @if (Model.IsPrivate)
+        {
+            <input type="checkbox" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" checked />
+        }
+        else
+        {
+            <input type="checkbox" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" unchecked />
+        }
+        @*@Html.EditorFor(model => model.IsPrivate)*@
+        @Html.ValidationMessageFor(model => model.IsPrivate, "", new { @class = "text-danger" })
 
-            @if (Model.IsPrivate)
-            {
-                <input type="checkbox" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" checked />
-            }
-            else
-            {
-                <input type="checkbox" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" unchecked />
-            }
-            @*@Html.EditorFor(model => model.IsPrivate)*@
-            @Html.ValidationMessageFor(model => model.IsPrivate, "", new { @class = "text-danger" })
-        </div>
     </div>
     @Html.HiddenFor(model => model.UserId)
     @*@Html.TextBox("UserId", Model.UserId, new { hidden = "hidden" })*@
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="button" name="submit" id="submit" value="Перевірити" class="btn btn-default" onclick="CheckIsValid();" />
-            <input type="submit" name="save" id="save" value="Підтвердити" class="btn btn-success" onclick="SaveToDb();" hidden />
-            <div id="messageWarning" class="text-danger"></div>
-            <div id="messageWait" class="text-success"></div>
-            <div id="messageAlert" class="text-warning"></div>
-        </div>
+
+        <input type="button" name="submit" id="submit" value="Перевірити" class="btn btn-default" onclick="CheckIsValid();" />
+        <input type="submit" name="save" id="save" value="Підтвердити" class="btn btn-success" onclick="SaveToDb();" hidden />
+        <div id="messageWarning" class="text-danger"></div>
+        <div id="messageWait" class="text-success"></div>
+        <div id="messageAlert" class="text-warning"></div>
+
     </div>
 </div>
 

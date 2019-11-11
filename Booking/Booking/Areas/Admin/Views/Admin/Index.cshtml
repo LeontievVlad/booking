@@ -1,57 +1,84 @@
 ﻿@model PagedList.IPagedList<Booking.Models.RoomViewModels.IndexRoomViewModel>
 @using PagedList.Mvc;
 
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Головна";
+
 }
 
-<h2>Index</h2>
+<!-- Start portfolio Area -->
+<div id="portfolio" class="portfolio-area area-padding fix">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="section-headline text-center">
+                    <h2>
+                        Всі кімнати
+                    </h2>
+                </div>
+                <h3 class="text-center">
+                    @Html.ActionLink("Створити", "Create")
+                </h3>
+            </div>
+        </div>
+        <br /><br />
+        <div class="row">
+            <!-- Start Portfolio -page -->
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table table-hover">
-    <tr>
-        <th>
-            NameRoom
-        </th>
-        <th>
-            MinTime
-        </th>
-        <th>
-            MaxTime
-        </th>
-        <th>
-            MaxPeople
-        </th>
-        <th></th>
-    </tr>
+            <div class="awesome-project-content">
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NameRoom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxPeople)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.RoomId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.RoomId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.RoomId })
-            </td>
-        </tr>
-    }
+                @foreach (var item in Model)
+                {
+                    var str = $"/Content/eBusiness/img/portfolio/{item.RoomId}.jpg";
+                    <!-- single-awesome-project start -->
+                    <div class="col-md-4 col-sm-4 col-xs-12 design development">
+                        <div class="single-awesome-project">
+                            <div class="awesome-img">
+                                <h2 class="text-center">@item.NameRoom</h2>
+                                <a href="#"><img src="@str" alt="@item.NameRoom" /></a>
+                                <div class="add-actions text-center">
+                                    <div class="project-dec">
 
-</table>
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                                        <h4>@item.NameRoom</h4>
+                                        <div>@item.MinTime - @item.MaxTime</div>
+                                        <div>Макс. людей @item.MaxPeople</div>
+                                        <input name="RoomId" value="@item.RoomId" hidden />
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn btn-default" href="@Url.Action("Edit",new
+                                                    {
+                                                        id = item.RoomId
+                                                    })" aria-label="Settings">
+                                <i class="fa fa-cog" aria-hidden="true"> Редагувати</i>
+                            </a>
+                            <a class="btn btn-default" href="@Url.Action("Details",new
+                                                    {
+                                                        id = item.RoomId
+                                                    })" aria-label="Delete">
+                                <i class="fa fa-info-circle text-info" aria-hidden="true"> Деталі</i>
+                            </a>
+                            <a class="btn btn-default" href="@Url.Action("Delete",new
+                                                    {
+                                                        id = item.RoomId
+                                                    })" aria-label="Delete">
+                                <i class="fa fa-trash-o text-danger" aria-hidden="true"> Видалити</i>
+                            </a>
+                        </div>
+                    </div>
+                }
+                <!-- single-awesome-project end -->
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- awesome-portfolio end -->
 
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

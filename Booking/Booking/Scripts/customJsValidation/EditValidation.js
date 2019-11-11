@@ -6,6 +6,7 @@ function ModalSuccess(url) {
 
         message: '<p class="text-center mb-0 text-success">Дані успішно збережено</p>',
         closeButton: false,
+        size: "small",
         buttons: {
             ok: {
                 callback: function () {
@@ -115,7 +116,8 @@ function SaveToDb() {
         var dialog = bootbox.dialog({
             title: '<p class="text-center mb-0">Повідомлення</p>',
             message: '<p class="text-center mb-0 text-success">Зберігаю...</p>',
-            closeButton: false
+            closeButton: false,
+            size: "small"
         });
         dialog.init(function () {
             setTimeout(function () {
@@ -152,7 +154,7 @@ function SaveToDb() {
                 $('#messageWarning').html("Помилка при збереженні");
                 $('#messageWarning').show();
                 $('#messageWait').hide();
-                
+
                 $('#save').hide();
                 $('#submit').show();
             }

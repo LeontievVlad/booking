@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Booking Room</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+
+    @Scripts.Render("~/bundles/modernizr")
+    <!-- Favicons -->
+    @*<link href="img/favicon.png" rel="icon">
+        <link href="img/apple-touch-icon.png" rel="apple-touch-icon">*@
+
+    <!-- Google Fonts -->
+    @*<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Raleway:300,400,400i,500,500i,700,800,900" rel="stylesheet">*@
+
+    <!-- Bootstrap CSS File -->
+    @*<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">*@
+    <link href="~/Content/eBusiness/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Libraries CSS Files -->
+    <link href="~/Content/eBusiness/lib/nivo-slider/css/nivo-slider.css" rel="stylesheet">
+    <link href="~/Content/eBusiness/lib/owlcarousel/owl.carousel.css" rel="stylesheet">
+    <link href="~/Content/eBusiness/lib/owlcarousel/owl.transitions.css" rel="stylesheet">
+    <link href="~/Content/eBusiness/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/eBusiness/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="~/Content/eBusiness/lib/venobox/venobox.css" rel="stylesheet">
+
+    <!-- Nivo Slider Theme -->
+    <link href="~/Content/eBusiness/css/nivo-slider-theme.css" rel="stylesheet">
+
+    <!-- Main Stylesheet File -->
+    <link href="~/Content/eBusiness/css/style.css" rel="stylesheet">
+
+    <!-- Responsive Stylesheet File -->
+    <link href="~/Content/eBusiness/css/responsive.css" rel="stylesheet">
+
+    <!-- DropDown Stylesheet File -->
+    <link href="~/Content/chosen.css" rel="stylesheet" />
+    <link href="~/Content/select2.css" rel="stylesheet" />
+
+    <!-- Pagination Stylesheet File -->
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body data-spy="scroll" data-target="#navbar-example">
+    <div id="preloader"></div>
+    <header>
+        <!-- header-area start -->
+        <div id="sticker" class="header-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+
+                        <!-- Navigation -->
+                        <nav class="navbar navbar-default">
+                            <!-- Brand and toggle get grouped for better mobile display -->
+                            <div class="navbar-header">
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".bs-example-navbar-collapse-1" aria-expanded="false">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                                <!-- Brand -->
+                                @Html.ActionLink("Booking Room", "IndexRoom", "Reserveds", new { area = "" }, new { @class = "navbar-brand" })
+                                @*<a class="navbar-brand page-scroll sticky-logo" href="index.html">
+                                        <!-- Uncomment below if you prefer to use an image logo -->
+                                        <!-- <img src="img/logo.png" alt="" title=""> -->
+                                    </a>*@
+                            </div>
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div class="collapse navbar-collapse main-menu bs-example-navbar-collapse-1" id="navbar-example">
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li class="active">
+                                        <a class="page-scroll" href="#home">Home</a>
+                                    </li>
+                                    <li>@Html.ActionLink("Всі події", "Index", "Reserveds", new { @class = "page-scroll" })</li>
+                                    <li>@Html.ActionLink("Забронювати кімнату", "IndexRoom", "Reserveds", new { @class = "page-scroll" })</li>
+                                    <li>@Html.ActionLink("Створити подію", "Create", "Reserveds", new { @class = "page-scroll" })</li>
+
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+
+
+
+                                        <li>
+                                            @Html.ActionLink("Мої події", "MyEvents", "Reserveds")
+
+                                        </li>
+
+                                        if (ViewBag.CountInvites == null || ViewBag.CountInvites == 0)
+                                        {
+                                        }
+                                        else
+                                        {
+                                            <li style="color:white;border-radius:50%;background-color:#337AB7;padding:3px;margin-top: 5px;">
+                                                &nbsp;&nbsp;@ViewBag.CountInvites&nbsp;&nbsp;
+                                            </li>
+                                        }
+                                    }
+
+
+
+                                    @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                                    {
+                                        <li>@Html.ActionLink("Адмін", "Admin", "Admin")</li>
+                                        if (ViewBag.CountGuests == null || ViewBag.CountGuests == 0)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            <li style="color:white;border-radius:50%;background-color:#3b8cd1;padding:3px;margin-top: 5px;">
+                                                <span style="margin-top: 2px;">
+                                                    &nbsp;&nbsp;@ViewBag.CountGuests&nbsp;&nbsp;
+
+                                                </span>
+                                            </li>
+                                        }
+                                    }
+
+                                </ul>
+                                @Html.Partial("_LoginPartial")
+
+                            </div>
+                            <!-- navbar-collapse -->
+                        </nav>
+                        <!-- END: Navigation -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- header-area end -->
+    </header>
+    <!-- header end -->
+    <div class="container body-content">
+        @RenderBody()
+        <div><span id="notification" style="color:red;font-size:15px;"></span></div>
+    </div>
+    <!-- Start Footer bottom Area -->
+    <footer>
+        <div class="footer-area-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="copyright text-center">
+                            <p>
+                                &copy; @DateTime.Now.Year - <strong>Booking Room</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="~/Content/eBusiness/lib/jquery/jquery.min.js"></script>
+    <script src="~/Content/eBusiness/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/eBusiness/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/Content/eBusiness/lib/venobox/venobox.min.js"></script>
+    <script src="~/Content/eBusiness/lib/knob/jquery.knob.js"></script>
+    <script src="~/Content/eBusiness/lib/wow/wow.min.js"></script>
+    <script src="~/Content/eBusiness/lib/parallax/parallax.js"></script>
+    <script src="~/Content/eBusiness/lib/easing/easing.min.js"></script>
+    <script src="~/Content/eBusiness/lib/nivo-slider/js/jquery.nivo.slider.js" type="text/javascript"></script>
+    <script src="~/Content/eBusiness/lib/appear/jquery.appear.js"></script>
+    <script src="~/Content/eBusiness/lib/isotope/isotope.pkgd.min.js"></script>
+
+    <!-- Contact Form JavaScript File -->
+    @*<script src="contactform/contactform.js"></script>*@
+
+    <script src="~/Content/eBusiness/js/main.js"></script>
+
+
+
+
+
+    @Scripts.Render("~/Scripts/jquery-3.3.1.js")
+    @Scripts.Render("~/Scripts/jquery.validate.js")
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.js")
+
+
+    <script src="~/Scripts/chosen.jquery.js"></script>
+    <script src="~/Scripts/select2/select2.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+
+    @RenderSection("scripts", required: false)
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            var notificationhub = $.connection.notificationHub;
+
+            notificationhub.client.displayMessage = function (msg) {
+
+                //$('#notification').html(message);
+                //alert(message);
+
+
+                var dialog = bootbox.dialog({
+
+                    message: '<p class="text-center mb-0 text-success">' + msg + '</p>',
+                    closeButton: false,
+                    size: "small",
+                    buttons: {
+                        ok: {
+                            callback: function () {
+                                dialog.hide();
+                            }
+                        },
+                        check: {
+                            callback: function () {
+                                alert("checked");
+                            }
+                        }
+                    }
+                });
+
+                //dialog.init(function () {
+                //    setTimeout(function () {
+                //        dialog.find('.bootbox-body').html('');
+                //        dialog.hide();
+                //    }, 5000);
+                //});
+            };
+
+            $.connection.hub.start();
+
+        });
+    </script>
+
+
+</body>
+
+</html>

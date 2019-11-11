@@ -49,20 +49,33 @@ namespace Booking.Controllers
 
         public char[] separateComa = { ',' };
 
+        [AllowAnonymous]
+        public ActionResult LayoutNew()
+        {
+            var room = db.Rooms.ToList();
+            var roomIndexModel = room
+                .OrderBy(x => x.NameRoom)
+                .Select(x => new IndexRoomViewModel(x));
+
+            ViewBag.CountInvites = CountInvites();
+            ViewBag.CountGuests = CountGuests();
+
+            SendPushNotification("шаблон");
+            return View(roomIndexModel);
+        }
+
         // GET: Rooms
         [AllowAnonymous]
-        public ActionResult IndexRoom(int? page)
+        public ActionResult IndexRoom()
         {
             var room = db.Rooms.ToList();
             var roomIndexModel = room
                 .OrderBy(x => x.NameRoom).Select(x => new IndexRoomViewModel(x));
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
             ViewBag.CountInvites = CountInvites();
             ViewBag.CountGuests = CountGuests();
 
             SendPushNotification("Пуш на головній");
-            return View(roomIndexModel.ToPagedList(pageNumber, pageSize));
+            return View(roomIndexModel);
         }
 
         // GET: Reserveds
@@ -78,14 +91,14 @@ namespace Booking.Controllers
             }
 
             var reserveIndexModel = reserveds
-                .OrderByDescending(x => x.ReservedDate)
+                .OrderByDescending(x => x.ReservedDate + x.ReservedTimeFrom)
                 .Select(x => new IndexReserveViewModel(x));
 
             ViewBag.CurrentId = currentUserId;
             ViewBag.CurrentName = currentUserName;
             ViewBag.CountInvites = CountInvites();
             ViewBag.CountGuests = CountGuests();
-            int pageSize = 3;
+            int pageSize = 4;
             int pageNumber = (page ?? 1);
 
             return View(reserveIndexModel.ToPagedList(pageNumber, pageSize));
@@ -107,10 +120,10 @@ namespace Booking.Controllers
             }
 
             var reserveIndexModel = events
-                .OrderByDescending(a => a.ReservedDate)
+                .OrderByDescending(a => a.ReservedDate + a.ReservedTimeFrom)
                 .Select(a => new IndexReserveViewModel(a));
 
-            int pageSize = 3;
+            int pageSize = 4;
             int pageNumber = (page ?? 1);
 
             ViewBag.CurrentName = currentUserName;
@@ -160,10 +173,10 @@ namespace Booking.Controllers
         }
 
         [HttpPost]
-        public ActionResult SearchRoom(string name)
+        public ActionResult SearchEvents(string name)
         {
 
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return PartialView();
             }
@@ -194,6 +207,7 @@ namespace Booking.Controllers
                 .OrderBy(a => a.Room.NameRoom)
                 .Select(a => new IndexReserveViewModel(a));
 
+            ViewBag.CurrentName = currentUserName;
             return PartialView(reserveIndexModel);
         }
 
@@ -598,7 +612,7 @@ namespace Booking.Controllers
                 var id = reserved.ReservedId;
                 string emailBody = "";
 
-                if (reserved.UsersEmails.Length > 0)
+                if (reserved.UsersEmails != null)
                 {
                     emailBody = $"<div><p>Деякі зміни в {eventName} <br/>" +
                                     $"Кімната: {roomForEvent} <br/>" +

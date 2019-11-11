@@ -5,135 +5,162 @@
     ViewBag.Title = "Всі події";
 }
 
+<br />
+<br />
+<br />
+<br />
 
-
-@using (Ajax.BeginForm("SearchRoom", new AjaxOptions
+@using (Ajax.BeginForm("SearchEvents", new AjaxOptions
 {
     UpdateTargetId = "searchresults",
 
 }))
 {
-
-    <div>
-        <input type="text" name="name" class="form-control pull-left" placeholder="Подія, кімната, організатор" />
-        <input type="submit" value="Пошук" class="btn btn-primary pull-left" />
+    <div class="well-text text-center">
+        <div class="subs-feilds">
+            <input type="text" name="name" class="text-center form-control" style="border-radius:100px;" placeholder="Подія, кімната, організатор" />
+        </div>
+        <br />
+        <input type="submit" value="Пошук" class="btn btn-default" />
     </div>
 }
-<br />
-<br />
-<div id="searchresults" class="pull-left" style="width:100%;"></div>
 
-<br />
-@*<p>
-        <input type="button" value="Count" id="count" class="btn-success" />
-    </p>
-    <br />*@
-<table class="table table-hover">
-
-    <tr>
-        <th>
-            Кімната
-        </th>
-        <th>
-            Подія
-        </th>
-        <th>
-            Дата
-        </th>
-        <th>
-            Час початку
-        </th>
-        <th>
-            Час кінця
-        </th>
-        <th>
-            Організатор
-        </th>
-        <th>
-            Приватна
-        </th>
-        <th></th>
-    </tr>
-    @foreach (var item in Model)
-    {
-        <tr onclick="redirectTo(@item.ReservedId);" style="cursor:pointer;">
-            <td>
-                @*@Html.Hidden(item.ReservedId.ToString())*@
-                @*<input class="ReservedId" value="@item.ReservedId" hidden />*@
-                @Html.HiddenFor(modelItem => item.SelectedUsersEmails)
-                @Html.HiddenFor(modelItem => item.AcceptedEmails)
-                @Html.HiddenFor(modelItem => item.DeniedEmails)
-                @Html.HiddenFor(modelItem => item.Description)
-                @Html.HiddenFor(modelItem => item.RoomId)
-                @Html.HiddenFor(modelItem => item.UserId)
-
-                @Html.DisplayFor(modelItem => item.Room.NameRoom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventName)
-            </td>
-            <td>
-                @Html.HiddenFor(modelItem => item.ReservedDate)
-                @item.ReservedDate.ToString("dd-MM-yyyy")
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReservedTimeFrom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReservedTimeTo)
-            </td>
-            <td>
-
-                @Html.DisplayFor(modelItem => item.User.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPrivate)
-
-            </td>
-
-            <td>
-                @if (item.ReservedDate < DateTime.Today ||
-                (item.ReservedDate == DateTime.Today &&
-                item.ReservedTimeFrom < DateTime.Now.TimeOfDay))
-                {
-                    <p>Подія вже відбулася</p>
-                }else if (!item.IsPrivate && item.UserId != ViewBag.CurrentId)
-                {
-                    if (!string.IsNullOrEmpty(item.AcceptedEmails) && item.AcceptedEmails.Contains(ViewBag.CurrentName))
+<!-- Start team Area -->
+<div id="team" class="our-team-area area-padding">
+    <div class="container">
+        <div class="row">
+            <div class="team-top">
+                <div id="searchresults">
+                    <!-- Start column -->
+                    @foreach (var item in Model)
                     {
-                        @Html.ActionLink("Скасувати", "ToCome", new { id = item.ReservedId, toCome = false },
-                       new { @class = "btn btn-default" })
-                    }
-                    else
-                    {
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                            <div class="single-team-member">
+                                <div class="team-content text-center" style="background-color:#fafafa;">
+                                    <div onclick="redirectTo(@item.ReservedId);" style="cursor:pointer;">
+                                        <h4 style="color:#3ec1d5;">@Html.DisplayFor(modelItem => item.EventName)</h4>
+                                        <p>@Html.DisplayFor(modelItem => item.Room.NameRoom)</p>
+                                        <span>
+                                            @*@Html.Hidden(item.ReservedId.ToString())*@
+                                            @*<input class="ReservedId" value="@item.ReservedId" hidden />*@
 
-                        @Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
-                       new { @class = "btn btn-default" })
-                    }
+                                            @Html.HiddenFor(modelItem => item.SelectedUsersEmails)
+                                            @Html.HiddenFor(modelItem => item.AcceptedEmails)
+                                            @Html.HiddenFor(modelItem => item.DeniedEmails)
+                                            @Html.HiddenFor(modelItem => item.Description)
+                                            @Html.HiddenFor(modelItem => item.RoomId)
+                                            @Html.HiddenFor(modelItem => item.UserId)
+                                        </span>
 
-                }
-                else
-                {
+                                        <p>
+                                            <i class="fa fa-calendar"></i>
+                                            @Html.HiddenFor(modelItem => item.ReservedDate)
+                                            @item.ReservedDate.ToString("dd-MM-yyyy")
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-hourglass-1" aria-hidden="true"></i>
+                                            @Html.DisplayFor(modelItem => item.ReservedTimeFrom) -
+                                            @Html.DisplayFor(modelItem => item.ReservedTimeTo)
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            @Html.DisplayFor(modelItem => item.User.UserName)
+                                        </p>
+                                        <p>
+                                            @if (item.IsPrivate)
+                                            {
+                                                <i class="fa fa-lock"> Приватна</i>
 
-                    @Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
-                       new { @class = "btn btn-default disabled" })
-                }
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-unlock"> Публічна</i>
+                                            }
+                                            @Html.HiddenFor(modelItem => item.IsPrivate)
+                                        </p>
+                                        <p>
+                                            @if (item.ReservedDate < DateTime.Today ||
+                                            (item.ReservedDate == DateTime.Today &&
+                                            item.ReservedTimeFrom < DateTime.Now.TimeOfDay))
+                                            {
+                                            <p>
+                                                @*<i class="fa fa-hourglass-end" aria-hidden="true"></i>*@
 
-            </td>
+                                                <a class="btn btn-default disabled" href="#" aria-label="Settings">
+                                                    <i class="fa fa-hourglass-end" aria-hidden="true"> Подія вже відбулася</i>
+                                                </a>
+                                            </p>
+                                        }
+                                        else if (!item.IsPrivate && item.UserId != ViewBag.CurrentId)
+                                        {
+                                            if (!string.IsNullOrEmpty(item.AcceptedEmails) && item.AcceptedEmails.Contains(ViewBag.CurrentName))
+                                            {
+                                                <a class="btn btn-default" href="@Url.Action("ToCome",new
+                                                    {
+                                                        id = item.ReservedId,
+                                                        toCome = false
+                                                    })" aria-label="Settings">
+                                                    <i class="fa fa-times-circle text-danger" aria-hidden="true"> Скасувати</i>
+                                                </a>
+                                                @*@Html.ActionLink("Скасувати", "ToCome", new { id = item.ReservedId, toCome = false },
+                                                    new { @class = "btn btn-default" })*@
+                                            }
+                                            else if (!string.IsNullOrEmpty(item.SelectedUsersEmails) && item.SelectedUsersEmails.Contains(ViewBag.CurrentName))
+                                            {
+                                                <a class="btn btn-default" href="@Url.Action("AcceptInvite",new
+                                                    {
+                                                        id = item.ReservedId,
+                                                        email = ViewBag.CurrentName,
+                                                        accept = true
+                                                    })" aria-label="Settings">
+                                                    <i class="fa fa-check-circle text-success" aria-hidden="true"> Прийняти</i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-default" href="@Url.Action("ToCome",new
+                                                    {
+                                                        id = item.ReservedId,
+                                                        toCome = true
+                                                    })" aria-label="Settings">
+                                                    <i class="fa fa-check-circle text-success" aria-hidden="true"> Приєднатися</i>
+                                                </a>
+                                                @*@Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
+                                                    new { @class = "ready-btn" })*@
+                                            }
 
-        </tr>
-    }
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-default disabled" href="@Url.Action("ToCome",new
+                                                    {
+                                                        id = item.ReservedId,
+                                                        toCome = true
+                                                    })" aria-label="Settings">
+                                                <i class="fa fa-check-circle" aria-hidden="true"> Організатор</i>
+                                            </a>
+                                            @*@Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
+                                                new { @class = "btn btn-default disabled" })*@
+                                        }
 
-</table>
-<br />
-@if (Model.PageCount > 1)
-{
-    <span>
-        Сторінка @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) з @Model.PageCount
 
-    </span>
-}
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    <div class="center-block">
+
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+                    </div>
+
+                    <!-- End column -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Team Area -->
 
 
 @section Scripts {

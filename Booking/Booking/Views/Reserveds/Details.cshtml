@@ -4,79 +4,128 @@
     ViewBag.Title = "Деталі";
 }
 
-<table class="table">
-    <tr>
-        <td>
-            Подія
-        </td>
-        <td>
-            Кімната
-        </td>
-        <td>
-            Опис
-        </td>
-        <td>
-            Дата
-        </td>
-        <td>
-            Час початку
-        </td>
-        <td>
-            Час кінця
-        </td>
-        <td>
-            Запрошені
-        </td>
-        <td>
-            Прийняли
-        </td>
-        <td>
-            Відхилили
-        </td>
-        <td>
-            Приватна
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.DisplayFor(model => model.EventName)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.Room.NameRoom)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.ReservedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.ReservedTimeFrom)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.ReservedTimeTo)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.SelectedUsersEmails)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.AcceptedEmails)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.DeniedEmails)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.IsPrivate)
-            @*@Html.Hidden("IsPrivate", Model.IsPrivate)*@
-        </td>
-    </tr>
-</table>
+<br />
+<br />
+<br />
 
-<p>
-    @Html.ActionLink("Мої події", "MyEvents", null, new { @class = "btn btn-default" })
-    @if (ViewBag.CurrentUserId == Model.UserId)
-    {
-        @Html.ActionLink("Редагувати", "Edit", new { id = Model.ReservedId }, new { @class = "btn btn-default" })
-        @Html.ActionLink("Видалити", "Delete", new { id = Model.ReservedId }, new { @class = "btn btn-default" })
-    }
-</p>
+<!-- Start team Area -->
+<div id="team" class="our-team-area area-padding">
+    <div class="container">
+        <div class="row">
+            <div class="team-top">
+                <!-- Start column -->
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="single-team-member">
+                        <div class="team-content text-center" style="background-color:#fafafa;">
+                            <div onclick="redirectTo(@Model.ReservedId);" style="cursor:pointer;">
+                                <h4 style="color:#3ec1d5;">@Html.DisplayFor(model => model.EventName)</h4>
+                                <p>@Html.DisplayFor(model => model.Room.NameRoom)</p>
+                                <span>
+                                    @*@Html.Hidden(item.ReservedId.ToString())*@
+                                    @*<input class="ReservedId" value="@item.ReservedId" hidden />*@
+
+                                    @Html.HiddenFor(model => model.SelectedUsersEmails)
+                                    @Html.HiddenFor(model => model.AcceptedEmails)
+                                    @Html.HiddenFor(model => model.DeniedEmails)
+                                    @Html.HiddenFor(model => model.Description)
+                                    @Html.HiddenFor(model => model.RoomId)
+                                    @Html.HiddenFor(model => model.UserId)
+                                </span>
+
+                                <p>
+                                    <i class="fa fa-calendar"></i>
+                                    @Html.HiddenFor(model => model.ReservedDate)
+                                    @Model.ReservedDate.ToString("dd-MM-yyyy")
+                                </p>
+                                <p>
+                                    <i class="fa fa-hourglass-1" aria-hidden="true"></i>
+                                    @Html.DisplayFor(model => model.ReservedTimeFrom) -
+                                    @Html.DisplayFor(model => model.ReservedTimeTo)
+                                </p>
+                                <p>
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    @Html.DisplayFor(model => model.User.UserName)
+                                </p>
+                                <p>
+                                    <i class="fa fa-question-circle-o" aria-hidden="true">
+                                        @Html.DisplayFor(model => model.SelectedUsersEmails)
+                                    </i>
+                                </p>
+                                <p>
+                                    <i class="fa fa-check-circle-o" aria-hidden="true">
+                                        @if (string.IsNullOrEmpty(Model.AcceptedEmails))
+                                        {
+                                            <span>
+                                                Нікого
+                                            </span>
+                                        }
+                                        else
+                                        {
+
+                                            @Html.DisplayFor(model => model.AcceptedEmails)
+                                        }
+                                    </i>
+                                </p>
+                                <p>
+                                    <i class="fa fa-times-circle-o" aria-hidden="true">
+                                        @if (string.IsNullOrEmpty(Model.DeniedEmails))
+                                        {
+                                            <span>
+                                                Нікого
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @Html.DisplayFor(model => model.DeniedEmails)
+                                        }
+                                    </i>
+                                </p>
+                                <p>
+                                    @if (Model.IsPrivate)
+                                    {
+                                        <i class="fa fa-lock"> Приватна</i>
+
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-unlock"> Публічна</i>
+                                    }
+                                    @Html.HiddenFor(model => model.IsPrivate)
+                                </p>
+                                <p>
+                                    @if (ViewBag.CurrentUserId == Model.UserId)
+                                    {
+
+                                        <a class="btn btn-default" href="@Url.Action("Edit",new
+                                                    {
+                                                        id = Model.ReservedId
+                                                    })" aria-label="Settings">
+                                            <i class="fa fa-cog" aria-hidden="true">
+                                                Редагувати
+                                            </i>
+                                        </a>
+                                        @*@Html.ActionLink("Редагувати", "Edit", new { id = Model.ReservedId }, new { @class = "btn btn-default" })*@
+                                        <a class="btn btn-default" href="@Url.Action("Delete",new
+                                                    {
+                                                        id = Model.ReservedId
+                                                    })" aria-label="Delete">
+                                            <i class="fa fa-trash-o text-danger" aria-hidden="true"> Видалити</i>
+                                        </a>
+                                        @*@Html.ActionLink("Редагувати", "Edit", new { id = Model.ReservedId }, new { @class = "btn btn-default" })
+                                            @Html.ActionLink("Видалити", "Delete", new { id = Model.ReservedId }, new { @class = "btn btn-default" })*@
+
+                                    }
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End column -->
+
+            </div>
+        </div>
+    </div>
+</div>

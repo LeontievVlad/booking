@@ -1,69 +1,53 @@
 ﻿@model Booking.Models.RoomViewModels.EditRoomViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Редагувати";
 }
-
-<h2>Edit</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Room</h4>
-        <hr />
+
+    <div class="text-center">
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.RoomId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.NameRoom, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.NameRoom, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.NameRoom, "", new { @class = "text-danger" })
-            </div>
+            @*@Html.LabelFor(model => model.NameRoom, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <h5>Назва кімнати</h5>
+            @Html.EditorFor(model => model.NameRoom, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
+            @Html.ValidationMessageFor(model => model.NameRoom, "", new { @class = "text-danger center-block text-center" })
+
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.MinTime, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MinTime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MinTime, "", new { @class = "text-danger" })
-            </div>
+            @*@Html.LabelFor(model => model.MinTime, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <h5>Час початку</h5>
+            @Html.EditorFor(model => model.MinTime, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
+            @Html.ValidationMessageFor(model => model.MinTime, "", new { @class = "text-danger center-block text-center" })
+
         </div>
 
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.BusyTime, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.BusyTime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.BusyTime, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
 
         <div class="form-group">
-            @Html.LabelFor(model => model.MaxTime, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaxTime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MaxTime, "", new { @class = "text-danger" })
-            </div>
+            @*@Html.LabelFor(model => model.MaxTime, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <h5>Час кінця</h5>
+            @Html.EditorFor(model => model.MaxTime, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
+            @Html.ValidationMessageFor(model => model.MaxTime, "", new { @class = "text-danger center-block text-center" })
+
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.MaxPeople, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaxPeople, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MaxPeople, "", new { @class = "text-danger" })
-            </div>
+            @*@Html.LabelFor(model => model.MaxPeople, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <h5>Максимум людей</h5>
+            @Html.EditorFor(model => model.MaxPeople, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
+            @Html.ValidationMessageFor(model => model.MaxPeople, "", new { @class = "text-danger center-block text-center" })
+
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+            <input type="submit" value="Зберегти" class="btn btn-default" />
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
