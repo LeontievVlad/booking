@@ -48,10 +48,10 @@ namespace Booking.Models
 
     public class LoginViewModel
     {
+        //[EmailAddress]
         [Required]
-        [Display(Name = "Адрес электронной почты")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Логін")]
+        public string Email { get; set; }// UserName*
 
         [Required]
         [DataType(DataType.Password)]
@@ -68,6 +68,10 @@ namespace Booking.Models
         [EmailAddress]
         [Display(Name = "Адрес электронной почты")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Ім'я")]
+        public string UserName { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]

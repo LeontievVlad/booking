@@ -43,6 +43,10 @@
 
     <!-- Pagination Stylesheet File -->
     <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="/Content/bootstrap-datetimepicker.css" />
+
+
 </head>
 
 <body data-spy="scroll" data-target="#navbar-example">
@@ -86,31 +90,27 @@
                                             @Html.ActionLink("Мої події", "MyEvents", "Reserveds")
 
                                         </li>
+                                        if (Html.Action("CountInvites", "Reserveds").ToString() != "0")
+                                        {
+                                            <li>
 
-                                        if (ViewBag.CountInvites == null || ViewBag.CountInvites == 0)
-                                        {
-                                        }
-                                        else
-                                        {
-                                            <li style="color:white;border-radius:50%;background-color:#3ec1d5;padding:3px;margin-top: 5px;">
-                                                &nbsp;&nbsp;@ViewBag.CountInvites&nbsp;&nbsp;
+                                                <span class="badge" style="font-size:1.3em;color:white;background-color:#3b8cd1;">
+                                                    @Html.Action("CountInvites", "Reserveds")
+                                                </span>
                                             </li>
                                         }
+
+
                                     }
 
                                     @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
                                     {
                                         <li>@Html.ActionLink("Адмін", "Admin", "Admin")</li>
-                                        if (ViewBag.CountGuests == null || ViewBag.CountGuests == 0)
+                                        if (Html.Action("CountGuests", "Reserveds").ToString() != "0")
                                         {
-
-                                        }
-                                        else
-                                        {
-                                            <li style="color:white;border-radius:50%;background-color:#3ec1d5;padding:3px;margin-top: 5px;">
-                                                <span style="margin-top: 2px;">
-                                                    &nbsp;&nbsp;@ViewBag.CountGuests&nbsp;&nbsp;
-
+                                            <li>
+                                                <span class="badge" style="font-size:1.3em;color:white;background-color:#3b8cd1;">
+                                                    @Html.Action("CountGuests", "Reserveds")
                                                 </span>
                                             </li>
                                         }
@@ -130,7 +130,7 @@
         <!-- header-area end -->
     </header>
     <!-- header end -->
-    <div class="container body-content">
+    <div class="container body-content" style="min-height:100%;">
         @RenderBody()
         <div><span id="notification" style="color:red;font-size:15px;"></span></div>
     </div>
@@ -180,20 +180,25 @@
     @Scripts.Render("~/Scripts/jquery.validate.js")
     @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.js")
     @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/moment-with-locales.min.js"></script>
     @Scripts.Render("~/bundles/bootstrap")
+
+
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
 
 
     <script src="~/Scripts/chosen.jquery.js"></script>
     <script src="~/Scripts/select2/select2.js"></script>
     <script src="~/Scripts/bootbox.min.js"></script>
 
-    @RenderSection("scripts", required: false)
     <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
     <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
     <script src="~/signalr/hubs"></script>
     <script type="text/javascript">
 
         $(function () {
+
 
             var notificationhub = $.connection.notificationHub;
 
@@ -233,7 +238,9 @@
             $.connection.hub.start();
 
         });
+
     </script>
+    @RenderSection("scripts", required: false)
 
 
 </body>

@@ -9,19 +9,129 @@
 <br />
 <br />
 <br />
-
+<br />
 @using (Ajax.BeginForm("SearchEvents", new AjaxOptions
 {
     UpdateTargetId = "searchresults",
 
 }))
 {
-    <div class="well-text text-center">
-        <div class="subs-feilds">
-            <input type="text" name="name" class="text-center form-control" style="border-radius:100px;" placeholder="Подія, кімната, організатор" />
+    <div class="container" id="simpleButtons">
+        <div class="row">
+            <div class='col-sm-12 text-center center-block'>
+                <input type="text" name="name" class="text-center form-control" placeholder="Подія, кімната, організатор" />
+
+                <br />
+
+                <input type="submit" value="Пошук" class="btn btn-default " />
+                <a class="btn btn-default litleIcons" id="showMore" href="#" aria-label="Settings" title="Публічна">
+                    <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                </a>
+
+            </div>
+
         </div>
-        <br />
-        <input type="submit" value="Пошук" class="btn btn-default" />
+    </div>
+
+}
+
+@using (Ajax.BeginForm("SearchMoreEvents", new AjaxOptions
+{
+    UpdateTargetId = "searchresults",
+
+}))
+{
+    <div id="moreFilters" hidden>
+        <div class="container">
+            <div class="row">
+                <div class='col-sm-4'>
+                    <div class="form-group">
+                        <div class='input-group'>
+                            <input type='text' name="UserName" class="form-control text-center" placeholder="Ім'я організатора" />
+                            <span class="input-group-addon">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-sm-4'>
+                    <div class="form-group">
+                        <div class='input-group'>
+                            <input type='text' name="RoomName" class="form-control text-center" placeholder="Кімната" />
+                            <span class="input-group-addon">
+                                <i class="fa fa-home" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-sm-4'>
+                    <div class="form-group">
+                        <div class='input-group'>
+                            <input type='text' name="EventName" class="form-control text-center" placeholder="Подія" />
+                            <span class="input-group-addon">
+                                <i class="fa fa-smile-o" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                @*time only from*@
+                <div class='col-sm-3'>
+                    <div class="form-group">
+                        <div class='input-group date' name="ReservedTimeFrom" id='datetimepicker3'>
+                            <input type='text' class="form-control text-center" placeholder="Час початку" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                @*time only to*@
+                <div class='col-sm-3'>
+                    <div class="form-group">
+                        <div class='input-group date' name="ReservedTimeTo" id='datetimepicker4'>
+                            <input type='text' class="form-control text-center" placeholder="Час кінця" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                @*date only*@
+                <div class='col-sm-3'>
+                    <div class="form-group">
+                        <div class='input-group date' name="ReservedDate" id='datetimepicker2'>
+                            <input type='text' class="form-control text-center" placeholder="Дата" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='col-sm-3 center-block'>
+
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="IsPrivate" class="custom-control-input" id="customCheck1">
+                        <label class="custom-control-label litleIcons" style="background-color:#eee;cursor:pointer;" for="customCheck1">
+                            Приватна
+                            <i class="fa fa-lock"></i>
+                            @*<a class="btn btn-default litleIcons" href="#" aria-label="Settings" title="Приватна" style="background-color:#eee;">
+                                </a>*@
+                        </label>
+                    </div>
+
+                </div>
+                <div class='col-sm-12 text-center center-block'>
+
+                    <input type="submit" class="btn btn-default" value="Розширений пошук" />
+                    <a class="btn btn-default litleIcons" id="showSimple" href="#" aria-label="Settings" title="Публічна">
+                        <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </div>
 }
 
@@ -39,7 +149,10 @@
                                 <div class="team-content text-center" style="background-color:#fafafa;">
                                     <div onclick="redirectTo(@item.ReservedId);" style="cursor:pointer;">
                                         <h4 style="color:#3ec1d5;">@Html.DisplayFor(modelItem => item.EventName)</h4>
-                                        <p>@Html.DisplayFor(modelItem => item.Room.NameRoom)</p>
+                                        <p>
+                                            <i class="fa fa-home" aria-hidden="true"></i>
+                                            @Html.DisplayFor(modelItem => item.Room.NameRoom)
+                                        </p>
                                         <span>
                                             @*@Html.Hidden(item.ReservedId.ToString())*@
                                             @*<input class="ReservedId" value="@item.ReservedId" hidden />*@
@@ -53,12 +166,14 @@
                                         </span>
 
                                         <p>
-                                            <i class="fa fa-calendar"></i>
+                                            @*<i class="fa fa-calendar"></i>*@
+                                            <span class="glyphicon glyphicon-calendar"></span>
                                             @Html.HiddenFor(modelItem => item.ReservedDate)
                                             @item.ReservedDate.ToString("dd-MM-yyyy")
                                         </p>
                                         <p>
-                                            <i class="fa fa-hourglass-1" aria-hidden="true"></i>
+                                            @*<i class="fa fa-hourglass-1" aria-hidden="true"></i>*@
+                                            <span class="glyphicon glyphicon-time"></span>
                                             @Html.DisplayFor(modelItem => item.ReservedTimeFrom) -
                                             @Html.DisplayFor(modelItem => item.ReservedTimeTo)
                                         </p>
@@ -149,7 +264,7 @@
                                 </div>
                             </div>
                         }
-                    <div class="center-block">
+                    <div style="text-align:center;">
 
                         @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
                     </div>
@@ -162,6 +277,18 @@
 </div>
 <!-- End Team Area -->
 
+<style>
+    .litleIcons {
+        padding: 9px 13px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1em;
+        color: #555;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+</style>
 
 @section Scripts {
     <script>
@@ -176,7 +303,6 @@
         function onFailure() {
             alert("onFailure");
         };
-
         function ToCome(id) {
             alert("start");
             //var toComeData = {
@@ -199,5 +325,34 @@
             });
             alert("end");
         };
+        $(function () {
+            $('#datetimepicker3').datetimepicker({
+                format: 'HH mm'
+
+            });
+            $('#datetimepicker4').datetimepicker({
+                format: 'HH mm'
+
+            });
+            $('#datetimepicker2').datetimepicker({
+                locale: 'uk',
+                format: 'L'
+            });
+        });
+        $(function () {
+            $('#showMore').click(function () {
+                $('#simpleButtons').hide(1000);
+                $('#moreFilters').show(1000);
+            });
+            $('#showSimple').click(function () {
+                $('#simpleButtons').show(1000);
+                $('#moreFilters').hide(1000);
+            });
+            $('#customCheck1').change(function () {
+                var IsPrivate = $("#customCheck1").is(":checked");
+                $('#customCheck1').val(IsPrivate);
+            });
+
+        });
     </script>
 }

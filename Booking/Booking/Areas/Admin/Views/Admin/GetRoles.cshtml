@@ -21,7 +21,7 @@
                     <!-- Start column -->
                     @foreach (var user in Model)
                     {
-                        <div class="col-md-4 col-sm-4 col-xs-12" style="margin-bottom: 30px;">
+                        <div class="col-md-3 col-sm-3 col-xs-12" style="margin-bottom: 30px;">
                             <div class="single-team-member">
                                 <div class="team-img">
                                 </div>
@@ -34,14 +34,14 @@
                                         {
                                             <p>
                                                 @Html.TextBox("UserId", user.UserId, new { hidden = "hidden" })
-                                                @user.UserName
+                                                Email: @user.UserEmail
                                             </p>
-                                            @Html.TextBox("UserName", user.UserName, new { hidden = "hidden" })
+                                            @Html.TextBox("UserName", user.UserEmail, new { hidden = "hidden" })
 
                                             foreach (var role in user.RoleNames)
                                             {
                                                 <p>
-                                                    @role
+                                                    Роль: @role
                                                     @Html.TextBox("RoleNames", role, new { hidden = "hidden" })
 
                                                 </p>

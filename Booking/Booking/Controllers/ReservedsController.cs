@@ -48,6 +48,15 @@ namespace Booking.Controllers
 
 
         public char[] separateComa = { ',' };
+        public string GetEmailAdress()
+        {
+            var userId = User.Identity.GetUserId();
+            using (var context = new ApplicationDbContext())
+            {
+                var user = context.Users.FirstOrDefault(u => u.Id == userId);
+                return user.Email;
+            }
+        }
 
         [AllowAnonymous]
         public ActionResult LayoutNew()
@@ -71,9 +80,7 @@ namespace Booking.Controllers
             var room = db.Rooms.ToList();
             var roomIndexModel = room
                 .OrderBy(x => x.NameRoom).Select(x => new IndexRoomViewModel(x));
-            ViewBag.CountInvites = CountInvites();
-            ViewBag.CountGuests = CountGuests();
-
+            
             SendPushNotification("Пуш на головній");
             return View(roomIndexModel);
         }
@@ -96,8 +103,7 @@ namespace Booking.Controllers
 
             ViewBag.CurrentId = currentUserId;
             ViewBag.CurrentName = currentUserName;
-            ViewBag.CountInvites = CountInvites();
-            ViewBag.CountGuests = CountGuests();
+            
             int pageSize = 4;
             int pageNumber = (page ?? 1);
 
@@ -127,18 +133,14 @@ namespace Booking.Controllers
             int pageNumber = (page ?? 1);
 
             ViewBag.CurrentName = currentUserName;
-            ViewBag.CountInvites = CountInvites();
-            ViewBag.CountGuests = CountGuests();
+            
 
             return View(reserveIndexModel.ToPagedList(pageNumber, pageSize));
         }
 
-        public int CountInvites()
+        public ActionResult CountInvites()
         {
             var reserved = db.Reserveds.ToList();
-
-
-
             int count = 0;
             foreach (var item in reserved)
             {
@@ -161,19 +163,19 @@ namespace Booking.Controllers
                 }
             }
 
-            return count;
+            return new ContentResult { Content = count.ToString() };
         }
 
-        public int CountGuests()
+        public ActionResult CountGuests()
         {
             //a694828d-76e3-4c7d-9811-0bf136168c8b
             var guest = db.Roles.Where(x => x.Name == "Guest").ToList();
             var users = guest.Select(x => x.Users).ToArray();
-            return users[0].Count;
+            return new ContentResult { Content = users[0].Count.ToString() };
         }
-
+        
         [HttpPost]
-        public ActionResult SearchEvents(string name)
+        public ActionResult SearchEvents(int? page, string name)
         {
 
             if (string.IsNullOrWhiteSpace(name))
@@ -208,7 +210,79 @@ namespace Booking.Controllers
                 .Select(a => new IndexReserveViewModel(a));
 
             ViewBag.CurrentName = currentUserName;
-            return PartialView(reserveIndexModel);
+
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+
+            return PartialView(reserveIndexModel.ToPagedList(pageNumber, pageSize));
+            //return PartialView(reserveIndexModel);
+        }
+
+        [HttpPost]
+        public ActionResult SearchMoreEvents(int? page, SearchViewModel model)
+        {
+            var events = db.Reserveds
+                .Include(x => x.Room)
+                .Include(x => x.User)
+                .Where(x => x.IsPrivate == model.IsPrivate)
+                .ToList();
+
+            if (events.Count == 0)
+            {
+                return PartialView();
+            }
+
+            bool havaData = false;
+
+            if (!string.IsNullOrWhiteSpace(model.EventName))
+            {
+                events = events.Where(x => x.EventName.Contains(model.EventName)).ToList();
+                havaData = true;
+            }
+            if (!string.IsNullOrWhiteSpace(model.RoomName))
+            {
+                events = events.Where(x => x.Room.NameRoom.Contains(model.RoomName)).ToList();
+                havaData = true;
+            }
+            if (!string.IsNullOrWhiteSpace(model.UserName))
+            {
+                events = events.Where(x => x.User.UserName.Contains(model.UserName)).ToList();
+                havaData = true;
+            }
+            if (model.ReservedDate != null && model.ReservedDate.Year != 1)
+            {
+                events = events.Where(x => x.ReservedDate == model.ReservedDate).ToList();
+                havaData = true;
+            }
+            if (model.ReservedTimeFrom != null && model.ReservedTimeFrom.TotalSeconds!=0)
+            {
+                events = events.Where(x => x.ReservedTimeFrom == model.ReservedTimeFrom).ToList();
+                havaData = true;
+            }
+            if (model.ReservedTimeTo != null && model.ReservedTimeTo.TotalSeconds != 0)
+            {
+                events = events.Where(x => x.ReservedTimeTo == model.ReservedTimeTo).ToList();
+                havaData = true;
+            }
+            if (events.Count == 0)
+            {
+                return PartialView();
+            }
+            if (!havaData)
+            {
+                return PartialView();
+            }
+
+            var reserveIndexModel = events
+                .OrderByDescending(x => x.ReservedDate + x.ReservedTimeFrom)
+                .Select(a => new IndexReserveViewModel(a));
+
+            ViewBag.CurrentName = currentUserName;
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+
+            return PartialView(reserveIndexModel.ToPagedList(pageNumber, pageSize));
+            //return PartialView(reserveIndexModel);
         }
 
         // GET: Reserveds/Details/5
@@ -229,7 +303,6 @@ namespace Booking.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.CountInvites = CountInvites();
             ViewBag.CurrentUserId = currentUserId;
             var detailsReserveViewModel = new DetailsReserveViewModel(reserved);
             if (!string.IsNullOrEmpty(reserved.AcceptedEmails))
@@ -258,9 +331,7 @@ namespace Booking.Controllers
         public ActionResult Reserve(int? RoomId)
         {
             var room = db.Rooms.Find(RoomId);
-            ViewBag.CountInvites = CountInvites();
-
-
+            
 
             //createReserveViewModel.GetUserList = db.Users.Select(x =>
             //new ApplicationUser { Id = x.Id, UserName = x.UserName }).ToList();
@@ -368,7 +439,7 @@ namespace Booking.Controllers
             db.SaveChanges();
 
 
-            if (reserved.SelectedUsersEmails != null)
+            if (createReserveViewModel.UsersEmails.Length > 0)
                 await Task.Run(async () =>
                 {
                     var date = reserved.ReservedDate.ToShortDateString();
@@ -381,13 +452,15 @@ namespace Booking.Controllers
                     $"Час кінця: {reserved.ReservedTimeTo} <br/>" +
                     $"Організатор: {currentUserName} <br/></p>";
 
-                    foreach (var email in reserved.SelectedUsersEmails.Split(',').ToArray())
+                    foreach (var email in createReserveViewModel.UsersEmails)
                     {
-                        var link = $"https://localhost:44367/Reserveds/AcceptInvite?id={id}&email={email}&accept=";
+                        var emailTo = db.Users.Find(email).Email.ToString();
+
+                        var link = $"https://localhost:44367/Reserveds/AcceptInvite?id={id}&email={emailTo}&accept=";
                         var linkMsg = $"<p><a href = '{link}true' > Прийняти </a> </p> " +
                             $" <p><a href = '{link}false' > Відхилити </a></p></div>";
 
-                        bool isSend = await SendEmailAsync(email, reserved.EventName, emailBody + linkMsg);
+                        bool isSend = await SendEmailAsync(emailTo, reserved.EventName, emailBody + linkMsg);
                     }
 
                 });
@@ -410,7 +483,7 @@ namespace Booking.Controllers
 
             ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
             //ViewBag.UsersEmails = db.Users.Select(x => x.UserName).ToList();
-            ViewBag.CountInvites = CountInvites();
+           
             ViewBag.CurrentUserName = currentUserName;
 
             return View(createReserveViewModel);
@@ -478,8 +551,6 @@ namespace Booking.Controllers
                 GetUserList = db.Users.ToList()
             };
 
-
-            ViewBag.CountInvites = CountInvites();
 
             ViewBag.CurrentUserId = currentUserId;
             ViewBag.currentUserName = currentUserName;
@@ -612,7 +683,7 @@ namespace Booking.Controllers
                 var id = reserved.ReservedId;
                 string emailBody = "";
 
-                if (reserved.UsersEmails != null)
+                if (reserved.UsersEmails.Length > 0)
                 {
                     emailBody = $"<div><p>Деякі зміни в {eventName} <br/>" +
                                     $"Кімната: {roomForEvent} <br/>" +
@@ -622,16 +693,18 @@ namespace Booking.Controllers
                                     $"Організатор: {currentUserName} <br/></p></div>";
                     foreach (var email in reserved.UsersEmails)
                     {
+                        var emailTo = db.Users.Find(email).Email.ToString();
+
                         editReserveViewModel.SelectedUsersEmails = string.Join(",",
                             RemoveEmailFromString(email, editReserveViewModel.SelectedUsersEmails));
                         await Task.Run(async () =>
                         {
 
-                            var link = $"https://localhost:44367/Reserveds/AcceptInvite?id={id}&email={email}&accept=";
+                            var link = $"https://localhost:44367/Reserveds/AcceptInvite?id={id}&email={emailTo}&accept=";
                             var linkMsg = $"<p><a href = '{link}true' > Прийняти </a> </p> " +
                                           $"<p><a href = '{link}false' > Відхилити </a></p></div>";
 
-                            bool isSend = await SendEmailAsync(email, reserved.EventName, emailBody + linkMsg);
+                            bool isSend = await SendEmailAsync(emailTo, reserved.EventName, emailBody + linkMsg);
 
                         });
                     }
@@ -642,21 +715,23 @@ namespace Booking.Controllers
                                 $"Час початку: {editReserveViewModel.ReservedTimeFrom} <br/>" +
                                 $"Час кінця: {editReserveViewModel.ReservedTimeTo} <br/>" +
                                 $"Організатор: {currentUserName} <br/></p></div>";
-
-                foreach (var email in editReserveViewModel.SelectedUsersEmails.Split(',').ToList())
-                {
-                    await Task.Run(async () =>
+                editReserveViewModel.UsersEmails = editReserveViewModel.SelectedUsersEmails.Split(',').ToArray();
+                if (editReserveViewModel.UsersEmails.Length > 0)
+                    foreach (var email in editReserveViewModel.UsersEmails)
                     {
+                        var emailTo = db.Users.First(x => x.UserName == email).Email.ToString();
+                        await Task.Run(async () =>
+                        {
 
-                        var link = $"https://localhost:44367/Reserveds/AcceptInvite?id={id}&email={email}&accept=";
-                        var linkMsg = $"<p><a href = '{link}true' > Прийняти </a> </p> " +
-                                      $"<p><a href = '{link}false' > Відхилити </a></p></div>";
+                            var link = $"https://localhost:44367/Reserveds/AcceptInvite?id={id}&email={emailTo}&accept=";
+                            var linkMsg = $"<p><a href = '{link}true' > Прийняти </a> </p> " +
+                                          $"<p><a href = '{link}false' > Відхилити </a></p></div>";
 
-                        bool isSend = await SendEmailAsync(email, reserved.EventName, emailBody + linkMsg);
+                            bool isSend = await SendEmailAsync(emailTo, reserved.EventName, emailBody + linkMsg);
 
-                    });
+                        });
 
-                }
+                    }
 
             }
 
@@ -722,7 +797,7 @@ namespace Booking.Controllers
                 var link = $"https://localhost:44367/Reserveds/AcceptToCome?id={id}&email={currentUserName}&accept=";
                 var linkMsg = $"<p><a href = '{link}true' > Прийняти </a> </p> " +
                     $" <p><a href = '{link}false' > Відхилити </a></p></div>";
-                await SendEmailAsync(user.UserName, reserved.EventName, emailBody + linkMsg);
+                await SendEmailAsync(user.Email, reserved.EventName, emailBody + linkMsg);
             }
             else
             {
@@ -757,7 +832,6 @@ namespace Booking.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CountInvites = CountInvites();
             var deleteReserveViewModel = new DeleteReserveViewModel(reserved);
             return View(deleteReserveViewModel);
         }
@@ -844,7 +918,6 @@ namespace Booking.Controllers
                     RemoveEmailFromString(email, reserveds.SelectedUsersEmails));
             }
             ViewBag.msg = msg;
-            ViewBag.CountInvites = CountInvites();
             db.Entry(reserveds).State = EntityState.Modified;
             db.SaveChanges();
             return View();
@@ -887,7 +960,6 @@ namespace Booking.Controllers
             }
 
             ViewBag.msg = msg;
-            ViewBag.CountInvites = CountInvites();
             db.Entry(reserveds).State = EntityState.Modified;
             db.SaveChanges();
             return View();

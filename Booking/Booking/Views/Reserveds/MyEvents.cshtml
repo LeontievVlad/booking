@@ -106,10 +106,10 @@
                                             </p>
                                             @*<p>
 
-                                    @Html.ActionLink("Редагувати", "Edit", new { id = item.ReservedId }, htmlAttributes: new { @class = "btn btn-default" })
+                                                    @Html.ActionLink("Редагувати", "Edit", new { id = item.ReservedId }, htmlAttributes: new { @class = "btn btn-default" })
 
-                                    @Html.ActionLink("Видалити", "Delete", new { id = item.ReservedId }, htmlAttributes: new { @class = "btn btn-default" })
-                                </p>*@
+                                                    @Html.ActionLink("Видалити", "Delete", new { id = item.ReservedId }, htmlAttributes: new { @class = "btn btn-default" })
+                                                </p>*@
                                         }
                                         else if (item.ReservedDate < DateTime.Today ||
                                        (item.ReservedDate == DateTime.Today &&
@@ -135,11 +135,11 @@
                                                         <i class="fa fa-check-circle text-success" aria-hidden="true"> Прийняти</i>
                                                     </a>
                                                     @*@Html.ActionLink("Прийняти", "AcceptInvite", new
-                                        {
-                                            id = item.ReservedId,
-                                            email = ViewBag.CurrentName,
-                                            accept = true
-                                        }, new { @class = "btn btn-default" })*@
+                                                        {
+                                                            id = item.ReservedId,
+                                                            email = ViewBag.CurrentName,
+                                                            accept = true
+                                                        }, new { @class = "btn btn-default" })*@
 
                                                     <a class="btn btn-default" href="@Url.Action("AcceptInvite",new
                                                     {
@@ -150,11 +150,11 @@
                                                         <i class="fa fa-times-circle text-danger" aria-hidden="true"> Відхилити</i>
                                                     </a>
                                                     @*@Html.ActionLink("Відхилити", "AcceptInvite", new
-                                        {
-                                            id = item.ReservedId,
-                                            email = ViewBag.CurrentName,
-                                            accept = false
-                                        }, new { @class = "btn btn-default" })*@
+                                                        {
+                                                            id = item.ReservedId,
+                                                            email = ViewBag.CurrentName,
+                                                            accept = false
+                                                        }, new { @class = "btn btn-default" })*@
 
                                                 </p>
                                             </div>
@@ -175,8 +175,8 @@
                                                     <i class="fa fa-times-circle text-danger" aria-hidden="true"> Скасувати</i>
                                                 </a>
                                                 @*<a class="btn btn-default btn-default" href="path/to/settings" aria-label="Settings">
-                                        <i class="fa fa-toggle-off text-danger" aria-hidden="true"> Відхилено</i>
-                                    </a>*@
+                                                        <i class="fa fa-toggle-off text-danger" aria-hidden="true"> Відхилено</i>
+                                                    </a>*@
                                             </p>
 
 
@@ -189,13 +189,17 @@
                         </div>
                     }
                     <!-- End column -->
+
+                    <div style="text-align:center;">
+                        
+                            @*@Html.PagedListPager(Model, page => Url.Action("MyEvents", new { page }))*@
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- End Team Area -->
-@Html.PagedListPager(Model, page => Url.Action("MyEvents", new { page }))
 <script>
     function redirectTo(id) {
         var url = "/Reserveds/Details/" + id;

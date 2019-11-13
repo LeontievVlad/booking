@@ -10,7 +10,7 @@
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    
+
     <!-- Bootstrap CSS File -->
     @*<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">*@
     <link href="~/Content/eBusiness/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -76,20 +76,32 @@
                                     <li>@Html.ActionLink("Створити роль", "CreateRole", "Admin")</li>
                                     @if (User.IsInRole("SuperAdmin") || User.IsInRole("Admin"))
                                     {
-                                        <li>@Html.ActionLink("Керування ролями", "GetRoles", "Admin")</li>
-                                        if (ViewBag.CountGuests == null || ViewBag.CountGuests == 0)
-                                        {
+                                        <li>
+                                            @Html.ActionLink("Керування ролями", "GetRoles", "Admin")
 
-                                        }
-                                        else
+                                        </li>
+                                        if (Html.Action("CountGuests", "Admin").ToString() != "0")
                                         {
-                                            <li style="color:white;border-radius:50%;background-color:#3b8cd1;padding:3px;margin-top: 5px;">
-                                                <span style="margin-top: 2px;">
-                                                    &nbsp;&nbsp;@ViewBag.CountGuests&nbsp;&nbsp;
+                                            <li>
+                                                <span class="badge" style="font-size:1.3em;color:white;background-color:#3b8cd1;">
+                                                    @Html.Action("CountGuests", "Admin")
 
                                                 </span>
                                             </li>
                                         }
+                                        @*if (ViewBag.CountGuests == null || ViewBag.CountGuests == 0)
+                                            {
+
+                                            }
+                                            else
+                                            {
+                                                <li style="color:white;border-radius:50%;background-color:#3b8cd1;padding:3px;margin-top: 5px;">
+                                                    <span style="margin-top: 2px;">
+                                                        &nbsp;&nbsp;@ViewBag.CountGuests&nbsp;&nbsp;
+
+                                                    </span>
+                                                </li>
+                                            }*@
                                     }
                                 </ul>
                                 @Html.Partial("_LoginPartial")

@@ -18,7 +18,7 @@
                     </h2>
                 </div>
                 <h3 class="text-center">
-                    @Html.ActionLink("Створити", "Create")
+                    @Html.ActionLink("Створити кімнату", "Create")
                 </h3>
             </div>
         </div>
@@ -38,7 +38,7 @@
                                 <h2 class="text-center">@item.NameRoom</h2>
                                 <a href="#"><img src="@str" alt="@item.NameRoom" /></a>
                                 <div class="add-actions text-center">
-                                    <div class="project-dec">
+                                    <div class="project-dec" style="color:#3ec1d5;">
 
                                         <h4>@item.NameRoom</h4>
                                         <div>@item.MinTime - @item.MaxTime</div>
@@ -72,13 +72,17 @@
                             </a>
                         </div>
                     </div>
+                    
                 }
                 <!-- single-awesome-project end -->
+
             </div>
         </div>
 
     </div>
 </div>
 <!-- awesome-portfolio end -->
-
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+<div style="text-align:center;">
+    
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>

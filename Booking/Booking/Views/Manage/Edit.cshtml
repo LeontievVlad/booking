@@ -1,0 +1,53 @@
+﻿@model Booking.Models.ManageEditViewModel
+
+@{
+    ViewBag.Title = "Редагування";
+}
+
+<br>
+<br />
+<br />
+
+<!-- Start team Area -->
+<div id="team" class="our-team-area area-padding">
+    <div class="container">
+        <div class="row">
+            <div class="team-top">
+                <!-- Start column -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="single-team-member">
+                        <div class="team-content text-center" style="background-color:#fafafa;">
+                            <h4 style="color:#3ec1d5;">Змінення параметрів облікового запису</h4>
+
+
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div>
+                                    @Html.ValidationSummary(true, "")
+                                    <div class="text-center">
+                                        <h5>
+                                            Ім'я
+                                        </h5>
+                                        @Html.EditorFor(model => model.UserNameEdit,new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+                                    
+                                    </div>
+
+                                    <div>
+                                            <input type="submit" value="Зберегти" />
+                                        
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End column -->
+
+            </div>
+        </div>
+    </div>
+</div>

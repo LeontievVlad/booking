@@ -1,10 +1,20 @@
-﻿@model IEnumerable<Booking.Models.ReservedViewModels.IndexReserveViewModel>
-
+﻿@*@model IEnumerable<Booking.Models.ReservedViewModels.IndexReserveViewModel>*@
+@model PagedList.IPagedList<Booking.Models.ReservedViewModels.IndexReserveViewModel>
+@using PagedList.Mvc;
 <!-- Start column -->
 @if (Model == null)
 {
+    <div class="center-block text-center text-warning">
+        <p>
+
+        Збігів не знайдено <i class="fa fa-refresh fa-spin fa-fw"></i>
+        </p>
+        <span class="sr-only">Loading...</span>
+    </div>
     <script>
-        location.reload();
+        setTimeout(function () {
+            window.location.reload(1);
+        }, 2000);
     </script>
 }
 else
@@ -128,5 +138,9 @@ else
             </div>
         }
 
+        @*<div style="text-align:center;">
+
+            @Html.PagedListPager(Model, page => Url.Action("SearchEvents", new { page }))
+        </div>*@
         <!-- End column -->
     }

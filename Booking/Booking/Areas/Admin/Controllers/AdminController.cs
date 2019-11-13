@@ -34,7 +34,6 @@ namespace Booking.Areas.Admin.Controllers
         [Authorize(Roles = "SuperAdmin,Admin")]
         public ActionResult GetRoles()
         {
-            ViewBag.CountGuests = CountGuests();
             var userRoles = new List<RolesViewModel>();
             var userStore = new UserStore<ApplicationUser>(db);
             var userManager = new UserManager<ApplicationUser>(userStore);
@@ -56,6 +55,7 @@ namespace Booking.Areas.Admin.Controllers
                 {
                     UserName = user.UserName,
                     UserId = user.Id,
+                    UserEmail = user.Email,
                     RolesList = db.Roles.Select(x => new SelectListItem
                     {
                         Value = x.Id,
@@ -86,7 +86,7 @@ namespace Booking.Areas.Admin.Controllers
         }
 
 
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpGet]
         public ActionResult ChangeRole(RolesViewModel model)
         {
@@ -94,8 +94,8 @@ namespace Booking.Areas.Admin.Controllers
             var userManager = new UserManager<ApplicationUser>(userStore);
             var user = userStore.Users;
             var role = db.Roles.Find(model.ChangeRoleTo);
-            userManager.RemoveFromRole(userStore.Users.First(s => s.UserName == model.UserName).Id, model.RoleNames.First());
-            userManager.AddToRole(userStore.Users.First(s => s.UserName == model.UserName).Id, role.Name);
+            userManager.RemoveFromRole(model.UserId, model.RoleNames.First());
+            userManager.AddToRole(model.UserId, role.Name);
 
             return RedirectToAction("GetRoles");
         }
@@ -127,12 +127,12 @@ namespace Booking.Areas.Admin.Controllers
 
             return new HttpStatusCodeResult(HttpStatusCode.Created);
         }
-        public int CountGuests()
+        public ActionResult CountGuests()
         {
             //a694828d-76e3-4c7d-9811-0bf136168c8b
             var guest = db.Roles.Where(x => x.Name == "Guest").ToList();
             var users = guest.Select(x => x.Users).ToArray();
-            return users[0].Count;
+            return new ContentResult { Content = users[0].Count.ToString() };
         }
 
 
