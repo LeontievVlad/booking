@@ -200,6 +200,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ReservedsController.cs" />
     <Compile Include="Entity_Models\Reserved.cs" />
@@ -220,8 +221,13 @@
     <Compile Include="Migrations\201911021132558_UpdateReserved.Designer.cs">
       <DependentUpon>201911021132558_UpdateReserved.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911140439585_AddImage.cs" />
+    <Compile Include="Migrations\201911140439585_AddImage.Designer.cs">
+      <DependentUpon>201911140439585_AddImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ChatModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageEditViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -330,10 +336,12 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\select2.css" />
+    <Content Include="Content\StyleSheet1.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\noimage.jpg" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
@@ -437,7 +445,9 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Content\_bootstrap-datetimepicker.less" />
     <Content Include="Content\bootstrap-datetimepicker-build.less" />
+    <Content Include="Areas\Admin\Views\Admin\DeleteError.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\chat.js" />
     <Content Include="Scripts\chosen.jquery.js" />
     <Content Include="Scripts\customJsValidation\EditValidation.js" />
     <Content Include="Scripts\customJsValidation\ReserveValidation.js" />
@@ -512,11 +522,15 @@
     <Content Include="Views\Reserveds\LayoutNew.cshtml" />
     <Content Include="Views\Manage\Edit.cshtml" />
     <Content Include="Views\Reserveds\SearchMoreEvents.cshtml" />
+    <Content Include="Views\Chat\Index.cshtml" />
+    <Content Include="Views\Chat\ChatRoom.cshtml" />
+    <Content Include="Views\Chat\History.cshtml" />
+    <Content Include="Views\Reserveds\SearchMyEvents.cshtml" />
+    <Content Include="Views\Reserveds\DeleteError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -540,6 +554,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911021132558_UpdateReserved.resx">
       <DependentUpon>201911021132558_UpdateReserved.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911140439585_AddImage.resx">
+      <DependentUpon>201911140439585_AddImage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

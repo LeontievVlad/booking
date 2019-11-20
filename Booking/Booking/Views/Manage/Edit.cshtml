@@ -20,26 +20,29 @@
                             <h4 style="color:#3ec1d5;">Змінення параметрів облікового запису</h4>
 
 
-                            @using (Html.BeginForm())
-                            {
-                                @Html.AntiForgeryToken()
+                            @*@using (Html.BeginForm())
+                                {*@
+                            @*@Html.AntiForgeryToken()*@
+
+                            <div>
+                                @*@Html.ValidationSummary(true, "")*@
+                                <div class="text-center">
+                                    <h5>
+                                        Ім'я
+                                    </h5>
+                                    @Html.EditorFor(model => model.UserNameEdit, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
+                                </div>
 
                                 <div>
-                                    @Html.ValidationSummary(true, "")
-                                    <div class="text-center">
-                                        <h5>
-                                            Ім'я
-                                        </h5>
-                                        @Html.EditorFor(model => model.UserNameEdit,new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
-                                    
-                                    </div>
 
-                                    <div>
-                                            <input type="submit" value="Зберегти" />
-                                        
-                                    </div>
+                                    <div id="messageWarning" class="text-danger"></div>
+                                    <br />
+                                    <input type="submit" class="btn btn-default" value="Зберегти" onclick="ChangeUserName();" />
+
                                 </div>
-                            }
+                            </div>
+                            @*}*@
 
                         </div>
                     </div>
@@ -51,3 +54,56 @@
         </div>
     </div>
 </div>
+
+<script>
+    //modal
+    function ModalSuccess() {
+
+
+        var dialog = bootbox.dialog({
+
+            message: '<p class="text-center mb-0 text-success">Дані успішно збережено</p><p class="text-center mb-0 text-warning">Для відображення змін, потрібно перезайти в обліковий запис<br>Використовуйте при вході нове ім`я</p>',
+            closeButton: true,
+            size: "small",
+            buttons: {
+                ok: {
+                    callback: function () {
+                        window.location.href = "../Manage/Index";
+                    }
+                }
+            }
+
+        });
+    };
+    function GetManageEditViewModel() {
+        var model = {
+            'UserNameEdit': $("#UserNameEdit").val()
+        };
+        //$("#checkbox").is(":checked");
+
+        return model;
+    };
+    function ChangeUserName() {
+        $.ajax({
+            type: "POST",
+            url: '../Manage/Edit',
+            data: JSON.stringify(GetManageEditViewModel()),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data, status) {
+
+                if (data == "Succeeded") {
+                    ModalSuccess();
+                } else {
+                    $('#messageWarning').html(data);
+
+                    $('#messageWarning').show();
+                }
+
+            },
+            error: function () {
+                alert("Помилка на сервері");
+            }
+        });
+    };
+</script>

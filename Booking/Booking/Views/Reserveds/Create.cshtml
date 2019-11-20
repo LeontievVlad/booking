@@ -93,11 +93,11 @@
     </div>
     @Html.HiddenFor(model => model.UserId)
     <div class="form-group">
+        <div id="messageWarning" class="text-danger"></div>
+        <div id="messageAlert" class="text-warning"></div>
+        <div id="messageWait" class="text-success"></div>
         <input type="button" name="submit" id="submit" value="Перевірити" class="btn btn-default" onclick="CheckIsValid();" />
         <input type="submit" name="save" id="save" value="Підтвердити" class="btn btn-success" onclick="SaveToDb();" hidden />
-        <div id="messageWarning" class="text-danger"></div>
-        <div id="messageWait" class="text-success"></div>
-        <div id="messageAlert" class="text-warning"></div>
 
     </div>
 </div>

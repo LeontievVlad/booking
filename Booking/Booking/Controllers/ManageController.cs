@@ -40,9 +40,9 @@ namespace Booking.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -224,42 +224,64 @@ namespace Booking.Controllers
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
-        
+
         public async Task<ActionResult> Edit()
         {
             ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
             if (user != null)
             {
-                ManageEditViewModel model = new ManageEditViewModel { UserNameEdit = user.UserName};
+                ManageEditViewModel model = new ManageEditViewModel { UserNameEdit = user.UserName };
                 return View(model);
             }
             return RedirectToAction("Login", "Account");
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(ManageEditViewModel model)
+        public async Task<JsonResult> Edit(ManageEditViewModel model)
         {
             ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var msg = "";
             if (user != null)
             {
-                user.UserName = model.UserNameEdit;
-                IdentityResult result = await UserManager.UpdateAsync(user);
-                if (result.Succeeded)
+                bool freeName = true;
+                using (var context = new ApplicationDbContext())
                 {
-                    return RedirectToAction("Index", "Manage");
+                    var users = context.Users;
+                    foreach (var item in users)
+                    {
+                        if (item.UserName == model.UserNameEdit)
+                        {
+                            freeName = false;
+                            continue;
+                        }
+                    }
+                }
+                if (freeName)
+                {
+                    user.UserName = model.UserNameEdit;
+                    IdentityResult result = await UserManager.UpdateAsync(user);
+
+                    if (result.Succeeded)
+                    {
+                        msg = "Succeeded";
+                    }
+                    else
+                    {
+                        msg = "Щось не так";
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Что-то пошло не так");
+                    msg = "Таке ім'я вже зайнято";
                 }
             }
             else
             {
-                ModelState.AddModelError("", "Пользователь не найден");
+                msg = "Користувача не знайдено";
             }
 
-            return View(model);
+            return Json(msg);
         }
         //
         // GET: /Manage/ChangePassword
@@ -381,7 +403,7 @@ namespace Booking.Controllers
             base.Dispose(disposing);
         }
 
-#region Вспомогательные приложения
+        #region Вспомогательные приложения
         // Используется для защиты от XSRF-атак при добавлении внешних имен входа
         private const string XsrfKey = "XsrfId";
 
@@ -432,6 +454,6 @@ namespace Booking.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

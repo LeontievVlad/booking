@@ -16,6 +16,8 @@ namespace Booking.Models.RoomViewModels
         }
         public int RoomId { get; set; }
         public string NameRoom { get; set; }
+
+        public string Description { get; set; }
         public DateTime Date { get; set; }
         public TimeSpan MinTime { get; set; }
         public TimeSpan MaxTime { get; set; }

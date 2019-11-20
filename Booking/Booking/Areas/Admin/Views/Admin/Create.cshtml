@@ -4,7 +4,7 @@
     ViewBag.Title = "Створити";
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div class="text-center">
@@ -12,38 +12,54 @@
         <div class="form-group">
             @*@Html.LabelFor(model => model.NameRoom, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <h5>Назва кімнати</h5>
-                @Html.EditorFor(model => model.NameRoom, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
-                @Html.ValidationMessageFor(model => model.NameRoom, "", new { @class = "text-danger text-center" })
-            
+            @Html.EditorFor(model => model.NameRoom, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
+            @Html.ValidationMessageFor(model => model.NameRoom, "", new { @class = "text-danger text-center" })
+
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.NameRoom, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <h5>Опис кімнати</h5>
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger text-center" })
+
         </div>
 
         <div class="form-group">
             @*@Html.LabelFor(model => model.MinTime, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <h5>Час початку</h5>
-                @Html.EditorFor(model => model.MinTime, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
-                @Html.ValidationMessageFor(model => model.MinTime, "", new { @class = "text-danger center-block text-center" })
-            
+            @Html.EditorFor(model => model.MinTime, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
+            @Html.ValidationMessageFor(model => model.MinTime, "", new { @class = "text-danger center-block text-center" })
+
         </div>
 
         <div class="form-group">
             @*@Html.LabelFor(model => model.MaxTime, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                <h5>Час кінця</h5>
-                @Html.EditorFor(model => model.MaxTime, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
-                @Html.ValidationMessageFor(model => model.MaxTime, "", new { @class = "text-danger center-block text-center" })
-            
+            <h5>Час кінця</h5>
+            @Html.EditorFor(model => model.MaxTime, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
+            @Html.ValidationMessageFor(model => model.MaxTime, "", new { @class = "text-danger center-block text-center" })
+
         </div>
 
         <div class="form-group">
             @*@Html.LabelFor(model => model.MaxPeople, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                <h5>Максимум людей</h5>
-                @Html.EditorFor(model => model.MaxPeople, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
-                @Html.ValidationMessageFor(model => model.MaxPeople, "", new { @class = "text-danger center-block text-center" })
-            
+            <h5>Максимум людей</h5>
+            @Html.EditorFor(model => model.MaxPeople, new { htmlAttributes = new { @class = "form-control center-block text-center" } })
+            @Html.ValidationMessageFor(model => model.MaxPeople, "", new { @class = "text-danger center-block text-center" })
+
+        </div>
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.Image, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <h5>
+                Картинка
+            </h5>
+            <input type="file" name="ImageFile" class="form-control center-block text-center" />
+
         </div>
 
         <div class="form-group">
-                <input type="submit" value="Створити" class="btn btn-default" />
-            
+            <input type="submit" value="Створити" class="btn btn-default" />
+
         </div>
     </div>
 }

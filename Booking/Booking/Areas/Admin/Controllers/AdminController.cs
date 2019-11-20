@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
@@ -32,13 +34,14 @@ namespace Booking.Areas.Admin.Controllers
 
 
         [Authorize(Roles = "SuperAdmin,Admin")]
-        public ActionResult GetRoles()
+        public ActionResult GetRoles(int? page, string nameNrole)
         {
             var userRoles = new List<RolesViewModel>();
             var userStore = new UserStore<ApplicationUser>(db);
             var userManager = new UserManager<ApplicationUser>(userStore);
 
-            List<string> disabled = new List<string>();
+
+                List<string> disabled = new List<string>();
             if (User.IsInRole("Admin"))
             {
                 disabled = db.Roles
@@ -60,7 +63,7 @@ namespace Booking.Areas.Admin.Controllers
                     {
                         Value = x.Id,
                         Text = x.Name,
-                        Disabled = x.Name == "SuperAdmin" ? true : false
+                        Disabled = x.Name == "SuperAdmin" ? true : false,
                     })
                 };
                 userRoles.Add(r);
@@ -69,20 +72,14 @@ namespace Booking.Areas.Admin.Controllers
             foreach (var user in userRoles)
             {
                 user.RoleNames = userManager.GetRoles(userStore.Users.First(s => s.UserName == user.UserName).Id);
-
             }
-
-            //var currentUser = db.Users.Find(currentUserId);
-            //ViewBag.CurrentRole = currentUser.Roles.ToString();
-            //var ro = db.Roles.Where(x=>x.Id).ToList();
-            //List<ApplicationUser> applicationUsers = db.Users.ToList();
-
-
-
-
+            userManager.Dispose();
             ViewBag.allRoles = new SelectList(db.Roles, "Id", "Name");
+            //int pageSize = 8;
+            int pageNumber = (page ?? 1);
+            ViewBag.nameNrole = nameNrole;
+            //return View(userRoles.ToPagedList(pageNumber, pageSize));
             return View(userRoles);
-
         }
 
 
@@ -90,13 +87,37 @@ namespace Booking.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult ChangeRole(RolesViewModel model)
         {
-            var userStore = new UserStore<ApplicationUser>(db);
-            var userManager = new UserManager<ApplicationUser>(userStore);
-            var user = userStore.Users;
-            var role = db.Roles.Find(model.ChangeRoleTo);
-            userManager.RemoveFromRole(model.UserId, model.RoleNames.First());
-            userManager.AddToRole(model.UserId, role.Name);
+            if (model == null || model.ChangeRoleTo == null)
+            {
+                return RedirectToAction("GetRoles");
+            }
 
+
+
+            var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+            string removeRole = model.RoleNames.Single();
+            string addRole = db.Roles.Find(model.ChangeRoleTo.Single()).Name;
+            userManager.RemoveFromRoles(model.UserId, removeRole);
+            userManager.AddToRole(model.UserId, addRole);
+            userManager.Dispose();
+
+            //var user = db.Users.Find(model.UserId);
+            //string nameNrole = user.UserName + " - " + addRole;
+
+            //var userStore = new UserStore<ApplicationUser>(db);
+            //UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(userStore);
+            //var role = db.Roles.Find(model.ChangeRoleTo.Single());
+            //userManager.RemoveFromRole(model.UserId, model.RoleNames.Single());
+
+            //var result = await userManager.RemoveFromRoleAsync(model.UserId, model.RoleNames.Single());
+            //result = await userManager.AddToRoleAsync(model.UserId, "Guest");
+
+            //var userStore = new UserStore<ApplicationUser>(db);
+            //var userManager = new UserManager<ApplicationUser>(userStore);
+            //var user = userStore.Users;
+            //var role = db.Roles.Find(model.ChangeRoleTo);
+            //userManager.RemoveFromRole(model.UserId, "Guest");//model.RoleNames.First()
+            //userManager.AddToRole(model.UserId, "User");//role.Name
             return RedirectToAction("GetRoles");
         }
 
@@ -158,6 +179,7 @@ namespace Booking.Areas.Admin.Controllers
         }
 
         // GET: Admin/Admin/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -187,16 +209,34 @@ namespace Booking.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreateRoomViewModel createRoomViewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                db.Rooms.Add(CreateRoomViewModelToRoom.CreateMapper()
-                    .Map<CreateRoomViewModel, Room>(createRoomViewModel));
-                db.SaveChanges();
-
-                return RedirectToAction("Index");
+                return View(createRoomViewModel);
             }
 
-            return View(createRoomViewModel);
+            if (createRoomViewModel.ImageFile != null)
+            {
+
+                string filename = Path.GetFileNameWithoutExtension(createRoomViewModel.ImageFile.FileName);
+                string extension = Path.GetExtension(createRoomViewModel.ImageFile.FileName);
+                filename = filename + DateTime.Now.ToString("yymmssfff") + extension;
+                createRoomViewModel.Image = "~/Images/" + filename;
+                filename = Path.Combine(Server.MapPath("~/Images/"), filename);
+                createRoomViewModel.ImageFile.SaveAs(filename);
+            }
+            else
+            {
+                createRoomViewModel.Image = "~/Images/noimage.jpg";
+            }
+
+
+
+            db.Rooms.Add(CreateRoomViewModelToRoom.CreateMapper()
+                .Map<CreateRoomViewModel, Room>(createRoomViewModel));
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+
         }
 
 
@@ -226,14 +266,30 @@ namespace Booking.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(EditRoomViewModel editRoomViewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                db.Entry(EditRoomViewModelToRoom.CreateMapper()
-                    .Map<EditRoomViewModel, Room>(editRoomViewModel)).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return View(editRoomViewModel);
             }
-            return View(editRoomViewModel);
+
+            if (editRoomViewModel.ImageFile != null)
+            {
+
+                string filename = Path.GetFileNameWithoutExtension(editRoomViewModel.ImageFile.FileName);
+                string extension = Path.GetExtension(editRoomViewModel.ImageFile.FileName);
+                filename = filename + DateTime.Now.ToString("yymmssfff") + extension;
+                editRoomViewModel.Image = "~/Images/" + filename;
+                filename = Path.Combine(Server.MapPath("~/Images/"), filename);
+                editRoomViewModel.ImageFile.SaveAs(filename);
+            }
+            else
+            {
+                editRoomViewModel.Image = "~/Images/noimage.jpg";
+            }
+
+            db.Entry(EditRoomViewModelToRoom.CreateMapper()
+                .Map<EditRoomViewModel, Room>(editRoomViewModel)).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: Admin/Admin/Delete/5
@@ -251,7 +307,7 @@ namespace Booking.Areas.Admin.Controllers
             var reserved = db.Reserveds.Where(x => x.RoomId == id).ToList();
             if (reserved.Count != 0)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Ця кімната заброньована");
+                return RedirectToAction("DeleteError");
             }
             var deleteRoomViewModel = new DeleteRoomViewModel(room) { };
             return View(deleteRoomViewModel);
@@ -267,6 +323,11 @@ namespace Booking.Areas.Admin.Controllers
             db.Rooms.Remove(room);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult DeleteError()
+        {
+            return View();
         }
 
         protected override void Dispose(bool disposing)

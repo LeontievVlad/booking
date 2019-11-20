@@ -18,9 +18,32 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="single-team-member">
                         <div class="team-content text-center" style="background-color:#fafafa;">
-                            <div onclick="redirectTo(@Model.ReservedId);" style="cursor:pointer;">
+                            <div>
                                 <h4 style="color:#3ec1d5;">@Html.DisplayFor(model => model.EventName)</h4>
-                                <p>@Html.DisplayFor(model => model.Room.NameRoom)</p>
+                                <a href="@Url.Content(Model.Room.Image)" target="_blank"><img src="@Url.Content(Model.Room.Image)" style="min-width:360px;min-height:240px;max-width:360px;max-height:240px;" alt="@Model.Room.NameRoom" /></a>
+
+                                @if (!string.IsNullOrEmpty(Model.Description))
+                                {
+                                    <p>
+                                        Опис події:
+                                        @Html.DisplayFor(model => model.Description)
+                                    </p>
+
+                                }
+                                <p>
+                                    Кімната:
+                                    @Html.DisplayFor(model => model.Room.NameRoom)
+                                    @*<input name="name" value="@item.Room.NameRoom" hidden />*@
+
+                                </p>
+                                @if (!string.IsNullOrEmpty(Model.Room.Description))
+                                {
+                                    <p>
+                                        Опис кімнати:
+                                        @Html.DisplayFor(model => model.Room.Description)
+                                    </p>
+
+                                }
                                 <span>
                                     @*@Html.Hidden(item.ReservedId.ToString())*@
                                     @*<input class="ReservedId" value="@item.ReservedId" hidden />*@
@@ -44,43 +67,39 @@
                                     @Html.DisplayFor(model => model.ReservedTimeTo)
                                 </p>
                                 <p>
-                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                    Організатор:
                                     @Html.DisplayFor(model => model.User.UserName)
                                 </p>
-                                <p>
-                                    <i class="fa fa-question-circle-o" aria-hidden="true">
-                                        @Html.DisplayFor(model => model.SelectedUsersEmails)
-                                    </i>
-                                </p>
-                                <p>
-                                    <i class="fa fa-check-circle-o" aria-hidden="true">
-                                        @if (string.IsNullOrEmpty(Model.AcceptedEmails))
-                                        {
-                                            <span>
-                                                Нікого
-                                            </span>
-                                        }
-                                        else
-                                        {
+                                @if ((Model.IsPrivate && (ViewBag.CurrentUserId == Model.UserId || ViewBag.isInAccepted)) || !Model.IsPrivate)
+                                {
 
+
+                                    if (!string.IsNullOrEmpty(Model.SelectedUsersEmails))
+                                    {
+                                        <p>
+                                            Запрошені:
+                                            @Html.DisplayFor(model => model.SelectedUsersEmails)
+
+                                        </p>
+                                    }
+
+                                    if (!string.IsNullOrEmpty(Model.AcceptedEmails))
+                                    {
+                                        <p>
+
+                                            Прийняли запрошення:
                                             @Html.DisplayFor(model => model.AcceptedEmails)
-                                        }
-                                    </i>
-                                </p>
-                                <p>
-                                    <i class="fa fa-times-circle-o" aria-hidden="true">
-                                        @if (string.IsNullOrEmpty(Model.DeniedEmails))
-                                        {
-                                            <span>
-                                                Нікого
-                                            </span>
-                                        }
-                                        else
-                                        {
+                                        </p>
+                                    }
+                                    if (!string.IsNullOrEmpty(Model.DeniedEmails))
+                                    {
+                                        <p>
+                                            Відхили запрошення:
                                             @Html.DisplayFor(model => model.DeniedEmails)
-                                        }
-                                    </i>
-                                </p>
+
+                                        </p>
+                                    }
+                                }
                                 <p>
                                     @if (Model.IsPrivate)
                                     {

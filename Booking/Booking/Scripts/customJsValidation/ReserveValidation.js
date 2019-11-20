@@ -63,6 +63,7 @@ function CheckIsValid() {
     if (fail != "") {
         $('#messageWarning').html(fail);
         $('#messageWarning').show();
+        $('#messageWait').hide();
         $('#save').hide();
         return false;
     } else {

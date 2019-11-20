@@ -36,11 +36,12 @@
                         <div class="single-awesome-project">
                             <div class="awesome-img">
                                 <h2 class="text-center">@item.NameRoom</h2>
-                                <a href="#"><img src="@str" alt="@item.NameRoom" /></a>
-                                <div class="add-actions text-center">
+                                <a href="#" style="width:360px;height:240px;overflow:hidden;"><img src="@Url.Content(item.Image)"style="min-width:360px;min-height:240px;" alt="@item.NameRoom" /></a>
+                                <div class="add-actions text-center" onclick="redirectToDetails(@item.RoomId);" style="cursor:pointer;">
                                     <div class="project-dec" style="color:#3ec1d5;">
 
                                         <h4>@item.NameRoom</h4>
+                                        <div>@item.Description</div>
                                         <div>@item.MinTime - @item.MaxTime</div>
                                         <div>Макс. людей @item.MaxPeople</div>
                                         <input name="RoomId" value="@item.RoomId" hidden />
@@ -86,3 +87,11 @@
     
         @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>
+
+<script>
+    function redirectToDetails(id) {
+
+            var url = "/Admin/Admin/Details/" + id;
+            window.location.href = url;
+        };
+</script>

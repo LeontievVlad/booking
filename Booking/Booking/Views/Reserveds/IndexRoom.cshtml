@@ -1,5 +1,5 @@
-﻿@model IEnumerable<Booking.Models.RoomViewModels.IndexRoomViewModel>
-
+﻿@model PagedList.IPagedList<Booking.Models.RoomViewModels.IndexRoomViewModel>
+@using PagedList.Mvc;
 
 @{
     ViewBag.Title = "Головна";
@@ -65,39 +65,51 @@
                     <!-- single-awesome-project start -->
                     <div class="col-md-4 col-sm-4 col-xs-12 design development">
                         <div class="single-awesome-project">
-                            <div class="awesome-img">
-                                <h2 class="text-center">@item.NameRoom</h2>
-                                <a href="#"><img src="@str" alt="@item.NameRoom" /></a>
-                                <div class="add-actions text-center">
-                                    <div class="project-dec">
-                                        <div id="Room" style="color:#3ec1d5;">
-                                            @using (Html.BeginForm("Reserve", "Reserveds", FormMethod.Get))
-                                            {
-                                                @*<a href="https://localhost:44367/Reserveds/Reserve?RoomId=@item.RoomId">
-                                                    </a>*@
+                            @using (Html.BeginForm("Reserve", "Reserveds", FormMethod.Get))
+                            {
+                                <div class="awesome-img">
+                                    <h2 class="text-center">@item.NameRoom</h2>
+                                    <a href="#" style="width:360px;height:240px;overflow:hidden;"><img src="@Url.Content(item.Image)" style="min-width:360px;min-height:240px;" alt="@item.NameRoom" /></a>
+                                    <div class="add-actions text-center" onclick="redirectToDetails(@item.RoomId);" style="cursor:pointer;">
+                                        <div class="project-dec">
+                                            <div id="Room" style="color:#3ec1d5;">
+                                                
                                                 <h4>@item.NameRoom</h4>
                                                 <div>@item.MinTime - @item.MaxTime</div>
+                                                <div>@item.Description</div>
                                                 <div>Макс. людей @item.MaxPeople</div>
 
                                                 <input name="RoomId" value="@item.RoomId" hidden />
-                                                @*<input name="NameRoom" value="@item.NameRoom" hidden />
-                                                    <input name="MinTime" value="@item.MinTime" hidden />
-                                                    <input name="MaxTime" value="@item.MaxTime" hidden />
-                                                    <input name="MaxPeople" value="@item.MaxPeople" hidden />*@
                                                 
-                                                    <input type="button" value="Забронювати" class="btn btn-default btn-lg" onclick="this.form.submit();"/>
-                                            }
+
+                                                @*<input type="button" value="Забронювати" class="btn btn-default btn-lg" onclick="this.form.submit();" />*@
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                                <br />
+                                <div class="center-block text-center">
+                                    <input type="button" value="Забронювати" class="btn btn-default btn-lg" onclick="this.form.submit();" />
+                                </div>
+                            }
                         </div>
                     </div>
+
                 }
                 <!-- single-awesome-project end -->
+                <div class="col-sm-12 center-block text-center">
+                    @Html.PagedListPager(Model, page => Url.Action("IndexRoom", new { page }))
+                </div>
             </div>
         </div>
 
     </div>
 </div>
 <!-- awesome-portfolio end -->
+<script>
+    function redirectToDetails(id) {
+
+        var url = "/Admin/Admin/Details/" + id;
+        window.location.href = url;
+    };
+</script>

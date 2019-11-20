@@ -12,8 +12,7 @@
 <br />
 @using (Ajax.BeginForm("SearchEvents", new AjaxOptions
 {
-    UpdateTargetId = "searchresults",
-
+    UpdateTargetId = "searchresults"
 }))
 {
     <div class="container" id="simpleButtons">
@@ -37,71 +36,91 @@
 
 @using (Ajax.BeginForm("SearchMoreEvents", new AjaxOptions
 {
-    UpdateTargetId = "searchresults",
+    UpdateTargetId = "searchresults"
 
 }))
 {
     <div id="moreFilters" hidden>
         <div class="container">
             <div class="row">
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <div class="form-group">
                         <div class='input-group'>
-                            <input type='text' name="UserName" class="form-control text-center" placeholder="Ім'я організатора" />
+                            <input type='text' id="SearchUserName" name="UserName" class="form-control text-center" placeholder="Ім'я організатора" />
                             <span class="input-group-addon">
                                 <i class="fa fa-user" aria-hidden="true"></i>
                             </span>
                         </div>
                     </div>
                 </div>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <div class="form-group">
                         <div class='input-group'>
-                            <input type='text' name="RoomName" class="form-control text-center" placeholder="Кімната" />
+                            <input type='text' id="SearchRoomName" name="RoomName" class="form-control text-center" placeholder="Кімната" />
                             <span class="input-group-addon">
                                 <i class="fa fa-home" aria-hidden="true"></i>
                             </span>
                         </div>
                     </div>
                 </div>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <div class="form-group">
                         <div class='input-group'>
-                            <input type='text' name="EventName" class="form-control text-center" placeholder="Подія" />
+                            <input type='text' id="SearchEventName" name="EventName" class="form-control text-center" placeholder="Подія" />
                             <span class="input-group-addon">
                                 <i class="fa fa-smile-o" aria-hidden="true"></i>
                             </span>
                         </div>
                     </div>
                 </div>
+                <div class='col-sm-3'>
+                    <div class="form-group">
+                        <div class='input-group'>
+                            <input type='text' id="SearchEventDescription" name="EventDescription" class="form-control text-center" placeholder="Опис події" />
+                            <span class="input-group-addon">
+                                @*<i class="fa fa-file-text" aria-hidden="true"></i>*@
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-sm-4'>
+                    <div class="form-group">
+                        <div class='input-group'>
+                            <input type='text' id="SearchRoomDescription" name="RoomDescription" class="form-control text-center" placeholder="Опис кімнати" />
+                            <span class="input-group-addon">
+                                @*<i class="fa fa-file-text" aria-hidden="true"></i>*@
+                            </span>
+                        </div>
+                    </div>
+                </div>
                 @*time only from*@
-                <div class='col-sm-3'>
-                    <div class="form-group">
-                        <div class='input-group date' name="ReservedTimeFrom" id='datetimepicker3'>
-                            <input type='text' class="form-control text-center" placeholder="Час початку" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-time"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
                 @*time only to*@
-                <div class='col-sm-3'>
+                @*<div class='col-sm-3'>
                     <div class="form-group">
-                        <div class='input-group date' name="ReservedTimeTo" id='datetimepicker4'>
-                            <input type='text' class="form-control text-center" placeholder="Час кінця" />
+                        <div class='input-group date' id='datetimepicker3'>
+                            <input type='text' id="SearchReservedTimeFrom" name="ReservedTimeFrom" class="form-control text-center" placeholder="Час початку" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-time"></span>
                             </span>
                         </div>
                     </div>
                 </div>
+                <div class='col-sm-3'>
+                    <div class="form-group">
+                        <div class='input-group date' id='SearchReservedTimeTo'>
+                            <input type='text' name="ReservedTimeTo" class="form-control text-center" placeholder="Час кінця" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>*@
 
                 @*date only*@
-                <div class='col-sm-3'>
+                <div class='col-sm-4'>
                     <div class="form-group">
-                        <div class='input-group date' name="ReservedDate" id='datetimepicker2'>
-                            <input type='text' class="form-control text-center" placeholder="Дата" />
+                        <div class='input-group date' id='datetimepicker2'>
+                            <input type='text' id="SearchReservedDate" name="ReservedDate" class="form-control text-center" placeholder="Дата" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -112,8 +131,8 @@
                 <div class='col-sm-3 center-block'>
 
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" name="IsPrivate" class="custom-control-input" id="customCheck1">
-                        <label class="custom-control-label litleIcons" style="background-color:#eee;cursor:pointer;" for="customCheck1">
+                        <input type="checkbox" id="SearchIsPrivate" name="IsPrivate" onclick="IsPrivateValue();" class="custom-control-input">
+                        <label class="custom-control-label litleIcons" style="background-color:#eee;cursor:pointer;" for="SearchIsPrivate">
                             Приватна
                             <i class="fa fa-lock"></i>
                             @*<a class="btn btn-default litleIcons" href="#" aria-label="Settings" title="Приватна" style="background-color:#eee;">
@@ -144,18 +163,32 @@
                     <!-- Start column -->
                     @foreach (var item in Model)
                     {
+
+
                         <div class="col-md-3 col-sm-3 col-xs-12">
                             <div class="single-team-member">
-                                <div class="team-content text-center" style="background-color:#fafafa;">
-                                    <div onclick="redirectTo(@item.ReservedId);" style="cursor:pointer;">
-                                        <h4 style="color:#3ec1d5;">@Html.DisplayFor(modelItem => item.EventName)</h4>
+                                <div class="team-content text-justify" style="background-color:#fafafa;padding:10px;">
+                                    <div style="text-align:center;">
+                                        <span style="float:right;margin-right:10px;color:#3EC1D5;font-size:1.2em;">
+
+                                            <i class="fa fa-info-circle" aria-hidden="true" onclick="redirectTo(@item.ReservedId);" style="cursor:pointer;"></i>
+                                        </span>
+                                        <h4 style="color:#3ec1d5;">
+                                            @Html.DisplayFor(modelItem => item.EventName)
+
+                                        </h4>
+
                                         <p>
-                                            <i class="fa fa-home" aria-hidden="true"></i>
-                                            @Html.DisplayFor(modelItem => item.Room.NameRoom)
+
+                                            <i class="fa fa-home" aria-hidden="true">
+                                                @Html.DisplayFor(modelItem => item.Room.NameRoom)
+                                                <input name="ContentNameRoom" value="@item.Room.NameRoom" hidden />
+                                            </i>
+
+
+
                                         </p>
                                         <span>
-                                            @*@Html.Hidden(item.ReservedId.ToString())*@
-                                            @*<input class="ReservedId" value="@item.ReservedId" hidden />*@
 
                                             @Html.HiddenFor(modelItem => item.SelectedUsersEmails)
                                             @Html.HiddenFor(modelItem => item.AcceptedEmails)
@@ -166,20 +199,28 @@
                                         </span>
 
                                         <p>
-                                            @*<i class="fa fa-calendar"></i>*@
+
+
                                             <span class="glyphicon glyphicon-calendar"></span>
-                                            @Html.HiddenFor(modelItem => item.ReservedDate)
+                                            @*@Html.HiddenFor(modelItem => item.ReservedDate)*@
                                             @item.ReservedDate.ToString("dd-MM-yyyy")
+                                            <input name="ContentReservedDate" value="@item.ReservedDate" hidden />
+
                                         </p>
                                         <p>
-                                            @*<i class="fa fa-hourglass-1" aria-hidden="true"></i>*@
+
                                             <span class="glyphicon glyphicon-time"></span>
+
                                             @Html.DisplayFor(modelItem => item.ReservedTimeFrom) -
                                             @Html.DisplayFor(modelItem => item.ReservedTimeTo)
                                         </p>
                                         <p>
+
+
                                             <i class="fa fa-user" aria-hidden="true"></i>
                                             @Html.DisplayFor(modelItem => item.User.UserName)
+                                            <input name="ContentUserName" value="@item.User.UserName" hidden />
+
                                         </p>
                                         <p>
                                             @if (item.IsPrivate)
@@ -194,78 +235,142 @@
                                             @Html.HiddenFor(modelItem => item.IsPrivate)
                                         </p>
                                         <p>
+
                                             @if (item.ReservedDate < DateTime.Today ||
                                             (item.ReservedDate == DateTime.Today &&
                                             item.ReservedTimeFrom < DateTime.Now.TimeOfDay))
                                             {
-                                            <p>
-                                                @*<i class="fa fa-hourglass-end" aria-hidden="true"></i>*@
 
-                                                <a class="btn btn-default disabled" href="#" aria-label="Settings">
-                                                    <i class="fa fa-hourglass-end" aria-hidden="true"> Подія вже відбулася</i>
-                                                </a>
-                                            </p>
-                                        }
-                                        else if (!item.IsPrivate && item.UserId != ViewBag.CurrentId)
-                                        {
-                                            if (!string.IsNullOrEmpty(item.AcceptedEmails) && item.AcceptedEmails.Contains(ViewBag.CurrentName))
+                                                <i class="fa fa-hourglass-end" aria-hidden="true"> Подія вже відбулася</i>
+
+
+                                            }
+                                            else if (item.UserId == ViewBag.CurrentId)
                                             {
-                                                <a class="btn btn-default" href="@Url.Action("ToCome",new
+                                                @*<span>
+                                                        Ви організатор
+                                                    </span>*@
+                                                <a href="@Url.Action("Edit",new
+                                                    {
+                                                        id = item.ReservedId
+                                                    })" aria-label="Settings">
+                                                    <i class="fa fa-cog" aria-hidden="true"> Редагувати</i>
+                                                </a>
+                                                <a href="@Url.Action("Delete",new
+                                                    {
+                                                        id = item.ReservedId
+                                                    })" aria-label="Delete">
+                                                    <i class="fa fa-trash-o text-danger" aria-hidden="true"> Видалити</i>
+                                                </a>
+                                            }
+                                            //прийняв, можливість скасувати
+                                            else if (!string.IsNullOrEmpty(item.AcceptedEmails) && item.AcceptedEmails.Contains(ViewBag.CurrentName))
+                                            {
+
+                                                <i class="fa fa-check-circle-o text-success" aria-hidden="true"> Прийнято</i>
+                                                <a href="@Url.Action("ToCome",new
                                                     {
                                                         id = item.ReservedId,
                                                         toCome = false
                                                     })" aria-label="Settings">
                                                     <i class="fa fa-times-circle text-danger" aria-hidden="true"> Скасувати</i>
                                                 </a>
-                                                @*@Html.ActionLink("Скасувати", "ToCome", new { id = item.ReservedId, toCome = false },
-                                                    new { @class = "btn btn-default" })*@
                                             }
+                                            //запрошений, можливість прийняти/скасувати
                                             else if (!string.IsNullOrEmpty(item.SelectedUsersEmails) && item.SelectedUsersEmails.Contains(ViewBag.CurrentName))
                                             {
-                                                <a class="btn btn-default" href="@Url.Action("AcceptInvite",new
+                                                <a href="@Url.Action("AcceptInvite",new
                                                     {
                                                         id = item.ReservedId,
-                                                        email = ViewBag.CurrentName,
+                                                        email = ViewBag.CurrentEmail,
                                                         accept = true
                                                     })" aria-label="Settings">
                                                     <i class="fa fa-check-circle text-success" aria-hidden="true"> Прийняти</i>
                                                 </a>
+                                                <a href="@Url.Action("AcceptInvite",new
+                                                    {
+                                                        id = item.ReservedId,
+                                                        email = ViewBag.CurrentEmail,
+                                                        accept = false
+                                                    })" aria-label="Settings">
+                                                    <i class="fa fa-times-circle text-danger" aria-hidden="true"> Відхилити</i>
+                                                </a>
                                             }
+                                            //не організатор, приватна
+                                            else if (item.IsPrivate)
+                                            {
+                                                <span class="text-warning">
+                                                    Обмежений вхід
+                                                </span>
+                                            }//публічна
                                             else
                                             {
-                                                <a class="btn btn-default" href="@Url.Action("ToCome",new
+                                                <a href="@Url.Action("ToCome",new
                                                     {
                                                         id = item.ReservedId,
                                                         toCome = true
                                                     })" aria-label="Settings">
                                                     <i class="fa fa-check-circle text-success" aria-hidden="true"> Приєднатися</i>
                                                 </a>
-                                                @*@Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
-                                                    new { @class = "ready-btn" })*@
                                             }
+                                        </p>
 
-                                        }
-                                        else
-                                        {
-                                            <a class="btn btn-default disabled" href="@Url.Action("ToCome",new
+
+                                        <div class="hidden">
+
+                                            @if (!item.IsPrivate && item.UserId != ViewBag.CurrentId)
+                                            {
+                                                if (!string.IsNullOrEmpty(item.AcceptedEmails) && item.AcceptedEmails.Contains(ViewBag.CurrentName))
+                                                {
+                                                    <a class="btn btn-default btn-default disabled" href="#" aria-label="Settings">
+                                                        <i class="fa fa-toggle-on text-success" aria-hidden="true"> Прийнято</i>
+                                                    </a>
+                                                    <a class="btn btn-default" href="@Url.Action("ToCome",new
+                                                    {
+                                                        id = item.ReservedId,
+                                                        toCome = false
+                                                    })" aria-label="Settings">
+                                                        <i class="fa fa-times-circle text-danger" aria-hidden="true"> Скасувати</i>
+                                                    </a>
+                                                    @*@Html.ActionLink("Скасувати", "ToCome", new { id = item.ReservedId, toCome = false },
+                                                        new { @class = "btn btn-default" })*@
+                                                }
+                                                else if (!string.IsNullOrEmpty(item.SelectedUsersEmails) && item.SelectedUsersEmails.Contains(ViewBag.CurrentName))
+                                                {
+                                                    <a class="btn btn-default" href="@Url.Action("AcceptInvite",new
+                                                    {
+                                                        id = item.ReservedId,
+                                                        email = ViewBag.CurrentName,
+                                                        accept = true
+                                                    })" aria-label="Settings">
+                                                        <i class="fa fa-check-circle text-success" aria-hidden="true"> Прийняти</i>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-default" href="@Url.Action("ToCome",new
                                                     {
                                                         id = item.ReservedId,
                                                         toCome = true
                                                     })" aria-label="Settings">
-                                                <i class="fa fa-check-circle" aria-hidden="true"> Організатор</i>
-                                            </a>
-                                            @*@Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
-                                                new { @class = "btn btn-default disabled" })*@
-                                        }
+                                                        <i class="fa fa-check-circle text-success" aria-hidden="true"> Приєднатися</i>
+                                                    </a>
+                                                    @*@Html.ActionLink("Прийти", "ToCome", new { id = item.ReservedId, toCome = true },
+                                                        new { @class = "ready-btn" })*@
+                                                }
 
-
+                                            }
                                         </div>
+
+
+
                                     </div>
                                 </div>
                             </div>
-                        }
-                    <div style="text-align:center;">
+                        </div>
+                    }
 
+                    <div class="col-sm-12 center-block text-center">
                         @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
                     </div>
 
@@ -288,10 +393,19 @@
         border: 1px solid #ccc;
         border-radius: 4px;
     }
+
+    /*#searchresults a {
+        color: #555555;
+        font-size: 16px;
+    }*/
 </style>
 
 @section Scripts {
     <script>
+        function IsPrivateValue() {
+            var isPrivate = $("#SearchIsPrivate").is(":checked");
+            $('#SearchIsPrivate').val(isPrivate);
+        };
         function redirectTo(id) {
 
             var url = "/Reserveds/Details/" + id;
@@ -330,7 +444,7 @@
                 format: 'HH mm'
 
             });
-            $('#datetimepicker4').datetimepicker({
+            $('#SearchReservedTimeTo').datetimepicker({
                 format: 'HH mm'
 
             });
@@ -354,5 +468,34 @@
             });
 
         });
+        function byButton() {
+            alert("start");
+            var SearchViewModel = {
+                'EventName': $("#SearchEventName").val(),
+                'RoomName': $("#SearchRoomName").val(),
+                'UserName': $("#SearchUserName").val(),
+                'EventDescription': $("#SearchEventDescription").val(),
+                'RoomDescription': $("#SearchRoomDescription").val(),
+                'ReservedDate': $("#SearchReservedDate").val(),
+                'ReservedTimeFrom': $("#SearchReservedTimeFrom").val(),
+                'ReservedTimeTo': $("#RSearcheservedTimeTo").val(),
+                'IsPrivate': $("#SearchIsPrivate").is(":checked")
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Reserveds/SearchMoreEvents',
+                data: JSON.stringify(SearchViewModel),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data, status) {
+
+                    alert("Готово" + data);
+                },
+                error: function () {
+                    alert("Помилка");
+                }
+            });
+
+        };
     </script>
 }

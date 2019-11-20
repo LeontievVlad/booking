@@ -15,9 +15,13 @@
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="single-team-member">
                         <div class="team-content text-center" style="background-color:#fafafa;">
-                            <div onclick="redirectTo(@Model.RoomId);" style="cursor:pointer;">
-                                <h4 style="color:#3ec1d5;">@Html.DisplayFor(model => model.NameRoom)</h4>
+                            <div>
+                                <a href="@Url.Content(Model.Image)" target="_blank"><img src="@Url.Content(Model.Image)" style="min-width:360px;min-height:240px;max-width:360px;max-height:240px;" alt="@Model.NameRoom" /></a>
 
+                                <h4 style="color:#3ec1d5;">@Html.DisplayFor(model => model.NameRoom)</h4>
+                                <p>
+                                    @Html.DisplayFor(model => model.Description)
+                                </p>
                                 <span>
                                     @Html.HiddenFor(model => model.RoomId)
                                 </span>
@@ -36,20 +40,32 @@
                                     <i class="fa fa-address-book" aria-hidden="true"></i>
                                     @Html.DisplayFor(model => model.MaxPeople)
                                 </p>
-                                <p>
-                                    <a class="btn btn-default" href="@Url.Action("Edit",new
+                                @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                                {
+
+                                    <p>
+                                        <a class="btn btn-default" href="@Url.Action("Edit",new
                                                     {
                                                         id = Model.RoomId
                                                     })" aria-label="Delete">
-                                        <i class="fa  fa-cog" aria-hidden="true"> Редагувати</i>
-                                    </a>
-                                    <a class="btn btn-default" href="@Url.Action("Index",new
+                                            <i class="fa  fa-cog" aria-hidden="true"> Редагувати</i>
+                                        </a>
+                                        <a class="btn btn-default" href="@Url.Action("Index",new
                                                     {
                                                         id = Model.RoomId
                                                     })" aria-label="Delete">
-                                        <i class="fa fa-newspaper-o" aria-hidden="true"> На головну</i>
-                                    </a>
-                                </p>
+                                            <i class="fa fa-newspaper-o" aria-hidden="true"> На головну</i>
+                                        </a>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p>
+                                        <a class="btn btn-default" href="/" aria-label="Delete">
+                                            <i class="fa fa-newspaper-o" aria-hidden="true"> На головну</i>
+                                        </a>
+                                    </p>
+                                }
                             </div>
                         </div>
                     </div>

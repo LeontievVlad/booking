@@ -14,6 +14,7 @@ namespace Booking.Models.ReservedViewModels
         [Required]
         public string EventName { get; set; }
         public string Description { get; set; }
+
         [DataType(DataType.Date)]
         public DateTime ReservedDate { get; set; }
 
@@ -21,6 +22,7 @@ namespace Booking.Models.ReservedViewModels
         [DataType(DataType.Time)]
         [DefaultValue("0:0:0")]
         public TimeSpan ReservedTimeFrom { get; set; }
+
         [DataType(DataType.Time)]
         [DefaultValue("0:0:0")]
         public TimeSpan ReservedTimeTo { get; set; }

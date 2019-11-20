@@ -11,129 +11,139 @@
 <br />
 
 @Html.AntiForgeryToken()
+<div class="container">
+    <div class="row">
+        <div class="text-center center-block">
 
-<div class="text-center">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ReservedId)
 
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.ReservedId)
+            <div class="form-group col-sm-12">
+                <h5>
+                    Подія
+                </h5>
+                @*@Html.LabelFor(model => model.EventName, "Подія", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
 
-    <div class="form-group">
-        <h5>
-            Подія
-        </h5>
-        @*@Html.LabelFor(model => model.EventName, "Подія", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+            </div>
+            <div class="form-group col-sm-12">
+                <h5>
+                    Опис
+                </h5>
+                @*@Html.LabelFor(model => model.Description, "Опис", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
 
-    </div>
-    <div class="form-group">
-        <h5>
-            Опис
-        </h5>
-        @*@Html.LabelFor(model => model.Description, "Опис", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+            </div>
+            <div class="form-group col-sm-12">
+                <h5>
+                    Дата
+                </h5>
+                <input type='text' id="ReservedDate" name="ReservedDate" value="@Model.ReservedDate.ToShortDateString()" class="form-control input-group center-block text-center date" style="width:40%;" placeholder="Дата" />
 
-    </div>
-    <div class="form-group">
-        <h5>
-            Дата
-        </h5>
-        @*@Html.LabelFor(model => model.ReservedDate, "Дата", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        <input value="@Model.ReservedDate.ToShortDateString()" class="form-control text-box single-line center-block text-center" style = "width:40%;" id="ReservedDate" name="ReservedDate" />
-        @*@Html.EditorFor(model => model.ReservedDate, new { htmlAttributes = new { @class = "form-control" } })*@
-
-    </div>
-
-    <div class="form-group">
-        <h5>
-            Час початку
-        </h5>
-        @*@Html.LabelFor(model => model.ReservedTimeFrom, "Час початку", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        @Html.EditorFor(model => model.ReservedTimeFrom, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
-
-    </div>
-
-    <div class="form-group">
-        <h5>
-            Час кінця
-        </h5>
-        @*@Html.LabelFor(model => model.ReservedTimeTo, "Час кінця", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        @Html.EditorFor(model => model.ReservedTimeTo, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
-
-    </div>
-
-    <div class="form-group">
-        <h5>
-            Кімната
-        </h5>
-        @*@Html.LabelFor(model => model.RoomId, "Кімната", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        @Html.DropDownList("RoomId", null, htmlAttributes: new { @class = "form-control center-block text-center", style = "width:40%;" })
-
-    </div>
-
-    <div class="form-group">
-        @*@Html.LabelFor(model => model.SelectedUsersEmails, $"Люди ( {Model.Room.MaxPeople} )", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        <h5>
-            Люди ( маскимум @Model.Room.MaxPeople )
-        </h5>
-        <select class="form-control center-block text-center" style = "width:40%;" id="UsersEmails" name="UsersEmails" multiple>
+                @*@Html.LabelFor(model => model.ReservedDate, "Дата", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @*<input value="@Model.ReservedDate.ToShortDateString()" class="form-control text-box single-line center-block text-center" style="width:40%;" id="ReservedDate" name="ReservedDate" />*@
+                @*@Html.EditorFor(model => model.ReservedDate, new { htmlAttributes = new { @class = "form-control" } })*@
 
 
-            @foreach (var emails in Model.GetUserList)
-            {
-                if (emails.UserName == ViewBag.CurrentUserName)
+            </div>
+
+            <div class="form-group col-sm-12">
+                <h5>
+                    Час початку
+                </h5>
+                @*@Html.LabelFor(model => model.ReservedTimeFrom, "Час початку", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.EditorFor(model => model.ReservedTimeFrom, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
+            </div>
+
+            <div class="form-group col-sm-12">
+                <h5>
+                    Час кінця
+                </h5>
+                @*@Html.LabelFor(model => model.ReservedTimeTo, "Час кінця", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.EditorFor(model => model.ReservedTimeTo, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
+            </div>
+
+            <div class="form-group col-sm-12">
+                <h5>
+                    Кімната
+                </h5>
+                @*@Html.LabelFor(model => model.RoomId, "Кімната", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.DropDownList("RoomId", null, htmlAttributes: new { @class = "form-control center-block text-center", style = "width:40%;" })
+
+            </div>
+
+            <div class="form-group col-sm-12">
+                @*@Html.LabelFor(model => model.SelectedUsersEmails, $"Люди ( {Model.Room.MaxPeople} )", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <h5>
+                    Люди ( маскимум @Model.Room.MaxPeople )
+                </h5>
+                <select class="form-control center-block text-center" style="width:40%;" id="UsersEmails" name="UsersEmails" multiple>
+
+
+                    @foreach (var emails in Model.GetUserList)
+                    {
+                        if (emails.UserName == ViewBag.CurrentUserName)
+                        {
+                            <option value="@emails.Id" disabled>@emails.UserName</option>
+                        }
+                        else if (Model.UsersEmails.Length > 0 && Model.UsersEmails.Contains(emails.UserName))
+                        {
+                            <option value="@emails.Id" selected>@emails.UserName</option>
+                        }
+                        else
+                        {
+                            <option value="@emails.Id">@emails.UserName</option>
+                        }
+                    }
+                </select>
+
+            </div>
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.IsPrivate, "Приватна", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <h5>
+                    Приватна
+                </h5>
+                @if (Model.IsPrivate)
                 {
-                    <option value="@emails.Id" disabled>@emails.UserName</option>
-                }
-                else if (Model.UsersEmails.Length > 0 && Model.UsersEmails.Contains(emails.UserName))
-                {
-                    <option value="@emails.Id" selected>@emails.UserName</option>
+                    <input type="checkbox" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" checked />
                 }
                 else
                 {
-                    <option value="@emails.Id">@emails.UserName</option>
+                    <input type="checkbox" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" unchecked />
                 }
-            }
-        </select>
+                @*@Html.EditorFor(model => model.IsPrivate)*@
+                @Html.ValidationMessageFor(model => model.IsPrivate, "", new { @class = "text-danger" })
 
-    </div>
-    <div class="form-group">
-        @*@Html.LabelFor(model => model.IsPrivate, "Приватна", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        <h5>
-            Приватна
-        </h5>
-        @if (Model.IsPrivate)
-        {
-            <input type="checkbox" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" checked />
-        }
-        else
-        {
-            <input type="checkbox" id="IsPrivate" name="IsPrivate" value="@Model.IsPrivate" unchecked />
-        }
-        @*@Html.EditorFor(model => model.IsPrivate)*@
-        @Html.ValidationMessageFor(model => model.IsPrivate, "", new { @class = "text-danger" })
+            </div>
+            @Html.HiddenFor(model => model.UserId)
+            @*@Html.TextBox("UserId", Model.UserId, new { hidden = "hidden" })*@
+            <div class="form-group">
 
-    </div>
-    @Html.HiddenFor(model => model.UserId)
-    @*@Html.TextBox("UserId", Model.UserId, new { hidden = "hidden" })*@
-    <div class="form-group">
+                <div id="messageWait" class="text-success"></div>
+                <div id="messageAlert" class="text-warning"></div>
+                <div id="messageWarning" class="text-danger"></div>
+                <input type="button" name="submit" id="submit" value="Перевірити" class="btn btn-default" onclick="CheckIsValid();" />
+                <input type="submit" name="save" id="save" value="Підтвердити" class="btn btn-success" onclick="SaveToDb();" hidden />
 
-        <input type="button" name="submit" id="submit" value="Перевірити" class="btn btn-default" onclick="CheckIsValid();" />
-        <input type="submit" name="save" id="save" value="Підтвердити" class="btn btn-success" onclick="SaveToDb();" hidden />
-        <div id="messageWarning" class="text-danger"></div>
-        <div id="messageWait" class="text-success"></div>
-        <div id="messageAlert" class="text-warning"></div>
-
+            </div>
+        </div>
     </div>
 </div>
-
 
 
 @section Scripts {
     @*@Scripts.Render("~/Scripts/ReservedDate.js")*@
     <script src="~/Scripts/customJsValidation/EditValidation.js"></script>
     <script>
-
+        $(function () {
+            $('#ReservedDate').datetimepicker({
+                locale: 'uk',
+                format: 'L'
+            });
+        });
         $(document).ready(function () {
             $("#UsersEmails").select2({
                 placeholder: "Додати людей",
