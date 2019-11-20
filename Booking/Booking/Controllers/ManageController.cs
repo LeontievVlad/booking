@@ -15,7 +15,15 @@ namespace Booking.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-
+        public string GetEmailAdress()
+        {
+            var userId = User.Identity.GetUserId();
+            using (var context = new ApplicationDbContext())
+            {
+                var user = context.Users.FirstOrDefault(u => u.Id == userId);
+                return user.Email;
+            }
+        }
         public ManageController()
         {
         }
@@ -32,9 +40,9 @@ namespace Booking.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -55,13 +63,14 @@ namespace Booking.Controllers
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Ваш пароль изменен."
+                message == ManageMessageId.ChangePasswordSuccess ? "Ваш пароль змінено."
                 : message == ManageMessageId.SetPasswordSuccess ? "Пароль задан."
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Настроен поставщик двухфакторной проверки подлинности."
                 : message == ManageMessageId.Error ? "Произошла ошибка."
                 : message == ManageMessageId.AddPhoneSuccess ? "Ваш номер телефона добавлен."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Ваш номер телефона удален."
                 : "";
+            ViewBag.CurrentUserName = User.Identity.Name;
 
             var userId = User.Identity.GetUserId();
             var model = new IndexViewModel
@@ -72,6 +81,8 @@ namespace Booking.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
+
+
             return View(model);
         }
 
@@ -213,6 +224,65 @@ namespace Booking.Controllers
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
+
+        public async Task<ActionResult> Edit()
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            if (user != null)
+            {
+                ManageEditViewModel model = new ManageEditViewModel { UserNameEdit = user.UserName };
+                return View(model);
+            }
+            return RedirectToAction("Login", "Account");
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Edit(ManageEditViewModel model)
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var msg = "";
+            if (user != null)
+            {
+                bool freeName = true;
+                using (var context = new ApplicationDbContext())
+                {
+                    var users = context.Users;
+                    foreach (var item in users)
+                    {
+                        if (item.UserName == model.UserNameEdit)
+                        {
+                            freeName = false;
+                            continue;
+                        }
+                    }
+                }
+                if (freeName)
+                {
+                    user.UserName = model.UserNameEdit;
+                    IdentityResult result = await UserManager.UpdateAsync(user);
+
+                    if (result.Succeeded)
+                    {
+                        msg = "Succeeded";
+                    }
+                    else
+                    {
+                        msg = "Щось не так";
+                    }
+                }
+                else
+                {
+                    msg = "Таке ім'я вже зайнято";
+                }
+            }
+            else
+            {
+                msg = "Користувача не знайдено";
+            }
+
+            return Json(msg);
+        }
         //
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
@@ -333,7 +403,7 @@ namespace Booking.Controllers
             base.Dispose(disposing);
         }
 
-#region Вспомогательные приложения
+        #region Вспомогательные приложения
         // Используется для защиты от XSRF-атак при добавлении внешних имен входа
         private const string XsrfKey = "XsrfId";
 
@@ -384,6 +454,6 @@ namespace Booking.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

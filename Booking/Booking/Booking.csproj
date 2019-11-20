@@ -45,16 +45,42 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.4.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.4.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
@@ -163,58 +189,289 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiControllers\ReservedsController.cs" />
+    <Compile Include="ApiControllers\RoomsController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\RoomsController.cs" />
+    <Compile Include="Controllers\ReservedsController.cs" />
+    <Compile Include="Entity_Models\Reserved.cs" />
+    <Compile Include="Entity_Models\Room.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910080848199_First.cs" />
-    <Compile Include="Migrations\201910080848199_First.Designer.cs">
-      <DependentUpon>201910080848199_First.cs</DependentUpon>
+    <Compile Include="Hubs\NotificationHub.cs" />
+    <Compile Include="Migrations\201910160853577_FirstM.cs" />
+    <Compile Include="Migrations\201910160853577_FirstM.Designer.cs">
+      <DependentUpon>201910160853577_FirstM.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201910080855350_TimeSpan.cs" />
-    <Compile Include="Migrations\201910080855350_TimeSpan.Designer.cs">
-      <DependentUpon>201910080855350_TimeSpan.cs</DependentUpon>
+    <Compile Include="Migrations\201910301009196_UpdateRoom1.cs" />
+    <Compile Include="Migrations\201910301009196_UpdateRoom1.Designer.cs">
+      <DependentUpon>201910301009196_UpdateRoom1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911021132558_UpdateReserved.cs" />
+    <Compile Include="Migrations\201911021132558_UpdateReserved.Designer.cs">
+      <DependentUpon>201911021132558_UpdateReserved.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911140439585_AddImage.cs" />
+    <Compile Include="Migrations\201911140439585_AddImage.Designer.cs">
+      <DependentUpon>201911140439585_AddImage.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\BookingContext.cs" />
+    <Compile Include="Models\ChatModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ManageEditViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Room.cs" />
+    <Compile Include="Models\ReservedViewModels\CreateReserveViewModel.cs" />
+    <Compile Include="Models\ReservedViewModels\DeleteReserveViewModel.cs" />
+    <Compile Include="Models\ReservedViewModels\DetailsReserveViewModel.cs" />
+    <Compile Include="Models\ReservedViewModels\EditReserveViewModel.cs" />
+    <Compile Include="Models\ReservedViewModels\IndexReserveViewModel.cs" />
+    <Compile Include="Models\RolesViewModel.cs" />
+    <Compile Include="Models\RoomViewModels\CreateRoomViewModel.cs" />
+    <Compile Include="Models\RoomViewModels\DeleteRoomViewModel.cs" />
+    <Compile Include="Models\RoomViewModels\DetailsRoomViewModel.cs" />
+    <Compile Include="Models\RoomViewModels\EditRoomViewModel.cs" />
+    <Compile Include="Models\RoomViewModels\IndexRoomViewModel.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\RolesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chosen-sprite.png" />
+    <Content Include="Content\chosen.css" />
+    <Content Include="Content\chosen.min.css" />
+    <Content Include="Content\eBusiness\css\nivo-slider-theme.css" />
+    <Content Include="Content\eBusiness\css\responsive.css" />
+    <Content Include="Content\eBusiness\css\style.css" />
+    <Content Include="Content\eBusiness\img\about\1.jpg" />
+    <Content Include="Content\eBusiness\img\about\2.jpg" />
+    <Content Include="Content\eBusiness\img\apple-touch-icon.png" />
+    <Content Include="Content\eBusiness\img\background\bg1.jpg" />
+    <Content Include="Content\eBusiness\img\background\slider1.jpg" />
+    <Content Include="Content\eBusiness\img\blog\1.jpg" />
+    <Content Include="Content\eBusiness\img\blog\2.jpg" />
+    <Content Include="Content\eBusiness\img\blog\3.jpg" />
+    <Content Include="Content\eBusiness\img\blog\4.jpg" />
+    <Content Include="Content\eBusiness\img\blog\5.jpg" />
+    <Content Include="Content\eBusiness\img\blog\6.jpg" />
+    <Content Include="Content\eBusiness\img\blog\b02.jpg" />
+    <Content Include="Content\eBusiness\img\favicon.png" />
+    <Content Include="Content\eBusiness\img\portfolio\1.jpg" />
+    <Content Include="Content\eBusiness\img\portfolio\10.jpg" />
+    <Content Include="Content\eBusiness\img\portfolio\2.jpg" />
+    <Content Include="Content\eBusiness\img\portfolio\3.jpg" />
+    <Content Include="Content\eBusiness\img\portfolio\5.jpg" />
+    <Content Include="Content\eBusiness\img\portfolio\8.jpg" />
+    <Content Include="Content\eBusiness\img\portfolio\6.jpg" />
+    <Content Include="Content\eBusiness\img\preloader.gif" />
+    <Content Include="Content\eBusiness\img\slider\1.jpg" />
+    <Content Include="Content\eBusiness\img\slider\slider1 - Copy.jpg" />
+    <Content Include="Content\eBusiness\img\slider\slider1.jpg" />
+    <Content Include="Content\eBusiness\img\slider\slider2.jpg" />
+    <Content Include="Content\eBusiness\img\slider\slider3.jpg" />
+    <Content Include="Content\eBusiness\img\team\1.jpg" />
+    <Content Include="Content\eBusiness\img\team\2.jpg" />
+    <Content Include="Content\eBusiness\img\team\3.jpg" />
+    <Content Include="Content\eBusiness\img\team\4.jpg" />
+    <Content Include="Content\eBusiness\img\venubox\close.gif" />
+    <Content Include="Content\eBusiness\img\venubox\next.gif" />
+    <Content Include="Content\eBusiness\img\venubox\preload-circle.png" />
+    <Content Include="Content\eBusiness\img\venubox\preload-dots.png" />
+    <Content Include="Content\eBusiness\img\venubox\preload-ios.png" />
+    <Content Include="Content\eBusiness\img\venubox\preload-quads.png" />
+    <Content Include="Content\eBusiness\img\venubox\preload.png" />
+    <Content Include="Content\eBusiness\img\venubox\prev.gif" />
+    <Content Include="Content\eBusiness\js\main.js" />
+    <Content Include="Content\eBusiness\lib\animate\animate.css" />
+    <Content Include="Content\eBusiness\lib\animate\animate.min.css" />
+    <Content Include="Content\eBusiness\lib\appear\jquery.appear.js" />
+    <Content Include="Content\eBusiness\lib\bootstrap\css\bootstrap.css" />
+    <Content Include="Content\eBusiness\lib\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Content\eBusiness\lib\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\eBusiness\lib\bootstrap\js\bootstrap.js" />
+    <Content Include="Content\eBusiness\lib\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Content\eBusiness\lib\easing\easing.js" />
+    <Content Include="Content\eBusiness\lib\easing\easing.min.js" />
+    <Content Include="Content\eBusiness\lib\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\eBusiness\lib\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\eBusiness\lib\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\eBusiness\lib\isotope\isotope.pkgd.js" />
+    <Content Include="Content\eBusiness\lib\isotope\isotope.pkgd.min.js" />
+    <Content Include="Content\eBusiness\lib\jquery\jquery.min.js" />
+    <Content Include="Content\eBusiness\lib\knob\jquery.knob.js" />
+    <Content Include="Content\eBusiness\lib\nivo-slider\css\nivo-slider.css" />
+    <Content Include="Content\eBusiness\lib\nivo-slider\img\arrows-2.png" />
+    <Content Include="Content\eBusiness\lib\nivo-slider\img\arrows.png" />
+    <Content Include="Content\eBusiness\lib\nivo-slider\img\arrow_left.svg" />
+    <Content Include="Content\eBusiness\lib\nivo-slider\img\arrow_right.svg" />
+    <Content Include="Content\eBusiness\lib\nivo-slider\img\bullets-2.png" />
+    <Content Include="Content\eBusiness\lib\nivo-slider\img\bullets.png" />
+    <Content Include="Content\eBusiness\lib\nivo-slider\img\loading-2.gif" />
+    <Content Include="Content\eBusiness\lib\nivo-slider\img\loading.gif" />
+    <Content Include="Content\eBusiness\lib\nivo-slider\js\jquery.nivo.slider.js" />
+    <Content Include="Content\eBusiness\lib\owlcarousel\owl.carousel.css" />
+    <Content Include="Content\eBusiness\lib\owlcarousel\owl.carousel.min.js" />
+    <Content Include="Content\eBusiness\lib\owlcarousel\owl.transitions.css" />
+    <Content Include="Content\eBusiness\lib\parallax\parallax.js" />
+    <Content Include="Content\eBusiness\lib\venobox\venobox.css" />
+    <Content Include="Content\eBusiness\lib\venobox\venobox.min.js" />
+    <Content Include="Content\eBusiness\lib\wow\wow.js" />
+    <Content Include="Content\eBusiness\lib\wow\wow.min.js" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="Content\select2.css" />
+    <Content Include="Content\StyleSheet1.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\noimage.jpg" />
+    <Content Include="Scripts\bootbox.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\GetRoles.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\CreateRole.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\AllRoles.cshtml" />
+    <Content Include="Content\eBusiness\lib\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\eBusiness\lib\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\eBusiness\lib\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\eBusiness\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\eBusiness\lib\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\eBusiness\lib\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\eBusiness\lib\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\eBusiness\lib\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\eBusiness\lib\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap\wells.less" />
+    <Content Include="Content\bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\utilities.less" />
+    <Content Include="Content\bootstrap\type.less" />
+    <Content Include="Content\bootstrap\tooltip.less" />
+    <Content Include="Content\bootstrap\thumbnails.less" />
+    <Content Include="Content\bootstrap\theme.less" />
+    <Content Include="Content\bootstrap\tables.less" />
+    <Content Include="Content\bootstrap\scaffolding.less" />
+    <Content Include="Content\bootstrap\responsive-utilities.less" />
+    <Content Include="Content\bootstrap\responsive-embed.less" />
+    <Content Include="Content\bootstrap\progress-bars.less" />
+    <Content Include="Content\bootstrap\print.less" />
+    <Content Include="Content\bootstrap\popovers.less" />
+    <Content Include="Content\bootstrap\panels.less" />
+    <Content Include="Content\bootstrap\pagination.less" />
+    <Content Include="Content\bootstrap\pager.less" />
+    <Content Include="Content\bootstrap\normalize.less" />
+    <Content Include="Content\bootstrap\navs.less" />
+    <Content Include="Content\bootstrap\navbar.less" />
+    <Content Include="Content\bootstrap\modals.less" />
+    <Content Include="Content\bootstrap\mixins\vendor-prefixes.less" />
+    <Content Include="Content\bootstrap\mixins\text-overflow.less" />
+    <Content Include="Content\bootstrap\mixins\text-emphasis.less" />
+    <Content Include="Content\bootstrap\mixins\table-row.less" />
+    <Content Include="Content\bootstrap\mixins\tab-focus.less" />
+    <Content Include="Content\bootstrap\mixins\size.less" />
+    <Content Include="Content\bootstrap\mixins\responsive-visibility.less" />
+    <Content Include="Content\bootstrap\mixins\resize.less" />
+    <Content Include="Content\bootstrap\mixins\reset-text.less" />
+    <Content Include="Content\bootstrap\mixins\reset-filter.less" />
+    <Content Include="Content\bootstrap\mixins\progress-bar.less" />
+    <Content Include="Content\bootstrap\mixins\panels.less" />
+    <Content Include="Content\bootstrap\mixins\pagination.less" />
+    <Content Include="Content\bootstrap\mixins\opacity.less" />
+    <Content Include="Content\bootstrap\mixins\nav-vertical-align.less" />
+    <Content Include="Content\bootstrap\mixins\nav-divider.less" />
+    <Content Include="Content\bootstrap\mixins\list-group.less" />
+    <Content Include="Content\bootstrap\mixins\labels.less" />
+    <Content Include="Content\bootstrap\mixins\image.less" />
+    <Content Include="Content\bootstrap\mixins\hide-text.less" />
+    <Content Include="Content\bootstrap\mixins\grid.less" />
+    <Content Include="Content\bootstrap\mixins\grid-framework.less" />
+    <Content Include="Content\bootstrap\mixins\gradients.less" />
+    <Content Include="Content\bootstrap\mixins\forms.less" />
+    <Content Include="Content\bootstrap\mixins\clearfix.less" />
+    <Content Include="Content\bootstrap\mixins\center-block.less" />
+    <Content Include="Content\bootstrap\mixins\buttons.less" />
+    <Content Include="Content\bootstrap\mixins\border-radius.less" />
+    <Content Include="Content\bootstrap\mixins\background-variant.less" />
+    <Content Include="Content\bootstrap\mixins\alerts.less" />
+    <Content Include="Content\bootstrap\mixins.less" />
+    <Content Include="Content\bootstrap\media.less" />
+    <Content Include="Content\bootstrap\list-group.less" />
+    <Content Include="Content\bootstrap\labels.less" />
+    <Content Include="Content\bootstrap\jumbotron.less" />
+    <Content Include="Content\bootstrap\input-groups.less" />
+    <Content Include="Content\bootstrap\grid.less" />
+    <Content Include="Content\bootstrap\glyphicons.less" />
+    <Content Include="Content\bootstrap\forms.less" />
+    <Content Include="Content\bootstrap\dropdowns.less" />
+    <Content Include="Content\bootstrap\component-animations.less" />
+    <Content Include="Content\bootstrap\code.less" />
+    <Content Include="Content\bootstrap\close.less" />
+    <Content Include="Content\bootstrap\carousel.less" />
+    <Content Include="Content\bootstrap\buttons.less" />
+    <Content Include="Content\bootstrap\button-groups.less" />
+    <Content Include="Content\bootstrap\breadcrumbs.less" />
+    <Content Include="Content\bootstrap\bootstrap.less" />
+    <Content Include="Content\bootstrap\badges.less" />
+    <Content Include="Content\bootstrap\alerts.less" />
+    <Content Include="Content\_bootstrap-datetimepicker.less" />
+    <Content Include="Content\bootstrap-datetimepicker-build.less" />
+    <Content Include="Areas\Admin\Views\Admin\DeleteError.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\chat.js" />
+    <Content Include="Scripts\chosen.jquery.js" />
+    <Content Include="Scripts\customJsValidation\EditValidation.js" />
+    <Content Include="Scripts\customJsValidation\ReserveValidation.js" />
+    <Content Include="Scripts\DateNow.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.1.js" />
+    <Content Include="Scripts\jquery.signalR-2.4.1.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\ReservedDate.js" />
+    <Content Include="Scripts\select2\select2.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -226,9 +483,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -249,16 +503,34 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Rooms\Create.cshtml" />
-    <Content Include="Views\Rooms\Delete.cshtml" />
-    <Content Include="Views\Rooms\Details.cshtml" />
-    <Content Include="Views\Rooms\Edit.cshtml" />
-    <Content Include="Views\Rooms\Index.cshtml" />
-    <Content Include="Views\Rooms\GetRoles.cshtml" />
-    <Content Include="Views\Rooms\Booking.cshtml" />
+    <Content Include="Views\Reserveds\Create.cshtml" />
+    <Content Include="Views\Reserveds\Delete.cshtml" />
+    <Content Include="Views\Reserveds\Details.cshtml" />
+    <Content Include="Views\Reserveds\Edit.cshtml" />
+    <Content Include="Views\Reserveds\Index.cshtml" />
+    <Content Include="Views\Reserveds\AddUsersToEvent.cshtml" />
+    <Content Include="Views\Reserveds\AddList.cshtml" />
+    <Content Include="Views\Reserveds\SearchEvents.cshtml" />
+    <Content Include="Views\Reserveds\Reserve.cshtml" />
+    <Content Include="Views\Reserveds\MyEvents.cshtml" />
+    <Content Include="Views\Reserveds\Sent.cshtml" />
+    <Content Include="Views\Reserveds\AcceptInvite.cshtml" />
+    <Content Include="Views\Reserveds\EmailMessage.cshtml" />
+    <Content Include="Views\Reserveds\EmptyPage.cshtml" />
+    <Content Include="Views\Reserveds\IndexRoom.cshtml" />
+    <Content Include="Views\Reserveds\AcceptToCome.cshtml" />
+    <Content Include="Views\Reserveds\LayoutNew.cshtml" />
+    <Content Include="Views\Manage\Edit.cshtml" />
+    <Content Include="Views\Reserveds\SearchMoreEvents.cshtml" />
+    <Content Include="Views\Chat\Index.cshtml" />
+    <Content Include="Views\Chat\ChatRoom.cshtml" />
+    <Content Include="Views\Chat\History.cshtml" />
+    <Content Include="Views\Reserveds\SearchMyEvents.cshtml" />
+    <Content Include="Views\Reserveds\DeleteError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -274,11 +546,17 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910080848199_First.resx">
-      <DependentUpon>201910080848199_First.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910160853577_FirstM.resx">
+      <DependentUpon>201910160853577_FirstM.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910080855350_TimeSpan.resx">
-      <DependentUpon>201910080855350_TimeSpan.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910301009196_UpdateRoom1.resx">
+      <DependentUpon>201910301009196_UpdateRoom1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911021132558_UpdateReserved.resx">
+      <DependentUpon>201911021132558_UpdateReserved.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911140439585_AddImage.resx">
+      <DependentUpon>201911140439585_AddImage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

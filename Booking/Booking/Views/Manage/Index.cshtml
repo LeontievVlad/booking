@@ -1,13 +1,53 @@
 ﻿@model Booking.Models.IndexViewModel
 @{
-    ViewBag.Title = "Управление";
+    ViewBag.Title = "Керування";
 }
 
-<h2>@ViewBag.Title.</h2>
+<br />
+<br />
+<br />
+<br />
+<br />
 
-<p class="text-success">@ViewBag.StatusMessage</p>
-<div>
-    <h4>Изменение параметров учетной записи</h4>
+<!-- Start team Area -->
+<div id="team" class="our-team-area area-padding">
+    <div class="container">
+        <div class="row">
+            <div class="team-top">
+                <!-- Start column -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="single-team-member">
+                        <div class="team-content text-center" style="background-color:#fafafa;">
+                            <h4 style="color:#3ec1d5;">Змінення параметрів облікового запису</h4>
+                            <h5>
+                                @ViewBag.CurrentUserName
+                            </h5>
+                            <p>
+                                @Html.ActionLink("Змінити ім'я", "Edit", null, new { @class = "btn btn-default" })
+                            
+                                @if (Model.HasPassword)
+                                {
+                                    @Html.ActionLink("Змінити пароль", "ChangePassword", null, new { @class = "btn btn-default" })
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Створити", "SetPassword", null, new { @class = "btn btn-default" })
+                                }
+                            </p>
+                                
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End column -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display:none;">
+    <h4>Змінення параметрів облікового запису</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>Пароль:</dt>
@@ -15,28 +55,30 @@
             [
             @if (Model.HasPassword)
             {
-                @Html.ActionLink("Смена пароля", "ChangePassword")
+                @Html.ActionLink("Зміна паролю", "ChangePassword")
             }
             else
             {
-                @Html.ActionLink("Создать", "SetPassword")
+                @Html.ActionLink("Створити", "SetPassword")
             }
             ]
         </dd>
-        <dt>Внешние имена входа:</dt>
+        <dt>Ім'я:</dt>
         <dd>
-            @Model.Logins.Count [
-            @Html.ActionLink("Управление", "ManageLogins") ]
+            @*@Model.Logins.Count [
+        @Html.ActionLink("Керування", "ManageLogins") ]*@
+            @ViewBag.CurrentUserName
+            @Html.ActionLink("Редагувати", "Edit", null, new { @class = "btn btn-default" })
         </dd>
         @*
             Номера телефонов можно использовать в качестве второго проверочного фактора для системы двухфакторной проверки подлинности.
-             
+
              В <a href="https://go.microsoft.com/fwlink/?LinkId=403804">этой статье</a>
                 можно узнать, как для этого приложения ASP.NET настроить двухфакторную проверку подлинности с использованием SMS.
-             
+
              Настроив двухфакторную проверку подлинности, раскомментируйте следующий блок
         *@
-        @*  
+        @*
             <dt>Номер телефона:</dt>
             <dd>
                 @(Model.PhoneNumber ?? "None")
@@ -56,12 +98,12 @@
                 }
             </dd>
         *@
-        <dt>Двухфакторная проверка подлинности:</dt>
+        <dt>@*Двухфакторная проверка подлинности:*@</dt>
         <dd>
-            <p>
-                Поставщики двухфакторной проверки подлинности не настроены. В <a href="https://go.microsoft.com/fwlink/?LinkId=403804">этой статье</a>
-                можно узнать, как настроить двухфакторную проверку подлинности для этого приложения ASP.NET.
-            </p>
+            @*<p>
+                    Поставщики двухфакторной проверки подлинности не настроены. В <a href="https://go.microsoft.com/fwlink/?LinkId=403804">этой статье</a>
+                    можно узнать, как настроить двухфакторную проверку подлинности для этого приложения ASP.NET.
+                </p>*@
             @*@if (Model.TwoFactor)
                 {
                     using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))

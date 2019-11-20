@@ -1,0 +1,135 @@
+﻿@model Booking.Models.ReservedViewModels.CreateReserveViewModel
+
+@{
+    ViewBag.Title = ViewBag.NameRoom;
+}
+
+<br />
+<br />
+<br />
+<br />
+<div class="text-center">
+
+
+    @Html.AntiForgeryToken()
+    <div id="result">
+
+        <h4>
+            @Model.Room.NameRoom
+            @*@ViewBag.NameRoom*@
+        </h4>
+
+        <hr />
+        <div class="form contact-form">
+            @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+            <div class="form-group">
+                <h6>
+                    Подія
+                </h6>
+                @*@Html.LabelFor(model => model.EventName, "Подія", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
+            </div>
+            <div class="form-group">
+                <h6>
+                    Опис
+                </h6>
+                @*@Html.LabelFor(model => model.Description, "Опис", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
+            </div>
+
+
+            <div class="form-group">
+                <h6>
+                    Дата
+                </h6>
+                @*@Html.LabelFor(model => model.ReservedDate, "Дата", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.EditorFor(model => model.ReservedDate, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
+            </div>
+
+            <div class="form-group">
+                <h6>
+                    Час початку
+                </h6>
+                @*@Html.LabelFor(model => model.ReservedTimeFrom, "Час початку", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.EditorFor(model => model.ReservedTimeFrom, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
+            </div>
+
+            <div class="form-group">
+                <h6>
+                    Час кінця
+                </h6>
+                @*@Html.LabelFor(model => model.ReservedTimeTo, "Час кінця", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                @Html.EditorFor(model => model.ReservedTimeTo, new { htmlAttributes = new { @class = "form-control center-block text-center", style = "width:40%;" } })
+
+            </div>
+
+            @Html.HiddenFor(model => model.RoomId)
+            <div class="form-group">
+                <h6>
+                    Люди ( максимум @Model.Room.MaxPeople)
+                </h6>
+                @*@Html.LabelFor(model => model.SelectedUsersEmails, $"Люди ( макс. {Model.Room.MaxPeople})", htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+                <select class="form-control center-block text-center" style="width:40%;" id="UsersEmails" name="UsersEmails" multiple>
+                    @foreach (var emails in Model.GetUserList)
+                    {
+                        if (emails.UserName == ViewBag.CurrentUserName)
+                        {
+                            <option value="@emails.Id" disabled>@emails.UserName</option>
+                        }
+                        else
+                        {
+                            <option value="@emails.Id">@emails.UserName</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <h6>
+                Приватна
+            </h6>
+            @*@Html.LabelFor(model => model.IsPrivate, "Приватна", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <input type="checkbox" id="IsPrivate" name="IsPrivate" />
+
+        </div>
+
+        <div class="form-group" style="margin-bottom: 100px;">
+
+            <div id="messageWarning" class="text-danger"></div>
+            <div id="messageAlert" class="text-warning"></div>
+            <div id="messageWait" class="text-success"></div>
+            <input type="button" name="submit" id="submit" value="Перевірити" class="btn btn-default" onclick="CheckIsValid();" />
+            <input type="submit" name="save" id="save" value="Підтвердити" class="btn btn-success" onclick="SaveToDb();" hidden />
+
+
+        </div>
+
+
+
+
+    </div>
+</div>
+@section Scripts {
+    <script src="~/Scripts/ReservedDate.js"></script>
+    <script src="~/Scripts/customJsValidation/ReserveValidation.js"></script>
+    <script>
+        $('.chosen-select').chosen();
+        $(document).ready(function () {
+            $("#UsersEmails").select2({
+                placeholder: "Додати людей",
+                multiple: true
+            });
+            $('#save').hide();
+        });
+
+
+    </script>
+
+}
+

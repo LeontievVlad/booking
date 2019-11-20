@@ -172,11 +172,11 @@ namespace Booking.Controllers
             if (ModelState.IsValid)
             {
 
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    result = await UserManager.AddToRoleAsync(user.Id, "User");
+                    result = await UserManager.AddToRoleAsync(user.Id, "Guest");
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // Дополнительные сведения о включении подтверждения учетной записи и сброса пароля см. на странице https://go.microsoft.com/fwlink/?LinkID=320771.
@@ -185,7 +185,7 @@ namespace Booking.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("IndexRoom", "Reserveds");
                 }
                 AddErrors(result);
             }
@@ -414,7 +414,7 @@ namespace Booking.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("IndexRoom", "Reserveds");
         }
 
         //
@@ -471,7 +471,7 @@ namespace Booking.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("IndexRoom", "Reserveds");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

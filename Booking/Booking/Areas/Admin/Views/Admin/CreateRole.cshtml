@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Створити роль";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="text-center">
+        @*<h4>Створити нову роль</h4>*@
+        <div class="form-group">
+            @*@Html.Label("Назва ролі", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <h5>
+                Створити нову роль
+            </h5>
+            <input name="Name" type="text" class="form-control center-block text-center" />
+
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Створити" class="btn btn-default" />
+
+        </div>
+    </div>
+}

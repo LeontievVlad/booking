@@ -1,0 +1,79 @@
+﻿@model Booking.Entity_Models.Reserved
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Reserved</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Room.NameRoom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Room.NameRoom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EventName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EventName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReservedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReservedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReservedTimeFrom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReservedTimeFrom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReservedTimeTo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReservedTimeTo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsersEmails)
+        </dt>
+
+        <dd>
+            @*@Html.DisplayFor(model => model.OwnerId)*@
+            @if (Model.UsersEmails != null)
+            {
+
+                foreach (var emails in Model.UsersEmails)
+                {
+                    <p>@emails</p>
+                }
+            }
+            else
+            {
+                <p>UsersEmails is empty</p>
+            }
+
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ReservedId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,97 @@
+﻿@model PagedList.IPagedList<Booking.Models.RoomViewModels.IndexRoomViewModel>
+@using PagedList.Mvc;
+
+
+@{
+    ViewBag.Title = "Головна";
+
+}
+
+<!-- Start portfolio Area -->
+<div id="portfolio" class="portfolio-area area-padding fix">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="section-headline text-center">
+                    <h2>
+                        Всі кімнати
+                    </h2>
+                </div>
+                <h3 class="text-center">
+                    @Html.ActionLink("Створити кімнату", "Create")
+                </h3>
+            </div>
+        </div>
+        <br /><br />
+        <div class="row">
+            <!-- Start Portfolio -page -->
+
+            <div class="awesome-project-content">
+
+                @foreach (var item in Model)
+                {
+                    var str = $"/Content/eBusiness/img/portfolio/{item.RoomId}.jpg";
+                    <!-- single-awesome-project start -->
+                    <div class="col-md-4 col-sm-4 col-xs-12 design development">
+                        <div class="single-awesome-project">
+                            <div class="awesome-img">
+                                <h2 class="text-center">@item.NameRoom</h2>
+                                <a href="#" style="width:360px;height:240px;overflow:hidden;"><img src="@Url.Content(item.Image)"style="min-width:360px;min-height:240px;" alt="@item.NameRoom" /></a>
+                                <div class="add-actions text-center" onclick="redirectToDetails(@item.RoomId);" style="cursor:pointer;">
+                                    <div class="project-dec" style="color:#3ec1d5;">
+
+                                        <h4>@item.NameRoom</h4>
+                                        <div>@item.Description</div>
+                                        <div>@item.MinTime - @item.MaxTime</div>
+                                        <div>Макс. людей @item.MaxPeople</div>
+                                        <input name="RoomId" value="@item.RoomId" hidden />
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <a class="btn btn-default" href="@Url.Action("Edit",new
+                                                    {
+                                                        id = item.RoomId
+                                                    })" aria-label="Settings">
+                                <i class="fa fa-cog" aria-hidden="true"> Редагувати</i>
+                            </a>
+                            <a class="btn btn-default" href="@Url.Action("Details",new
+                                                    {
+                                                        id = item.RoomId
+                                                    })" aria-label="Delete">
+                                <i class="fa fa-info-circle text-info" aria-hidden="true"> Деталі</i>
+                            </a>
+                            <a class="btn btn-default" href="@Url.Action("Delete",new
+                                                    {
+                                                        id = item.RoomId
+                                                    })" aria-label="Delete">
+                                <i class="fa fa-trash-o text-danger" aria-hidden="true"> Видалити</i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                }
+                <!-- single-awesome-project end -->
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- awesome-portfolio end -->
+<div style="text-align:center;">
+    
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>
+
+<script>
+    function redirectToDetails(id) {
+
+            var url = "/Admin/Admin/Details/" + id;
+            window.location.href = url;
+        };
+</script>

@@ -1,0 +1,90 @@
+﻿@model Booking.Models.RoomViewModels.DeleteRoomViewModel
+
+@{
+    ViewBag.Title = "Видалити";
+}
+
+
+<!-- Start team Area -->
+<div id="team" class="our-team-area area-padding">
+    <div class="container">
+        <div class="row">
+            <div class="team-top">
+                <!-- Start column -->
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="single-team-member">
+                        <div class="team-content text-center" style="background-color:#fafafa;">
+                            <div onclick="redirectTo(@Model.RoomId);" style="cursor:pointer;">
+
+                                <h3>Ви впевнені, що хочете видалити кімнату?</h3>
+                                <h4 style="color:#3ec1d5;">@Html.DisplayFor(model => model.NameRoom)</h4>
+
+                                <span>
+                                    @Html.HiddenFor(model => model.RoomId)
+                                </span>
+
+                                <p>
+                                    <i class="fa fa-calendar"></i>
+                                    @Html.HiddenFor(model => model.Date)
+                                    @Model.Date.ToString("dd-MM-yyyy")
+                                </p>
+                                <p>
+                                    <i class="fa fa-hourglass-1" aria-hidden="true"></i>
+                                    @Html.DisplayFor(model => model.MinTime) -
+                                    @Html.DisplayFor(model => model.MaxTime)
+                                </p>
+                                <p>
+                                    <i class="fa fa-address-book" aria-hidden="true"></i>
+                                    @Html.DisplayFor(model => model.MaxPeople)
+                                </p>
+                                <p>
+                                    @using (Html.BeginForm())
+                                    {
+                                        @Html.AntiForgeryToken()
+
+
+                                        <input type="submit" value="Видалити" class="btn btn-default" />
+                                        <a class="btn btn-default" href="@Url.Action("Index",new
+                                                    {
+                                                        id = Model.RoomId
+                                                    })" aria-label="Delete">
+                                            <i class="fa fa-newspaper-o" aria-hidden="true"> На головну</i>
+                                        </a>
+                                    }
+                                    @*<a class="btn btn-default" href="@Url.Action("Delete",new
+                            {
+                                id = Model.RoomId
+                            })" aria-label="Delete">
+                <i class="fa  fa-cog" aria-hidden="true"> Редагувати</i>
+            </a>*@
+                                    @*<a class="btn btn-default" href="@Url.Action("Index",new
+                            {
+                                id = Model.RoomId
+                            })" aria-label="Delete">
+                <i class="fa fa-newspaper-o" aria-hidden="true"> На головну</i>
+            </a>*@
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End column -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>*@

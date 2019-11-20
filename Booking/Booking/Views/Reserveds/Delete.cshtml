@@ -1,0 +1,26 @@
+﻿@model Booking.Models.ReservedViewModels.DeleteReserveViewModel
+
+@{
+    ViewBag.Title = "Видалити";
+}
+
+<h3>Ви впевнені, що хочете видалити?</h3>
+<div>
+    <hr />
+    <h4>
+        Подія: @Html.DisplayFor(model => model.EventName)
+    </h4>
+    
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            @Html.ActionLink("Мої події", "MyEvents", null, htmlAttributes: new { @class = "btn btn-success" })
+            <input type="submit" value="Видалити" class="btn btn-danger" />
+        </div>
+
+    }
+</div>

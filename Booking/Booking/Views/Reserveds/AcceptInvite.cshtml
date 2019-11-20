@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "Підтвердження";
+}
+
+<h2>
+    @ViewBag.msg
+    <input id="msg" value="@ViewBag.msg" hidden/>
+</h2>
+
+
+
+@section Scripts {
+    <script>
+
+        var msg = $('#msg').val();
+        $(document).ready(function () {
+
+            var url = "/Reserveds/MyEvents";
+            //modal
+            var dialog = bootbox.dialog({
+
+                message: '<p class="text-center mb-0 text-success">'+msg+'</p>',
+                closeButton: false,
+                buttons: {
+                    ok: {
+                        callback: function () {
+                            window.location.href = url;
+                        }
+                    }
+                }
+            });
+
+            dialog.init(function () {
+                setTimeout(function () {
+                    dialog.find('.bootbox-body').html('');
+                    window.location.href = url;
+                }, 3000);
+            });
+
+
+        });
+
+
+
+    </script>
+}

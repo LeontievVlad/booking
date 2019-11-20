@@ -1,0 +1,150 @@
+﻿@model Booking.Models.ReservedViewModels.DetailsReserveViewModel
+
+@{
+    ViewBag.Title = "Деталі";
+}
+
+<br />
+<br />
+<br />
+
+<!-- Start team Area -->
+<div id="team" class="our-team-area area-padding">
+    <div class="container">
+        <div class="row">
+            <div class="team-top">
+                <!-- Start column -->
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="single-team-member">
+                        <div class="team-content text-center" style="background-color:#fafafa;">
+                            <div>
+                                <h4 style="color:#3ec1d5;">@Html.DisplayFor(model => model.EventName)</h4>
+                                <a href="@Url.Content(Model.Room.Image)" target="_blank"><img src="@Url.Content(Model.Room.Image)" style="min-width:360px;min-height:240px;max-width:360px;max-height:240px;" alt="@Model.Room.NameRoom" /></a>
+
+                                @if (!string.IsNullOrEmpty(Model.Description))
+                                {
+                                    <p>
+                                        Опис події:
+                                        @Html.DisplayFor(model => model.Description)
+                                    </p>
+
+                                }
+                                <p>
+                                    Кімната:
+                                    @Html.DisplayFor(model => model.Room.NameRoom)
+                                    @*<input name="name" value="@item.Room.NameRoom" hidden />*@
+
+                                </p>
+                                @if (!string.IsNullOrEmpty(Model.Room.Description))
+                                {
+                                    <p>
+                                        Опис кімнати:
+                                        @Html.DisplayFor(model => model.Room.Description)
+                                    </p>
+
+                                }
+                                <span>
+                                    @*@Html.Hidden(item.ReservedId.ToString())*@
+                                    @*<input class="ReservedId" value="@item.ReservedId" hidden />*@
+
+                                    @Html.HiddenFor(model => model.SelectedUsersEmails)
+                                    @Html.HiddenFor(model => model.AcceptedEmails)
+                                    @Html.HiddenFor(model => model.DeniedEmails)
+                                    @Html.HiddenFor(model => model.Description)
+                                    @Html.HiddenFor(model => model.RoomId)
+                                    @Html.HiddenFor(model => model.UserId)
+                                </span>
+
+                                <p>
+                                    <i class="fa fa-calendar"></i>
+                                    @Html.HiddenFor(model => model.ReservedDate)
+                                    @Model.ReservedDate.ToString("dd-MM-yyyy")
+                                </p>
+                                <p>
+                                    <i class="fa fa-hourglass-1" aria-hidden="true"></i>
+                                    @Html.DisplayFor(model => model.ReservedTimeFrom) -
+                                    @Html.DisplayFor(model => model.ReservedTimeTo)
+                                </p>
+                                <p>
+                                    Організатор:
+                                    @Html.DisplayFor(model => model.User.UserName)
+                                </p>
+                                @if ((Model.IsPrivate && (ViewBag.CurrentUserId == Model.UserId || ViewBag.isInAccepted)) || !Model.IsPrivate)
+                                {
+
+
+                                    if (!string.IsNullOrEmpty(Model.SelectedUsersEmails))
+                                    {
+                                        <p>
+                                            Запрошені:
+                                            @Html.DisplayFor(model => model.SelectedUsersEmails)
+
+                                        </p>
+                                    }
+
+                                    if (!string.IsNullOrEmpty(Model.AcceptedEmails))
+                                    {
+                                        <p>
+
+                                            Прийняли запрошення:
+                                            @Html.DisplayFor(model => model.AcceptedEmails)
+                                        </p>
+                                    }
+                                    if (!string.IsNullOrEmpty(Model.DeniedEmails))
+                                    {
+                                        <p>
+                                            Відхили запрошення:
+                                            @Html.DisplayFor(model => model.DeniedEmails)
+
+                                        </p>
+                                    }
+                                }
+                                <p>
+                                    @if (Model.IsPrivate)
+                                    {
+                                        <i class="fa fa-lock"> Приватна</i>
+
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-unlock"> Публічна</i>
+                                    }
+                                    @Html.HiddenFor(model => model.IsPrivate)
+                                </p>
+                                <p>
+                                    @if (ViewBag.CurrentUserId == Model.UserId)
+                                    {
+
+                                        <a class="btn btn-default" href="@Url.Action("Edit",new
+                                                    {
+                                                        id = Model.ReservedId
+                                                    })" aria-label="Settings">
+                                            <i class="fa fa-cog" aria-hidden="true">
+                                                Редагувати
+                                            </i>
+                                        </a>
+                                        @*@Html.ActionLink("Редагувати", "Edit", new { id = Model.ReservedId }, new { @class = "btn btn-default" })*@
+                                        <a class="btn btn-default" href="@Url.Action("Delete",new
+                                                    {
+                                                        id = Model.ReservedId
+                                                    })" aria-label="Delete">
+                                            <i class="fa fa-trash-o text-danger" aria-hidden="true"> Видалити</i>
+                                        </a>
+                                        @*@Html.ActionLink("Редагувати", "Edit", new { id = Model.ReservedId }, new { @class = "btn btn-default" })
+                                            @Html.ActionLink("Видалити", "Delete", new { id = Model.ReservedId }, new { @class = "btn btn-default" })*@
+
+                                    }
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End column -->
+
+            </div>
+        </div>
+    </div>
+</div>

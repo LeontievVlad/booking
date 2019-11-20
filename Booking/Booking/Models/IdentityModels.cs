@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Booking.Entity_Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -20,9 +21,13 @@ namespace Booking.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<Reserved> Reserveds { get; set; }
         public ApplicationDbContext()
-            : base("BookingContext", throwIfV1Schema: false)
+            : base("ApplicationDbContext", throwIfV1Schema: false)
         {
+
         }
 
         public static ApplicationDbContext Create()

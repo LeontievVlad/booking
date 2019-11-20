@@ -1,0 +1,187 @@
+﻿@model PagedList.IPagedList<Booking.Models.ReservedViewModels.IndexReserveViewModel>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Мої події";
+}
+
+<br />
+<br />
+<br />
+<br />
+
+@using (Ajax.BeginForm("SearchMyEvents", new AjaxOptions
+{
+    UpdateTargetId = "searchresults"
+}))
+{
+    <div class="container" id="simpleButtons">
+        <div class="row">
+            <div class='col-sm-12 text-center center-block'>
+                <input type="text" name="name" class="text-center form-control" placeholder="Подія, кімната, організатор" />
+
+                <br />
+
+                <input type="submit" value="Пошук" class="btn btn-default " />
+                @*<a class="btn btn-default litleIcons" id="showMore" href="#" aria-label="Settings" title="Публічна">
+                    <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                </a>*@
+
+            </div>
+
+        </div>
+    </div>
+
+}
+<!-- Start team Area -->
+<div id="team" class="our-team-area area-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="section-headline text-center">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="team-top">
+
+                <div id="searchresults">
+                    <!-- Start column -->
+                    @foreach (var item in Model)
+                    {
+
+
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                            <div class="single-team-member">
+
+                                <div class="team-content text-center" style="background-color:#fafafa;">
+                                    <div>
+                                        <span style="float:right;margin-right:10px;color:#3EC1D5;font-size:1.2em;">
+
+                                            <i class="fa fa-info-circle" aria-hidden="true" onclick="redirectTo(@item.ReservedId);" style="cursor:pointer;"></i>
+                                        </span>
+                                        <h4 style="color:#3ec1d5;">@Html.DisplayFor(modelItem => item.EventName)</h4>
+                                        <p>@Html.DisplayFor(modelItem => item.Room.NameRoom)</p>
+
+
+                                        <p>
+                                            <i class="fa fa-calendar"></i>
+                                            @Html.HiddenFor(modelItem => item.ReservedDate)
+                                            @item.ReservedDate.ToString("dd-MM-yyyy")
+
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-hourglass-o" aria-hidden="true"></i>
+                                            @Html.DisplayFor(modelItem => item.ReservedTimeFrom) -
+                                            @Html.DisplayFor(modelItem => item.ReservedTimeTo)
+
+                                        </p>
+
+                                        <p>
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            @Html.DisplayFor(modelItem => item.User.UserName)
+
+                                        </p>
+                                        <p>
+                                            @if (item.IsPrivate)
+                                            {
+                                                <i class="fa fa-lock"> Приватна</i>
+
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-unlock"> Публічна</i>
+                                            }
+                                            @Html.HiddenFor(modelItem => item.IsPrivate)
+
+                                        </p>
+
+
+
+
+                                        @if (item.User.UserName == ViewBag.CurrentName)
+                                        {
+                                            <p>
+                                                <a href="@Url.Action("Edit",new
+                                                    {
+                                                        id = item.ReservedId
+                                                    })" aria-label="Settings">
+                                                    <i class="fa fa-cog" aria-hidden="true"> Редагувати</i>
+                                                </a>
+                                                <a href="@Url.Action("Delete",new
+                                                    {
+                                                        id = item.ReservedId
+                                                    })" aria-label="Delete">
+                                                    <i class="fa fa-trash-o text-danger" aria-hidden="true"> Видалити</i>
+                                                </a>
+                                            </p>
+
+                                        }
+                                        else if (item.ReservedDate < DateTime.Today ||
+                                       (item.ReservedDate == DateTime.Today &&
+                                       item.ReservedTimeFrom < DateTime.Now.TimeOfDay))
+                                        {
+                                            <p>
+                                                <i class="fa fa-hourglass-end" aria-hidden="true"> Подія вже відбулася</i>
+
+                                            </p>
+                                        }
+                                        else if (item.SelectedUsersEmails != null && item.SelectedUsersEmails.Contains(ViewBag.CurrentName))
+                                        {
+                                            <div>
+
+                                                <p>
+                                                    <a href="@Url.Action("AcceptInvite",new
+                                                    {
+                                                        id = item.ReservedId,
+                                                        email = ViewBag.CurrentEmail,
+                                                        accept = true
+                                                    })" aria-label="Settings">
+                                                        <i class="fa fa-check-circle text-success" aria-hidden="true"> Прийняти</i>
+                                                    </a>
+                                                    <a href="@Url.Action("AcceptInvite",new
+                                                    {
+                                                        id = item.ReservedId,
+                                                        email = ViewBag.CurrentEmail,
+                                                        accept = false
+                                                    })" aria-label="Settings">
+                                                        <i class="fa fa-times-circle text-danger" aria-hidden="true"> Відхилити</i>
+                                                    </a>
+                                                </p>
+                                            </div>
+
+                                        }
+                                        else if (item.AcceptedEmails != null && item.AcceptedEmails.Contains(ViewBag.CurrentName))
+                                        {
+                                            <p>
+                                                <i class="fa fa-check-circle-o text-success" aria-hidden="true"> Прийнято</i>
+
+                                                <a href="@Url.Action("ToCome",new
+                                                    {
+                                                        id = item.ReservedId,
+                                                        toCome = false
+                                                    })" aria-label="Settings">
+                                                    <i class="fa fa-times-circle text-danger" aria-hidden="true"> Скасувати</i>
+                                                </a>
+                                            </p>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <!-- End column -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Team Area -->
+<script>
+    function redirectTo(id) {
+        var url = "/Reserveds/Details/" + id;
+        window.location.href = url;
+    }
+</script>
+

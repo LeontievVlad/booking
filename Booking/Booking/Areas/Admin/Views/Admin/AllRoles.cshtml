@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Всі ролі";
+}
+<br />
+<table class="table table-hover">
+    <tr>
+        <th>
+            Назва ролі
+        </th> 
+    </tr>
+
+    @foreach (var item in ViewBag.roles)
+    {
+        <tr>
+            <td>
+                @item
+            </td>
+        </tr>
+    }
+
+</table>
