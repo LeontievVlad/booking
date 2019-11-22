@@ -3,14 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace Booking.Models.ReservedViewModels
 {
     public class EditReserveViewModel
     {
-        public EditReserveViewModel(){}
+        public EditReserveViewModel() { }
         public EditReserveViewModel(Reserved reserved)
         {
             ReservedId = reserved.ReservedId;
@@ -27,11 +25,11 @@ namespace Booking.Models.ReservedViewModels
 
             RoomId = reserved.RoomId;
             UserId = reserved.UserId;
-            
+
             Room = reserved.Room;
             User = reserved.User;
 
-            
+
         }
         public int ReservedId { get; set; }
         [Required]

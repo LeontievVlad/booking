@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using Booking.Entity_Models;
 using Booking.Hubs;
 using Booking.Models;
 using Booking.Models.ReservedViewModels;
 using Booking.Models.RoomViewModels;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.VisualBasic.ApplicationServices;
 using PagedList;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Booking.Controllers
 {
@@ -391,10 +387,10 @@ namespace Booking.Controllers
             //{
 
             //}).ToList();
-           
+
             var allUsers = db.Users.ToList();
 
-           
+
 
             CreateReserveViewModel createReserveViewModel = new CreateReserveViewModel
             {
@@ -553,7 +549,7 @@ namespace Booking.Controllers
 
             };
 
-            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId","NameRoom");
+            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom");
             //ViewBag.UsersEmails = db.Users.Select(x => x.UserName).ToList();
 
             ViewBag.CurrentUserName = currentUserName;
@@ -573,7 +569,7 @@ namespace Booking.Controllers
             {
 
                 ViewBag.UsersEmails = db.Users.Select(x => x.UserName).ToList();
-                ViewBag.RoomId = new SelectList(db.Rooms, "RoomId","NameRoom", createReserveViewModel.RoomId);
+                ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", createReserveViewModel.RoomId);
                 return Json("model is not valid", JsonRequestBehavior.AllowGet);
             }
             if (createReserveViewModel.UsersEmails != null)
@@ -637,7 +633,7 @@ namespace Booking.Controllers
             //ViewBag.selected = unionEmail;
             editReserveViewModel.UsersEmails = unionEmail.ToArray();
 
-            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId","NameRoom", editReserveViewModel.RoomId);
+            ViewBag.RoomId = new SelectList(db.Rooms, "RoomId", "NameRoom", editReserveViewModel.RoomId);
             return View(editReserveViewModel);
         }
 
@@ -1045,7 +1041,7 @@ namespace Booking.Controllers
             return View();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Качество кода","IDE0067:Ликвидировать объекты перед потерей области", Justification = "<Ожидание>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Качество кода", "IDE0067:Ликвидировать объекты перед потерей области", Justification = "<Ожидание>")]
         public async Task<bool> SendEmailAsync(string email, string subject, string emailBody)
         {
 

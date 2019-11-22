@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Booking.Entity_Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Web;
-using Booking.Entity_Models;
 
 namespace Booking.Models.RoomViewModels
 {

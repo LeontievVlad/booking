@@ -1,7 +1,6 @@
-﻿using System.Web.Http;
-using Booking.Models.ReservedViewModels;
-using Booking.Entity_Models;
+﻿using Booking.Entity_Models;
 using System.Collections.Generic;
+using System.Web.Http;
 
 namespace Booking.ApiControllers
 {
@@ -17,9 +16,9 @@ namespace Booking.ApiControllers
         }
         public void POST(List<Room> rooms)
         {
-            
+
         }
     }
 }
-            
-            
+
+

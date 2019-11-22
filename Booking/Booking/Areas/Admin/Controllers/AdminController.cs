@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using AutoMapper;
+﻿using AutoMapper;
 using Booking.Entity_Models;
 using Booking.Models;
 using Booking.Models.RoomViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using PagedList;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
 
 namespace Booking.Areas.Admin.Controllers
 {
@@ -41,7 +39,7 @@ namespace Booking.Areas.Admin.Controllers
             var userManager = new UserManager<ApplicationUser>(userStore);
 
 
-                List<string> disabled = new List<string>();
+            List<string> disabled = new List<string>();
             if (User.IsInRole("Admin"))
             {
                 disabled = db.Roles
@@ -146,7 +144,7 @@ namespace Booking.Areas.Admin.Controllers
             db.Roles.Add(roles);
             db.SaveChanges();
 
-            return new HttpStatusCodeResult(HttpStatusCode.Created);
+            return RedirectToAction("AllRoles");
         }
         public ActionResult CountGuests()
         {

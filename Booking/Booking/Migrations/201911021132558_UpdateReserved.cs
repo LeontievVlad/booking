@@ -1,8 +1,7 @@
 namespace Booking.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class UpdateReserved : DbMigration
     {
         public override void Up()
@@ -12,7 +11,7 @@ namespace Booking.Migrations
             AddColumn("dbo.Reserveds", "DeniedEmails", c => c.String());
             AddColumn("dbo.Reserveds", "IsPrivate", c => c.Boolean(nullable: false));
         }
-        
+
         public override void Down()
         {
             DropColumn("dbo.Reserveds", "IsPrivate");
